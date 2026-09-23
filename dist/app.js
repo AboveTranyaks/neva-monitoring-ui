@@ -16,7 +16,7 @@ const gbrUnits = [
   {id:'ГБР-7',crew:'Мельников Р.С.',distance:'7,4 км',eta:'16 мин',role:'Резервная',state:'Свободен',phone:'+78615550007'},
   {id:'ГБР-4',crew:'Захаров Д.В.',distance:'11,2 км',eta:'24 мин',role:'Резервная',state:'На задании',phone:'+78615550004'}
 ];
-let selected = alarms[1];
+let selected = alarms[3];
 let filter = 'all';
 let shiftMode = 'off';
 let shiftStartedAt = null;
@@ -87,5 +87,50 @@ $('startShiftBtn').addEventListener('click',()=>setShiftMode('work')); $('endShi
 $('openPhotosBtn').addEventListener('click',()=>$('photosDialog').showModal()); $('mapButton').addEventListener('click',()=>{$('mapPanel').hidden=false;}); $('mapClose').addEventListener('click',()=>{$('mapPanel').hidden=true;});
 $('allEventsBtn').addEventListener('click',()=>{$('eventsDialogBody').innerHTML=history.map(h=>`<p><b>${h.time}</b> — ${h.event} <small>${h.operator}</small></p>`).join('');$('eventsDialog').showModal();});
 document.addEventListener('click',e=>{if(e.target.closest('a.phone'))toast('Открывается звонок');}); document.addEventListener('keydown',e=>{if(e.key==='Escape'){setDrawer(false);$('operatorsMenu').hidden=true;$('mapPanel').hidden=true;}});
+
+const paneResizer = $('paneResizer');
+const workspace = document.querySelector('.workspace');
+function setPaneWidth(clientX) {
+  const bounds = workspace.getBoundingClientRect();
+  const min = bounds.width * 0.25;
+  const max = bounds.width * 0.55;
+  const width = Math.min(max, Math.max(min, clientX - bounds.left));
+  workspace.style.setProperty('--list-width', `${width}px`);
+  paneResizer.setAttribute('aria-valuenow', String(Math.round(width / bounds.width * 100)));
+}
+paneResizer.addEventListener('pointerdown', e => {
+  paneResizer.setPointerCapture(e.pointerId);
+  paneResizer.classList.add('dragging');
+  document.body.classList.add('resizing-panes');
+  setPaneWidth(e.clientX);
+});
+paneResizer.addEventListener('pointermove', e => { if (paneResizer.hasPointerCapture(e.pointerId)) setPaneWidth(e.clientX); });
+paneResizer.addEventListener('pointerup', e => {
+  paneResizer.releasePointerCapture(e.pointerId);
+  paneResizer.classList.remove('dragging');
+  document.body.classList.remove('resizing-panes');
+});
+let mouseResizing = false;
+paneResizer.addEventListener('mousedown', e => {
+  mouseResizing = true;
+  paneResizer.classList.add('dragging');
+  document.body.classList.add('resizing-panes');
+  setPaneWidth(e.clientX);
+});
+document.addEventListener('mousemove', e => { if (mouseResizing) setPaneWidth(e.clientX); });
+document.addEventListener('mouseup', () => {
+  if (!mouseResizing) return;
+  mouseResizing = false;
+  paneResizer.classList.remove('dragging');
+  document.body.classList.remove('resizing-panes');
+});
+paneResizer.addEventListener('keydown', e => {
+  if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+  e.preventDefault();
+  const bounds = workspace.getBoundingClientRect();
+  const current = document.querySelector('.alarm-pane').getBoundingClientRect().width;
+  setPaneWidth(bounds.left + current + (e.key === 'ArrowLeft' ? -24 : 24));
+});
+
 setInterval(()=>{alarms.forEach(a=>{if(a.status!=='complete')a.elapsedSec+=1;});renderRows();$('elapsed').textContent=formatElapsed(selected.elapsedSec);$('clock').textContent=new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});},1000);
 renderRows();renderDetail();renderContacts();renderHistory();

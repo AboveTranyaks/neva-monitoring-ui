@@ -51,3 +51,24 @@
 
 @media(min-width:1451px){.brand{min-width:270px}.topbar{gap:11px}.operators-trigger{padding-left:7px;padding-right:7px}.current-user{min-width:125px}.top-stats{gap:9px}.stat{font-size:.69rem}}
 @media(max-width:1450px){.topbar{height:auto;min-height:70px;flex-wrap:wrap;padding:8px 12px}.shift-controls{order:4;margin-left:auto}.top-stats{order:5;width:100%;padding-bottom:3px}.operators-popover{top:118px}.menu-drawer{top:119px}.drawer-backdrop{inset:119px 250px 0 0}.photo-gallery{grid-template-columns:1fr}.photo-gallery figure:first-child{grid-row:auto}.photo-gallery figure:first-child img{height:330px}}
+
+/* Регулируемая ширина списка и карточки */
+.workspace{--list-width:36%;grid-template-columns:var(--list-width) 8px minmax(0,1fr)}
+.pane-resizer{position:relative;background:#eef2f5;border-left:1px solid #cbd5dc;border-right:1px solid #cbd5dc;cursor:col-resize;touch-action:none;z-index:12}
+.pane-resizer:hover,.pane-resizer.dragging,.pane-resizer:focus{background:#dce9f2;outline:none}
+.pane-resizer span{position:absolute;left:50%;top:50%;width:3px;height:54px;border-radius:3px;background:#8ca4b5;transform:translate(-50%,-50%)}
+.pane-resizer:hover span,.pane-resizer.dragging span{background:#246c9f}
+body.resizing-panes{cursor:col-resize;user-select:none}
+
+/* Основные данные без фотографии, ГБР справа */
+.main-data-heading{display:flex;align-items:center;justify-content:space-between}
+.main-data-heading h2{margin:0;font:inherit}
+.main-data-heading button{height:29px;padding:0 12px;border:1px solid #2772bc;border-radius:4px;background:#edf5fc;color:#0d5da7;font-weight:800;cursor:pointer}
+.main-data-grid{grid-template-columns:minmax(0,1fr) 360px;align-items:stretch}
+.embedded-gbr{border-left:1px solid var(--line);background:#f5f7f8}
+.embedded-gbr h3{font-size:.86rem}
+.middle-grid{grid-template-columns:1.25fr 1fr}
+.contacts-card{grid-column:auto}
+
+@media(max-width:1450px){.workspace{--list-width:39%;grid-template-columns:var(--list-width) 8px minmax(0,1fr)}.main-data-grid{grid-template-columns:minmax(0,1fr) 320px}.middle-grid{grid-template-columns:1fr}.contacts-card{grid-column:auto}}
+@media(max-width:1100px){.workspace{display:block}.pane-resizer{display:none}.main-data-grid{grid-template-columns:1fr}.embedded-gbr{border-left:0;border-top:1px solid var(--line)}}

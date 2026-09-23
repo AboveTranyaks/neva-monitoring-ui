@@ -70,6 +70,8 @@
         <div class="alarm-summary">Всего активных: <b>10</b><span>•</span>Не взяты: <b id="unclaimedCount">3</b></div>
       </section>
 
+      <div class="pane-resizer" id="paneResizer" role="separator" aria-label="Изменить ширину списка тревог" aria-orientation="vertical" tabindex="0"><span></span></div>
+
       <section class="detail-pane" aria-live="polite">
         <div class="alarm-banner">
           <div class="alarm-title"><span aria-hidden="true">●</span> ТРЕВОГА • ОБЪЕКТ <span id="bannerNumber">14919</span></div>
@@ -84,12 +86,8 @@
         </div>
 
         <section class="card main-data">
-          <h2 class="section-heading blue">Основные данные</h2>
+          <div class="section-heading blue main-data-heading"><h2>Основные данные</h2><button id="openPhotosBtn">▣ Фото объекта</button></div>
           <div class="main-data-grid">
-            <button class="photo-preview" id="openPhotosBtn" aria-label="Открыть фотографии объекта">
-              <img id="objectPhoto" src="assets/office-main.png" alt="Фотография объекта">
-              <span>▣ Открыть фото объекта</span>
-            </button>
             <dl>
               <div><dt>Название</dt><dd id="objectName">Кабинет разработчиков ПО ХБ Нева</dd></div>
               <div><dt>Адрес</dt><dd><span id="objectAddress">Краснодар, ул. Пашковская, 74, кабинет 306</span><button class="icon-button map-button" id="mapButton" aria-label="Показать объект на мини-карте" title="Показать карту">⌖</button></dd></div>
@@ -99,6 +97,10 @@
               <div><dt>Раздел</dt><dd id="objectSection">Раздел 1</dd></div>
               <div><dt>Услуги</dt><dd id="objectServices">Охрана ОС • Мониторинг ПС</dd></div>
             </dl>
+            <section class="embedded-gbr" aria-label="Экипажи ГБР">
+              <h3 class="section-heading green">ГБР рядом с объектом</h3>
+              <div class="gbr-list" id="gbrList"></div>
+            </section>
           </div>
         </section>
 
@@ -108,11 +110,6 @@
             <table class="data-table"><thead><tr><th>№</th><th>Шлейф</th><th>Наименование</th><th>Состояние</th><th>Время</th></tr></thead>
               <tbody id="loopsBody"></tbody>
             </table>
-          </section>
-
-          <section class="card gbr-card">
-            <h2 class="section-heading green">ГБР</h2>
-            <div class="gbr-list" id="gbrList"></div>
           </section>
 
           <section class="card contacts-card">

@@ -147,7 +147,7 @@
 
   <aside class="menu-drawer" id="mainMenu" hidden>
     <div class="drawer-head"><strong>Меню</strong><button id="menuClose" aria-label="Закрыть меню">×</button></div>
-    <nav><button class="active">● Тревоги</button><button>⌖ Объекты</button><button>▱ Карта</button><button>▰ ГБР</button><button>▣ Фото</button><button id="reportsMenuBtn">▥ Отчёты</button><button>▤ Справочники</button><button>⚙ Настройки</button></nav>
+    <nav><button class="active">● Тревоги</button><button>⌖ Объекты</button><button>▱ Карта</button><button>▰ ГБР</button><button>▣ Фото</button><button id="reportsMenuBtn">▥ Отчёты</button><button id="operatorStatsMenuBtn">▥ Статистика операторов</button><button>▤ Справочники</button><button>⚙ Настройки</button></nav>
     <button class="help">?&nbsp; Помощь</button>
   </aside>
   <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
@@ -159,6 +159,7 @@
   <dialog id="loopsDialog"><form method="dialog"><header><div><h2>Все шлейфы объекта</h2><small id="loopsObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div id="loopsDialogBody"></div></form></dialog>
   <dialog id="contactsDialog"><form method="dialog"><header><div><h2>Все ответственные лица</h2><small id="contactsObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div id="contactsDialogBody"></div></form></dialog>
   <dialog class="reports-dialog" id="reportsDialog"><form method="dialog"><header><div><h2>Отчёты по завершённым тревогам</h2><small>Полная информация и хронология отработки</small></div><button aria-label="Закрыть">×</button></header><div id="reportsBody"></div></form></dialog>
+  <dialog class="reports-dialog" id="operatorStatsDialog"><form method="dialog"><header><div><h2>Статистика операторов</h2><small>Рабочее время, перерывы, обед и нагрузка за выбранную дату</small></div><button aria-label="Закрыть">×</button></header><div class="event-filters"><label>Дата<input id="operatorStatsDate" type="date" value="2026-09-23"></label><button type="button" id="applyOperatorStats">Показать</button><button type="button" class="secondary" id="todayOperatorStats">Сегодня</button></div><div id="operatorStatsBody"></div></form></dialog>
   <dialog class="photos-dialog" id="photosDialog"><form method="dialog"><header><div><h2>Фотографии объекта</h2><small id="photosObjectName">Кабинет разработчиков ПО ХБ Нева</small></div><button aria-label="Закрыть">×</button></header><div class="photo-gallery"><figure><img src="assets/office-main.png" alt="Общий вид офиса"><figcaption>Общий вид помещения</figcaption></figure><figure><img src="assets/office-entrance.png" alt="Вход в офис"><figcaption>Основной вход</figcaption></figure><figure><img src="assets/office-security.png" alt="Охранное оборудование"><figcaption>Прибор и датчики</figcaption></figure></div></form></dialog>
   <aside class="map-panel" id="mapPanel" hidden aria-label="Мини-карта объекта">
     <header><div><strong>Карта объекта</strong><small id="mapObjectName">Кабинет разработчиков ПО ХБ Нева</small></div><button id="mapClose" aria-label="Закрыть карту">×</button></header>

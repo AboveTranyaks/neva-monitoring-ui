@@ -19,6 +19,16 @@ const completedReports = [{
   number:'9921',name:'Бизнес-центр Олимп',address:'Краснодар, ул. Северная, 324',event:'Техническое событие',operator:'Сидорова Е.С.',completedAt:'04.08.2026 10:49:40',result:'Связь восстановлена, оборудование работает штатно.',panel:'Краснодар',section:'Раздел 3',administrator:'А 01',manager:'Соколова Марина Викторовна',gbr:'Не направлялась',
   chronology:[{time:'10:31:02',event:'Получено техническое событие',operator:'Система'},{time:'10:32:15',event:'Тревога принята в работу',operator:'Сидорова Е.С.'},{time:'10:38:04',event:'Звонок ответственному лицу',operator:'Сидорова Е.С.'},{time:'10:49:40',event:'Тревога завершена',operator:'Сидорова Е.С.'}]
 }];
+const operatorStats = [
+  {date:'2026-09-23',name:'Смирнов А.С.',start:'08:00',end:'16:32',workSec:27480,breakSec:1380,lunchSec:1800,alarms:12},
+  {date:'2026-09-23',name:'Иванов И.И.',start:'08:02',end:'16:41',workSec:28020,breakSec:960,lunchSec:1860,alarms:15},
+  {date:'2026-09-23',name:'Петров А.В.',start:'09:00',end:'17:24',workSec:27060,breakSec:1200,lunchSec:1980,alarms:9},
+  {date:'2026-09-23',name:'Сидорова Е.С.',start:'07:58',end:'16:17',workSec:26700,breakSec:1500,lunchSec:1680,alarms:11},
+  {date:'2026-09-22',name:'Смирнов А.С.',start:'08:01',end:'16:20',workSec:26820,breakSec:1260,lunchSec:1860,alarms:10},
+  {date:'2026-09-22',name:'Иванов И.И.',start:'08:05',end:'16:46',workSec:28140,breakSec:1020,lunchSec:1860,alarms:14},
+  {date:'2026-09-22',name:'Петров А.В.',start:'09:02',end:'17:28',workSec:27360,breakSec:1140,lunchSec:1860,alarms:8},
+  {date:'2026-09-22',name:'Сидорова Е.С.',start:'07:55',end:'16:14',workSec:26640,breakSec:1440,lunchSec:1740,alarms:13}
+];
 let selected = alarms[3];
 let filter = 'all';
 let shiftMode = 'off';
@@ -198,6 +208,15 @@ function renderReports(){
   $('reportsBody').innerHTML=completedReports.length?completedReports.map(report=>`<article class="report-card"><div class="report-summary"><div><b>Объект ${report.number} • ${report.name}</b><span>${report.address}</span></div><div><span>Завершено</span><strong>${report.completedAt}</strong></div><div><span>Оператор</span><strong>${report.operator}</strong></div></div><details><summary>Подробнее об отработке</summary><div class="report-details"><dl><div><dt>Событие</dt><dd>${report.event}</dd></div><div><dt>Категория</dt><dd>${report.category||2}</dd></div><div><dt>Результат</dt><dd>${report.result}</dd></div><div><dt>ГБР</dt><dd>${report.gbr}</dd></div><div><dt>Комментарий оператора</dt><dd>${report.operatorComment||'Комментарий не добавлен'}</dd></div><div><dt>Администратор</dt><dd>${report.administrator}</dd></div><div><dt>Менеджер</dt><dd>${report.manager}</dd></div></dl><h3>Хронология отработки</h3><table><thead><tr><th>Время</th><th>Действие</th><th>Оператор</th><th>Детали</th></tr></thead><tbody>${sortHistory(report.chronology,'asc').map(item=>`<tr><td>${item.time}</td><td>${item.event}</td><td>${item.operator}</td><td>${item.details||'—'}</td></tr>`).join('')}</tbody></table></div></details></article>`).join(''):'<div class="events-empty">Завершённых тревог пока нет</div>';
 }
 $('reportsMenuBtn').addEventListener('click',()=>{setDrawer(false);renderReports();$('reportsDialog').showModal();});
+function renderOperatorStats(){
+  const date=$('operatorStatsDate').value;
+  const rows=operatorStats.filter(item=>item.date===date);
+  const totalWork=rows.reduce((sum,item)=>sum+item.workSec,0), totalBreak=rows.reduce((sum,item)=>sum+item.breakSec,0), totalLunch=rows.reduce((sum,item)=>sum+item.lunchSec,0), totalAlarms=rows.reduce((sum,item)=>sum+item.alarms,0);
+  $('operatorStatsBody').innerHTML=rows.length?`<div class="operator-stats-summary"><div><span>Операторов</span><b>${rows.length}</b></div><div><span>Рабочее время</span><b>${formatShift(totalWork)}</b></div><div><span>Перерывы</span><b>${formatShift(totalBreak)}</b></div><div><span>Обед</span><b>${formatShift(totalLunch)}</b></div><div><span>Тревог обработано</span><b>${totalAlarms}</b></div></div><div class="operator-stats-table-wrap"><table class="events-full-table operator-stats-table"><thead><tr><th>Оператор</th><th>Начало смены</th><th>Завершение</th><th>Рабочее время</th><th>Перерыв</th><th>Обед</th><th>Обработано тревог</th></tr></thead><tbody>${rows.map(item=>`<tr><td><b>${item.name}</b></td><td>${item.start}</td><td>${item.end}</td><td><strong>${formatShift(item.workSec)}</strong></td><td>${formatShift(item.breakSec)}</td><td>${formatShift(item.lunchSec)}</td><td><span class="alarm-count-badge">${item.alarms}</span></td></tr>`).join('')}</tbody></table></div>`:'<div class="events-empty">За выбранную дату статистики нет</div>';
+}
+$('operatorStatsMenuBtn').addEventListener('click',()=>{setDrawer(false);renderOperatorStats();$('operatorStatsDialog').showModal();});
+$('applyOperatorStats').addEventListener('click',renderOperatorStats);
+$('todayOperatorStats').addEventListener('click',()=>{$('operatorStatsDate').value='2026-09-23';renderOperatorStats();});
 document.addEventListener('click',e=>{const phone=e.target.closest('a.phone');if(!phone)return;if(phone.dataset.callName)addHistory('Звонок ответственному лицу',phone.dataset.callName);if(phone.dataset.callGbr)addHistory('Звонок экипажу ГБР',phone.dataset.callGbr);toast('Открывается звонок');}); document.addEventListener('keydown',e=>{if(e.key==='Escape'){setDrawer(false);$('operatorsMenu').hidden=true;$('mapPanel').hidden=true;}});
 
 const paneResizer = $('paneResizer');

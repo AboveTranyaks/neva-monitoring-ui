@@ -207,7 +207,7 @@ function renderEventsDialog() {
   const date=$('eventsDate').value;
   const from=$('eventsTimeFrom').value;
   const to=$('eventsTimeTo').value;
-  const filtered=history.filter(item=>item.alarmNumber===selected.number&&(!date||item.date===date)&&(!from||item.time>=`${from}:00`)&&(!to||item.time<=`${to}:59`));
+  const filtered=sortHistory(history.filter(item=>item.alarmNumber===selected.number&&(!date||item.date===date)&&(!from||item.time>=`${from}:00`)&&(!to||item.time<=`${to}:59`)),'asc');
   $('eventsDialogBody').innerHTML=filtered.length?`<table class="events-full-table"><thead><tr><th>Дата</th><th>Время</th><th>Действие</th><th>Оператор</th><th>Детали</th></tr></thead><tbody>${filtered.map(h=>`<tr><td>${h.date.split('-').reverse().join('.')}</td><td><b>${h.time}</b></td><td>${h.event}</td><td>${h.operator}</td><td>${h.details||'—'}</td></tr>`).join('')}</tbody></table>`:'<div class="events-empty">За выбранный период событий нет</div>';
 }
 function openEventsDialog(){

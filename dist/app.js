@@ -1,6 +1,6 @@
 const currentOperator = 'Смирнов А.С.';
 const alarms = [
-  {time:'11:04',number:'14933',name:'Магазин Север',address:'Краснодар, ул. Северная, 102',event:'Тревожная кнопка',status:'new',statusLabel:'НОВАЯ / НЕ ВЗЯТА',operator:'—',elapsedSec:38,critical:true,note:'Позвонить ответственному лицу',panel:'Краснодар',section:'Раздел 1',services:'Охрана ОС',coords:'45.0402,38.9760'},
+  {time:'11:04',number:'14933',name:'Магазин Север',address:'Краснодар, ул. Северная, 102',event:'Тревожная кнопка',alarmType:'КТС',category:7,status:'new',statusLabel:'КТС • НЕ ВЗЯТА',operator:'—',elapsedSec:38,critical:true,note:'Позвонить ответственному лицу',panel:'Краснодар',section:'Раздел 1',services:'Охрана ОС',coords:'45.0402,38.9760'},
   {time:'11:00',number:'14919',name:'Кабинет разработчиков ПО ХБ Нева',address:'Краснодар, ул. Пашковская, 74, кабинет 306',event:'Датчик движения',status:'mine',statusLabel:'В РАБОТЕ',operator:'Смирнов А.С.',elapsedSec:282,critical:false,note:'При тревоге отвечаем и всё',panel:'Краснодар',section:'Раздел 1',services:'Охрана ОС • Мониторинг ПС',coords:'45.032954,38.971944'},
   {time:'10:58',number:'12844',name:'Ритейл Плюс',address:'Краснодар, ул. Красная, 176',event:'Открытие двери',status:'gbr',statusLabel:'ГБР-7 НАПРАВЛЕНА',operator:'Иванов И.И.',elapsedSec:375,critical:true,note:'Главный вход',panel:'Краснодар',section:'Раздел 2',services:'Охрана ОС',coords:'45.0448,38.9764'},
   {time:'10:52',number:'11307',name:'Склад Юг',address:'Краснодар, ул. Уральская, 97',event:'Пожарный шлейф',status:'work',statusLabel:'ЗВОНОК КЛИЕНТУ',operator:'Петров А.В.',elapsedSec:561,critical:true,note:'Проверить пожарный датчик',panel:'Краснодар',section:'Раздел 1',services:'Мониторинг ПС',coords:'45.0196,39.0432'},
@@ -26,6 +26,7 @@ let shiftStartedAt = null;
 let shiftTotalSec = 0;
 let shiftWorkSec = 0;
 let shiftModeSec = 0;
+let shiftPauseSec = 0;
 let shiftFinished = false;
 let historySortDirection = 'asc';
 let history = [
@@ -46,15 +47,18 @@ const formatElapsed = seconds => {
 const formatShift = seconds => `${String(Math.floor(seconds/3600)).padStart(2,'0')}:${String(Math.floor((seconds%3600)/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;
 function sortedAlarms(list) {
   return [...list].sort((a,b) => {
+    const aKts=isKts(a), bKts=isKts(b);
+    if(aKts!==bKts)return aKts?-1:1;
     if (a.status === 'new' && b.status !== 'new') return -1;
     if (a.status !== 'new' && b.status === 'new') return 1;
     return b.elapsedSec - a.elapsedSec;
   });
 }
+function isKts(alarm){return alarm.alarmType==='КТС'||/тревожная кнопка|ктс/i.test(alarm.event);}
 function renderRows() {
   const q = $('alarmSearch').value.trim().toLowerCase();
   const rows = sortedAlarms(alarms.filter(a => filter === 'all' || (filter === 'new' && a.status === 'new') || (filter === 'mine' && a.operator === currentOperator)).filter(a => `${a.number} ${a.name} ${a.address} ${a.event}`.toLowerCase().includes(q)));
-  $('alarmRows').innerHTML = rows.map(a => `<tr class="${a.status} ${a.number===selected.number?'selected':''}" data-number="${a.number}" tabindex="0"><td><strong>${a.time}</strong><small>${a.number}</small></td><td>${a.name}</td><td class="address-cell"><span title="${a.address}">${a.address}</span></td><td>${a.event}</td><td><span class="status ${statusClass(a)}">${a.statusLabel}</span></td><td>${a.operator}</td><td class="timer ${a.status==='new'&&a.elapsedSec>600?'critical':''}">${formatElapsed(a.elapsedSec)}</td></tr>`).join('');
+  $('alarmRows').innerHTML = rows.map(a => `<tr class="${a.status} ${isKts(a)?'kts':''} ${a.number===selected.number?'selected':''}" data-number="${a.number}" tabindex="0"><td><strong>${a.time}</strong><small>${a.number}</small></td><td>${a.name}</td><td class="address-cell"><span title="${a.address}">${a.address}</span></td><td>${a.event}</td><td><span class="status ${statusClass(a)} ${isKts(a)?'kts':''}">${a.statusLabel}</span></td><td>${a.operator}</td><td class="timer ${a.status==='new'&&a.elapsedSec>600?'critical':''}">${formatElapsed(a.elapsedSec)}</td></tr>`).join('');
   document.querySelectorAll('#alarmRows tr').forEach(row => { const choose = () => selectAlarm(row.dataset.number); row.addEventListener('click',choose); row.addEventListener('keydown',e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();} }); });
   $('totalCount').textContent = alarms.length;
   $('unclaimedCount').textContent = alarms.filter(a => a.status === 'new').length;
@@ -66,12 +70,19 @@ function selectAlarm(number) { selected = alarms.find(a => a.number === number);
 function mapUrl(a) { const [lat,lon] = a.coords.split(','); return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=17/${lat}/${lon}`; }
 function renderDetail() {
   $('bannerNumber').textContent=selected.number; $('objectNumber').textContent=selected.number; $('footerNumber').textContent=selected.number;
-  $('objectName').textContent=selected.name; $('objectAddress').textContent=selected.address; $('footerAddress').textContent=selected.address; $('objectNote').textContent=selected.note; $('objectPanel').textContent=selected.panel; $('objectSection').textContent=selected.section; $('objectAdministrator').textContent=selected.administrator||'А 01'; $('objectManager').textContent=selected.manager||'Соколова Марина Викторовна'; $('objectServices').textContent=selected.services; $('elapsed').textContent=formatElapsed(selected.elapsedSec);
+  $('objectName').textContent=selected.name; $('objectAddress').textContent=selected.address; $('footerAddress').textContent=selected.address; $('objectNote').textContent=selected.note; $('objectPanel').textContent=selected.panel; $('objectSection').textContent=selected.section; const category=selected.category||([14933,12844,9775].includes(Number(selected.number))?7:2); $('objectCategory').textContent=category; $('objectCategory').classList.toggle('important',[1,7,10].includes(category)); $('objectCategoryHint').textContent=[1,7,10].includes(category)?'Важный объект':'Стандартный объект'; $('objectAdministrator').textContent=selected.administrator||'А 01'; $('objectManager').textContent=selected.manager||'Соколова Марина Викторовна'; $('objectServices').textContent=selected.services; $('elapsed').textContent=formatElapsed(selected.elapsedSec);
   $('acceptBtn').hidden=selected.status!=='new'; $('takeBtn').hidden=selected.status==='new'||selected.operator===currentOperator||selected.status==='complete'; $('finishBtn').hidden=selected.operator!==currentOperator; $('operatorCommentBtn').hidden=!hasDispatchedGbr(selected.number);
   $('loopsBody').innerHTML=getAlarmLoops(selected).map(loop=>`<tr><td><span class="state-alarm">●</span> ${loop.number}</td><td>${loop.name}</td><td>${loop.description}</td><td class="state-alarm">ТРЕВОГА</td><td>${loop.time}</td></tr>`).join('');
   $('photosObjectName').textContent=selected.name; $('mapObjectName').textContent=selected.name; $('mapCoords').textContent=selected.coords.replace(',',', '); $('mapAddress').textContent=selected.address; $('mapLabel').textContent=`Объект ${selected.number}`; $('externalMapLink').href=mapUrl(selected);
   renderGbr();
+  renderWorkflow();
   renderHistory();
+}
+function renderWorkflow(){
+  const type=isKts(selected)?'КТС':/пожар|пс/i.test(`${selected.event} ${selected.services}`)?'ПС':'ОС';
+  const steps=type==='КТС'?['Принять тревогу','Немедленно направить ГБР','Получить результат осмотра','Добавить комментарий','Завершить тревогу']:type==='ПС'?['Принять тревогу','Позвонить клиенту','При необходимости направить ГБР','Зафиксировать результат','Завершить тревогу']:['Принять тревогу','Проверить: датчик сработал однократно или многократно','При многократном срабатывании направить ГБР','Получить осмотр ГБР и добавить комментарий','Позвонить клиенту','Завершить тревогу'];
+  $('workflowList').innerHTML=steps.map((step,index)=>`<li class="${index===0?'done':index===1?'active':''}"><span>${index===0?'✓':index+1}</span><b>${index+1}</b>${step}${index===1?'<button aria-label="Перейти к шагу">›</button>':''}</li>`).join('');
+  const button=document.querySelector('#workflowList button');if(button)button.addEventListener('click',()=>{addHistory('Проверена информация',`${type}: выполнен следующий шаг алгоритма`);toast('Действие добавлено в хронологию');});
 }
 function renderGbr() {
   $('gbrList').innerHTML=gbrUnits.map((unit,index)=>`<article class="gbr-unit ${index===0?'primary':''}"><div class="gbr-unit-head"><div><span class="gbr-role">${unit.role}</span><b>▰ ${unit.id}</b></div><span class="crew-state ${unit.state==='Свободен'?'free':'busy'}">${unit.state}</span></div><div class="gbr-meta"><span>${unit.crew}</span><strong>${unit.distance}</strong><span>≈ ${unit.eta}</span></div><div class="gbr-actions"><button class="dispatch-gbr" data-unit="${unit.id}" ${unit.state!=='Свободен'?'disabled':''}>Отправить</button><a class="icon-button phone" data-call-gbr="${unit.id}" href="tel:${unit.phone}" aria-label="Позвонить ${unit.id}">☎</a></div></article>`).join('');
@@ -81,7 +92,8 @@ function dispatchGbr(unitId) {
   selected.status='gbr'; selected.statusLabel=`${unitId} НАПРАВЛЕНА`; selected.operator=currentOperator;
   const unit=gbrUnits.find(item=>item.id===unitId); unit.state='Направлена'; addHistory('ГБР направлена',`${unitId} • экипаж ${unit.crew} • ${unit.distance} • прибытие ${unit.eta}`); renderRows(); renderDetail(); toast(`${unitId} направлена на объект`);
 }
-function renderContacts(){const contacts=[['Иванов И.И.','Администратор','+79181234567','+7 (918) 123-45-67'],['Петров А.В.','Технический специалист','+79182345678','+7 (918) 234-56-78']];$('contactsList').innerHTML=contacts.map(c=>`<div class="contact"><span class="avatar">${c[0].split(' ').map(s=>s[0]).join('').slice(0,2)}</span><div><b>${c[0]}</b><span>${c[1]}</span><strong>${c[3]}</strong></div><a class="icon-button phone" data-call-name="${c[0]}" href="tel:${c[2]}" aria-label="Позвонить ${c[0]}">☎</a></div>`).join('');}
+const responsibleContacts=[['Иванов И.И.','Администратор','+79181234567','+7 (918) 123-45-67'],['Петров А.В.','Технический специалист','+79182345678','+7 (918) 234-56-78'],['Смирнова Ольга В.', 'Директор', '+79183334455', '+7 (918) 333-44-55'],['Ковалёв Андрей П.','Заместитель директора','+79184445566','+7 (918) 444-55-66']];
+function renderContacts(){$('contactsList').innerHTML=responsibleContacts.slice(0,2).map(c=>`<div class="contact"><span class="avatar">${c[0].split(' ').map(s=>s[0]).join('').slice(0,2)}</span><div><b>${c[0]}</b><span>${c[1]}</span><strong>${c[3]}</strong></div><a class="icon-button phone" data-call-name="${c[0]}" href="tel:${c[2]}" aria-label="Позвонить ${c[0]}">☎</a></div>`).join('');}
 function historyTimestamp(item){return `${item.date||'0000-00-00'}T${item.time}`;}
 function sortHistory(items,direction=historySortDirection){return [...items].sort((a,b)=>historyTimestamp(a).localeCompare(historyTimestamp(b))*(direction==='asc'?1:-1));}
 function renderHistory(){const items=sortHistory(history.filter(h=>h.alarmNumber===selected.number));$('historyTimeSort').textContent=`Время ${historySortDirection==='asc'?'↑':'↓'}`;$('historyTimeSort').setAttribute('aria-sort',historySortDirection==='asc'?'ascending':'descending');$('historyBody').innerHTML=items.map(h=>`<tr><td class="${h.tone==='red'?'state-alarm':''}">●</td><td>${h.time}</td><td>${h.event}</td><td>${h.operator}</td><td>${h.details||'—'}</td></tr>`).join('');}
@@ -103,7 +115,7 @@ async function copyText(text, successMessage) {
   toast(successMessage);
 }
 function selectedObjectText() {
-  return [`Объект: ${selected.name}`,`Адрес: ${selected.address}`,`Пультовый номер: ${selected.number}`,`Пульт: ${selected.panel}`,`Раздел: ${selected.section}`,`Событие: ${selected.event}`,`Статус: ${selected.statusLabel}`,`Оператор: ${selected.operator}`,`Примечание: ${selected.note}`,`Услуги: ${selected.services}`,`Координаты: ${selected.coords}`].join('\n');
+  return [`Объект: ${selected.name}`,`Адрес: ${selected.address}`,`Пультовый номер: ${selected.number}`,`Пульт: ${selected.panel}`,`Раздел: ${selected.section}`,`Категория: ${selected.category||([14933,12844,9775].includes(Number(selected.number))?7:2)}`,`Событие: ${selected.event}`,`Статус: ${selected.statusLabel}`,`Оператор: ${selected.operator}`,`Примечание: ${selected.note}`,`Услуги: ${selected.services}`,`Координаты: ${selected.coords}`].join('\n');
 }
 function getAlarmLoops(alarm){
   if(alarm.loops)return alarm.loops;
@@ -116,7 +128,7 @@ function hasDispatchedGbr(alarmNumber){return history.some(item=>item.alarmNumbe
 function setShiftMode(mode){
   const previous=shiftMode;
   shiftMode=mode; const active=mode!=='off';
-  if(mode==='work'&&!shiftStartedAt){shiftStartedAt=new Date();shiftTotalSec=0;shiftWorkSec=0;shiftModeSec=0;shiftFinished=false;}
+  if(mode==='work'&&!shiftStartedAt){shiftStartedAt=new Date();shiftTotalSec=0;shiftWorkSec=0;shiftPauseSec=0;shiftModeSec=0;shiftFinished=false;}
   if(mode!==previous&&mode!=='off')shiftModeSec=0;
   $('startShiftBtn').hidden=active; $('endShiftBtn').hidden=!active; $('breakBtn').disabled=!active; $('lunchBtn').disabled=!active;
   $('breakBtn').classList.toggle('active',mode==='break'); $('lunchBtn').classList.toggle('active',mode==='lunch');
@@ -124,11 +136,11 @@ function setShiftMode(mode){
   document.querySelector('.current-user small').textContent=active?labels[mode]:'Оператор'; renderShiftTimer(); toast(labels[mode]);
 }
 function renderShiftTimer(){
-  if(shiftFinished){$('shiftStatus').textContent=`Смена завершена • Работа ${formatShift(shiftWorkSec)} • Всего ${formatShift(shiftTotalSec)}`;return;}
+  if(shiftFinished){$('shiftStatus').textContent=`Смена завершена • Работа ${formatShift(shiftWorkSec)} • Перерывы и обед ${formatShift(shiftPauseSec)} • Всего ${formatShift(shiftTotalSec)}`;return;}
   if(shiftMode==='off'){$('shiftStatus').textContent='Смена не начата';return;}
-  if(shiftMode==='work'){$('shiftStatus').textContent=`На смене ${formatShift(shiftTotalSec)} • Работа ${formatShift(shiftWorkSec)}`;return;}
+  if(shiftMode==='work'){$('shiftStatus').textContent=`Работа ${formatShift(shiftWorkSec)} • Смена ${formatShift(shiftTotalSec)}`;return;}
   const label=shiftMode==='break'?'Перерыв':'Обед';
-  $('shiftStatus').textContent=`${label} ${formatShift(shiftModeSec)} • Смена ${formatShift(shiftTotalSec)}`;
+  $('shiftStatus').textContent=`${label} ${formatShift(shiftModeSec)} • Работа ${formatShift(shiftWorkSec)} • Смена ${formatShift(shiftTotalSec)}`;
 }
 document.querySelectorAll('.filters button').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');filter=btn.dataset.filter;renderRows();}));
 $('alarmSearch').addEventListener('input',renderRows);
@@ -147,7 +159,7 @@ $('confirmFinishBtn').addEventListener('click',()=>{
   addHistory('Тревога завершена',`Результат: ${note}`);
   const completedHistory=history.filter(item=>item.alarmNumber===completedNumber).map(item=>({time:item.time,event:item.event,operator:item.operator,details:item.details}));
   const gbrEntry=completedHistory.find(item=>item.event==='ГБР направлена');
-  completedReports.unshift({number:selected.number,name:selected.name,address:selected.address,event:selected.event,operator:currentOperator,completedAt:new Date().toLocaleString('ru-RU'),result:note,operatorComment:selected.operatorComment||'Комментарий не добавлен',panel:selected.panel,section:selected.section,administrator:selected.administrator||'А 01',manager:selected.manager||'Соколова Марина Викторовна',gbr:gbrEntry?gbrEntry.details:'Не направлялась',chronology:sortHistory(completedHistory,'asc')});
+  completedReports.unshift({number:selected.number,name:selected.name,address:selected.address,event:selected.event,operator:currentOperator,completedAt:new Date().toLocaleString('ru-RU'),result:note,operatorComment:selected.operatorComment||'Комментарий не добавлен',panel:selected.panel,section:selected.section,category:selected.category||2,administrator:selected.administrator||'А 01',manager:selected.manager||'Соколова Марина Викторовна',gbr:gbrEntry?gbrEntry.details:'Не направлялась',chronology:sortHistory(completedHistory,'asc')});
   const index=alarms.findIndex(a=>a.number===completedNumber);
   if(index!==-1)alarms.splice(index,1);
   $('finishDialog').close();
@@ -160,9 +172,11 @@ $('startShiftBtn').addEventListener('click',()=>setShiftMode('work')); $('endShi
 $('openPhotosBtn').addEventListener('click',()=>$('photosDialog').showModal()); $('mapButton').addEventListener('click',()=>{$('mapPanel').hidden=false;}); $('mapClose').addEventListener('click',()=>{$('mapPanel').hidden=true;});
 $('copyObjectBtn').addEventListener('click',()=>copyText(selectedObjectText(),'Информация об объекте скопирована'));
 $('historyTimeSort').addEventListener('click',()=>{historySortDirection=historySortDirection==='asc'?'desc':'asc';renderHistory();});
-$('operatorCommentBtn').addEventListener('click',()=>{$('commentObjectLabel').textContent=`Объект ${selected.number} • ${selected.name}`;$('operatorCommentText').value=selected.operatorComment||'';$('operatorCommentDialog').showModal();});
+$('operatorCommentBtn').addEventListener('click',()=>{$('commentObjectLabel').textContent=`Объект ${selected.number} • ${selected.name}`;$('savedCommentText').textContent=selected.operatorComment||'Комментарий ещё не добавлен';const hasComment=Boolean(selected.operatorComment);$('commentView').hidden=!hasComment;$('commentEditor').hidden=hasComment;$('saveCommentBtn').hidden=hasComment;$('cancelEditCommentBtn').hidden=true;$('operatorCommentText').value=selected.operatorComment||'';$('operatorCommentDialog').showModal();});
 $('cancelCommentBtn').addEventListener('click',()=>$('operatorCommentDialog').close());
-$('saveCommentBtn').addEventListener('click',()=>{const text=$('operatorCommentText').value.trim();if(!text){$('operatorCommentText').focus();toast('Введите комментарий по осмотру');return;}const edited=Boolean(selected.operatorComment);selected.operatorComment=text;addHistory(edited?'Комментарий оператора изменён':'Комментарий оператора добавлен',text);$('operatorCommentDialog').close();toast(edited?'Комментарий обновлён':'Комментарий сохранён');});
+$('editCommentBtn').addEventListener('click',()=>{$('commentView').hidden=true;$('commentEditor').hidden=false;$('saveCommentBtn').hidden=false;$('cancelEditCommentBtn').hidden=false;$('operatorCommentText').focus();});
+$('cancelEditCommentBtn').addEventListener('click',()=>{$('commentView').hidden=false;$('commentEditor').hidden=true;$('saveCommentBtn').hidden=true;$('cancelEditCommentBtn').hidden=true;$('operatorCommentText').value=selected.operatorComment||'';});
+$('saveCommentBtn').addEventListener('click',()=>{const text=$('operatorCommentText').value.trim();if(!text){$('operatorCommentText').focus();toast('Введите комментарий по осмотру');return;}const edited=Boolean(selected.operatorComment);selected.operatorComment=text;addHistory(edited?'Комментарий оператора изменён':'Комментарий оператора добавлен',text);$('savedCommentText').textContent=text;$('commentView').hidden=false;$('commentEditor').hidden=true;$('saveCommentBtn').hidden=true;$('cancelEditCommentBtn').hidden=true;toast(edited?'Комментарий обновлён':'Комментарий сохранён');});
 function renderEventsDialog() {
   const date=$('eventsDate').value;
   const from=$('eventsTimeFrom').value;
@@ -177,14 +191,14 @@ function openEventsDialog(){
 }
 $('allEventsBtn').addEventListener('click',openEventsDialog);
 $('objectEventsBtn').addEventListener('click',()=>{$('loopsObjectLabel').textContent=`Объект ${selected.number} • ${selected.name}`;$('loopsDialogBody').innerHTML=`<table class="events-full-table"><thead><tr><th>№</th><th>Шлейф</th><th>Описание</th><th>Состояние</th><th>Время</th></tr></thead><tbody>${getAllLoops(selected).map(loop=>`<tr><td>${loop.number}</td><td>${loop.name}</td><td>${loop.description}</td><td class="${loop.alarm?'state-alarm':'state-ok'}">${loop.alarm?'ТРЕВОГА':'Норма'}</td><td>${loop.time}</td></tr>`).join('')}</tbody></table>`;$('loopsDialog').showModal();});
+$('allContactsBtn').addEventListener('click',()=>{$('contactsObjectLabel').textContent=`Объект ${selected.number} • ${selected.name}`;$('contactsDialogBody').innerHTML=`<table class="events-full-table contacts-full-table"><thead><tr><th>№</th><th>ФИО</th><th>Роль</th><th>Телефон</th><th></th></tr></thead><tbody>${responsibleContacts.map((c,index)=>`<tr><td>${index+1}</td><td><b>${c[0]}</b></td><td>${c[1]}</td><td>${c[3]}</td><td><button class="copy-phone" data-phone="${c[3]}" aria-label="Копировать номер ${c[0]}">⧉ Копировать</button></td></tr>`).join('')}</tbody></table>`;document.querySelectorAll('.copy-phone').forEach(button=>button.addEventListener('click',()=>copyText(button.dataset.phone,'Номер телефона скопирован')));$('contactsDialog').showModal();});
 $('applyEventsFilter').addEventListener('click',renderEventsDialog);
 $('resetEventsFilter').addEventListener('click',()=>{$('eventsDate').value='';$('eventsTimeFrom').value='';$('eventsTimeTo').value='';renderEventsDialog();});
 function renderReports(){
-  $('reportsBody').innerHTML=completedReports.length?completedReports.map(report=>`<article class="report-card"><div class="report-summary"><div><b>Объект ${report.number} • ${report.name}</b><span>${report.address}</span></div><div><span>Завершено</span><strong>${report.completedAt}</strong></div><div><span>Оператор</span><strong>${report.operator}</strong></div></div><details><summary>Подробнее об отработке</summary><div class="report-details"><dl><div><dt>Событие</dt><dd>${report.event}</dd></div><div><dt>Результат</dt><dd>${report.result}</dd></div><div><dt>ГБР</dt><dd>${report.gbr}</dd></div><div><dt>Комментарий оператора</dt><dd>${report.operatorComment||'Комментарий не добавлен'}</dd></div><div><dt>Администратор</dt><dd>${report.administrator}</dd></div><div><dt>Менеджер</dt><dd>${report.manager}</dd></div></dl><h3>Хронология отработки</h3><table><thead><tr><th>Время</th><th>Действие</th><th>Оператор</th><th>Детали</th></tr></thead><tbody>${sortHistory(report.chronology,'asc').map(item=>`<tr><td>${item.time}</td><td>${item.event}</td><td>${item.operator}</td><td>${item.details||'—'}</td></tr>`).join('')}</tbody></table></div></details></article>`).join(''):'<div class="events-empty">Завершённых тревог пока нет</div>';
+  $('reportsBody').innerHTML=completedReports.length?completedReports.map(report=>`<article class="report-card"><div class="report-summary"><div><b>Объект ${report.number} • ${report.name}</b><span>${report.address}</span></div><div><span>Завершено</span><strong>${report.completedAt}</strong></div><div><span>Оператор</span><strong>${report.operator}</strong></div></div><details><summary>Подробнее об отработке</summary><div class="report-details"><dl><div><dt>Событие</dt><dd>${report.event}</dd></div><div><dt>Категория</dt><dd>${report.category||2}</dd></div><div><dt>Результат</dt><dd>${report.result}</dd></div><div><dt>ГБР</dt><dd>${report.gbr}</dd></div><div><dt>Комментарий оператора</dt><dd>${report.operatorComment||'Комментарий не добавлен'}</dd></div><div><dt>Администратор</dt><dd>${report.administrator}</dd></div><div><dt>Менеджер</dt><dd>${report.manager}</dd></div></dl><h3>Хронология отработки</h3><table><thead><tr><th>Время</th><th>Действие</th><th>Оператор</th><th>Детали</th></tr></thead><tbody>${sortHistory(report.chronology,'asc').map(item=>`<tr><td>${item.time}</td><td>${item.event}</td><td>${item.operator}</td><td>${item.details||'—'}</td></tr>`).join('')}</tbody></table></div></details></article>`).join(''):'<div class="events-empty">Завершённых тревог пока нет</div>';
 }
 $('reportsMenuBtn').addEventListener('click',()=>{setDrawer(false);renderReports();$('reportsDialog').showModal();});
 document.addEventListener('click',e=>{const phone=e.target.closest('a.phone');if(!phone)return;if(phone.dataset.callName)addHistory('Звонок ответственному лицу',phone.dataset.callName);if(phone.dataset.callGbr)addHistory('Звонок экипажу ГБР',phone.dataset.callGbr);toast('Открывается звонок');}); document.addEventListener('keydown',e=>{if(e.key==='Escape'){setDrawer(false);$('operatorsMenu').hidden=true;$('mapPanel').hidden=true;}});
-document.querySelector('#workflowList button').addEventListener('click',()=>{addHistory('Проверена информация','Карточка объекта и сработавшие шлейфы проверены');toast('Действие добавлено в хронологию');});
 
 const paneResizer = $('paneResizer');
 const workspace = document.querySelector('.workspace');
@@ -232,7 +246,7 @@ paneResizer.addEventListener('keydown', e => {
 
 setInterval(()=>{
   alarms.forEach(a=>{if(a.status!=='complete')a.elapsedSec+=1;});
-  if(shiftMode!=='off'){shiftTotalSec+=1;shiftModeSec+=1;if(shiftMode==='work')shiftWorkSec+=1;renderShiftTimer();}
+  if(shiftMode!=='off'){shiftTotalSec+=1;shiftModeSec+=1;if(shiftMode==='work')shiftWorkSec+=1;else shiftPauseSec+=1;renderShiftTimer();}
   renderRows();if(selected)$('elapsed').textContent=formatElapsed(selected.elapsedSec);$('clock').textContent=new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
 },1000);
 renderRows();renderDetail();renderContacts();renderHistory();

@@ -10,7 +10,7 @@
 .shift-controls button:disabled{opacity:.45;cursor:not-allowed}
 .shift-controls .shift-primary{background:#347c4a;color:#fff;border-color:#5b9a6c}
 .shift-controls .shift-end{background:#7e2630;color:#fff;border-color:#a55861}
-.shift-controls .shift-mode.active{background:#d8e6ef;border-color:#fff;box-shadow:inset 0 0 0 1px #234f70}
+.shift-controls .shift-mode{background:#d88922;color:#fff;border-color:#eea84f}.shift-controls .shift-mode.active{background:#b91f2e;color:#fff;border-color:#e05d67;box-shadow:inset 0 0 0 1px #7c111c}
 .shift-status{grid-column:1/-1;text-align:center;color:#d8e4ec;font-size:.63rem}
 
 /* Фото объекта */
@@ -107,9 +107,12 @@ body.resizing-panes{cursor:col-resize;user-select:none}
 .alarm-table tbody tr{background:#fff;color:#111}
 .alarm-table tbody tr:hover{background:#f5f7f8}
 .alarm-table tbody tr.selected{background:#fff;outline:2px solid #2f75a5;outline-offset:-2px}
-.alarm-table tbody tr.new{background:#fff0f2;color:#a20f21}
-.alarm-table tbody tr.new:hover,.alarm-table tbody tr.new.selected{background:#ffe4e8}
+.alarm-table tbody tr.new{background:#fff;color:#111}.alarm-table tbody tr.new:hover,.alarm-table tbody tr.new.selected{background:#f5f7f8}.alarm-table tbody tr.new .status.new{color:#111;background:#edf1f4}
 .alarm-table tbody tr:not(.new) .status{color:#111;background:#edf1f4}
+.alarm-table tbody tr.kts{font-weight:800;border-left-color:#c8172c}.alarm-table .status.kts{font-weight:900;border:1px solid #c8172c;animation:ktsPulse 1.2s ease-in-out infinite}@keyframes ktsPulse{0%,100%{background:#fff;color:#111;box-shadow:0 0 0 0 #d61c3440}50%{background:#f7cfd5;color:#9e1022;box-shadow:0 0 0 3px #d61c3418}}
+.category-badge{display:inline-grid;place-items:center;min-width:28px;height:24px;padding:0 8px;border-radius:12px;background:#e9eef2;color:#17232b;margin-right:8px}.category-badge.important{background:#f4dfb9;color:#6d4100;border:1px solid #d49832}#objectCategoryHint{color:#687681}
+.comment-view>div{display:flex;align-items:center;justify-content:space-between;color:#26343d;font-weight:700}.comment-view p{margin:10px 0;padding:12px;border:1px solid #d5dfe5;border-radius:5px;background:#f7f9fa;white-space:pre-wrap}.edit-pencil{width:36px;height:34px;border:1px solid #2d73b5;border-radius:4px;background:#edf5ff;color:#075fd4;font-size:1.1rem;cursor:pointer}
+#contactsDialogBody{padding:16px;max-height:65vh;overflow:auto}.contacts-full-table .copy-phone{height:30px;border:1px solid #2d73b5;border-radius:4px;background:#edf5ff;color:#075fd4;font-weight:700;cursor:pointer}.operator-mode{display:grid;gap:2px;font-weight:700}.operator-mode time{font-size:.65rem;color:#6f3b00}.operator-mode.break,.operator-mode.lunch{color:#b25c00}.operators-popover{width:390px}.operators-popover li{grid-template-columns:34px 1fr minmax(105px,auto) auto}
 
 /* Отчёты по завершённым тревогам */
 .reports-dialog{width:min(1180px,95vw)}

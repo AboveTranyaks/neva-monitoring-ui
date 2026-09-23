@@ -46,8 +46,8 @@
       <ul id="operatorList">
         <li data-name="смирнов"><span class="avatar">СА</span><b>Смирнов А.С.</b><span class="online">● Онлайн</span><em>1 тревога</em></li>
         <li data-name="иванов"><span class="avatar">ИИ</span><b>Иванов И.И.</b><span class="online">● Онлайн</span><em>2 тревоги</em></li>
-        <li data-name="петров"><span class="avatar">ПА</span><b>Петров А.В.</b><span class="online">● Онлайн</span><em>Свободен</em></li>
-        <li data-name="сидорова"><span class="avatar">СЕ</span><b>Сидорова Е.С.</b><span class="away">● Перерыв</span><em></em></li>
+        <li data-name="петров"><span class="avatar">ПА</span><b>Петров А.В.</b><span class="operator-mode lunch">● Обед <time>00:18:42</time></span><em>Свободен</em></li>
+        <li data-name="сидорова"><span class="avatar">СЕ</span><b>Сидорова Е.С.</b><span class="operator-mode break">● Перерыв <time>00:07:15</time></span><em>1 тревога</em></li>
       </ul>
     </div>
 
@@ -96,6 +96,7 @@
               <div><dt>Пультовый номер</dt><dd id="objectNumber">14919</dd></div>
               <div><dt>Пульт</dt><dd id="objectPanel">Краснодар</dd></div>
               <div><dt>Раздел</dt><dd id="objectSection">Раздел 1</dd></div>
+              <div><dt>Категория объекта</dt><dd><strong class="category-badge" id="objectCategory">2</strong><small id="objectCategoryHint">Стандартный объект</small></dd></div>
               <div><dt>Администратор</dt><dd id="objectAdministrator">А 01</dd></div>
               <div><dt>Менеджер</dt><dd id="objectManager">Соколова Марина Викторовна</dd></div>
               <div><dt>Услуги</dt><dd id="objectServices">Охрана ОС • Мониторинг ПС</dd></div>
@@ -116,7 +117,7 @@
           </section>
 
           <section class="card contacts-card">
-            <h2 class="section-heading blue">Ответственные лица</h2>
+            <div class="section-heading blue section-heading-actions"><h2>Ответственные лица</h2><button id="allContactsBtn">Все ответственные ›</button></div>
             <div id="contactsList"></div>
           </section>
         </div>
@@ -154,8 +155,9 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <dialog id="eventsDialog"><form method="dialog"><header><div><h2>Все события объекта</h2><small id="eventsObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div class="event-filters"><label>Дата<input id="eventsDate" type="date"></label><label>Время с<input id="eventsTimeFrom" type="time"></label><label>Время по<input id="eventsTimeTo" type="time"></label><button type="button" id="applyEventsFilter">Показать</button><button type="button" class="secondary" id="resetEventsFilter">Сбросить</button></div><div id="eventsDialogBody"></div></form></dialog>
   <dialog class="finish-dialog" id="finishDialog"><form method="dialog"><header><div><h2>Завершение тревоги</h2><small id="finishObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div class="finish-dialog-body"><label>Результат отработки и примечание<textarea id="finishNote" rows="5" placeholder="Например: ответственное лицо подтвердило ложное срабатывание…" required></textarea></label><div class="finish-dialog-actions"><button type="button" class="secondary" id="cancelFinishBtn">Отмена</button><button type="button" id="confirmFinishBtn">Завершить тревогу</button></div></div></form></dialog>
-  <dialog class="finish-dialog" id="operatorCommentDialog"><form method="dialog"><header><div><h2>Комментарий оператора</h2><small id="commentObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div class="finish-dialog-body"><label>Информация по результатам осмотра объекта<textarea id="operatorCommentText" rows="6" placeholder="Например: экипаж осмотрел периметр, следов проникновения не обнаружено…"></textarea></label><p class="dialog-hint">Комментарий смогут дополнять и редактировать все операторы, работающие с тревогой.</p><div class="finish-dialog-actions"><button type="button" class="secondary" id="cancelCommentBtn">Отмена</button><button type="button" class="save-comment" id="saveCommentBtn">Сохранить комментарий</button></div></div></form></dialog>
+  <dialog class="finish-dialog" id="operatorCommentDialog"><form method="dialog"><header><div><h2>Комментарий оператора</h2><small id="commentObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div class="finish-dialog-body"><div class="comment-view" id="commentView"><div><span>Информация по результатам осмотра объекта</span><button type="button" class="edit-pencil" id="editCommentBtn" aria-label="Редактировать комментарий" title="Редактировать">✎</button></div><p id="savedCommentText">Комментарий ещё не добавлен</p></div><label id="commentEditor" hidden>Информация по результатам осмотра объекта<textarea id="operatorCommentText" rows="6" placeholder="Например: экипаж осмотрел периметр, следов проникновения не обнаружено…"></textarea></label><p class="dialog-hint">Комментарий смогут дополнять и редактировать все операторы, работающие с тревогой.</p><div class="finish-dialog-actions"><button type="button" class="secondary" id="cancelCommentBtn">Закрыть</button><button type="button" class="secondary" id="cancelEditCommentBtn" hidden>Отменить редактирование</button><button type="button" class="save-comment" id="saveCommentBtn" hidden>Сохранить комментарий</button></div></div></form></dialog>
   <dialog id="loopsDialog"><form method="dialog"><header><div><h2>Все шлейфы объекта</h2><small id="loopsObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div id="loopsDialogBody"></div></form></dialog>
+  <dialog id="contactsDialog"><form method="dialog"><header><div><h2>Все ответственные лица</h2><small id="contactsObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div id="contactsDialogBody"></div></form></dialog>
   <dialog class="reports-dialog" id="reportsDialog"><form method="dialog"><header><div><h2>Отчёты по завершённым тревогам</h2><small>Полная информация и хронология отработки</small></div><button aria-label="Закрыть">×</button></header><div id="reportsBody"></div></form></dialog>
   <dialog class="photos-dialog" id="photosDialog"><form method="dialog"><header><div><h2>Фотографии объекта</h2><small id="photosObjectName">Кабинет разработчиков ПО ХБ Нева</small></div><button aria-label="Закрыть">×</button></header><div class="photo-gallery"><figure><img src="assets/office-main.png" alt="Общий вид офиса"><figcaption>Общий вид помещения</figcaption></figure><figure><img src="assets/office-entrance.png" alt="Вход в офис"><figcaption>Основной вход</figcaption></figure><figure><img src="assets/office-security.png" alt="Охранное оборудование"><figcaption>Прибор и датчики</figcaption></figure></div></form></dialog>
   <aside class="map-panel" id="mapPanel" hidden aria-label="Мини-карта объекта">

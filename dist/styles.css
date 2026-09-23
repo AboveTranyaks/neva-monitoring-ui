@@ -53,7 +53,7 @@
 @media(max-width:1450px){.topbar{height:auto;min-height:70px;flex-wrap:wrap;padding:8px 12px}.shift-controls{order:4;margin-left:auto}.top-stats{order:5;width:100%;padding-bottom:3px}.operators-popover{top:118px}.menu-drawer{top:119px}.drawer-backdrop{inset:119px 250px 0 0}.photo-gallery{grid-template-columns:1fr}.photo-gallery figure:first-child{grid-row:auto}.photo-gallery figure:first-child img{height:330px}}
 
 /* Регулируемая ширина списка и карточки */
-.workspace{--list-width:36%;grid-template-columns:var(--list-width) 8px minmax(0,1fr)}
+.workspace{--list-width:55%;grid-template-columns:var(--list-width) 8px minmax(0,1fr)}
 .pane-resizer{position:relative;background:#eef2f5;border-left:1px solid #cbd5dc;border-right:1px solid #cbd5dc;cursor:col-resize;touch-action:none;z-index:12}
 .pane-resizer:hover,.pane-resizer.dragging,.pane-resizer:focus{background:#dce9f2;outline:none}
 .pane-resizer span{position:absolute;left:50%;top:50%;width:3px;height:54px;border-radius:3px;background:#8ca4b5;transform:translate(-50%,-50%)}
@@ -71,7 +71,7 @@ body.resizing-panes{cursor:col-resize;user-select:none}
 .middle-grid{grid-template-columns:1.25fr 1fr}
 .contacts-card{grid-column:auto}
 
-@media(max-width:1450px){.workspace{--list-width:39%;grid-template-columns:var(--list-width) 8px minmax(0,1fr)}.main-data-grid{grid-template-columns:minmax(0,1fr) 320px}.middle-grid{grid-template-columns:1fr}.contacts-card{grid-column:auto}}
+@media(max-width:1450px){.workspace{--list-width:55%;grid-template-columns:var(--list-width) 8px minmax(0,1fr)}.main-data-grid{grid-template-columns:minmax(0,1fr) 320px}.middle-grid{grid-template-columns:1fr}.contacts-card{grid-column:auto}}
 @media(max-width:1100px){.workspace{display:block}.pane-resizer{display:none}.main-data-grid{grid-template-columns:1fr}.embedded-gbr{border-left:0;border-top:1px solid var(--line)}}
 
 /* Адрес в списке тревог и копирование */

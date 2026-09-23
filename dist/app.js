@@ -15,10 +15,7 @@ const gbrUnits = [
   {id:'ГБР-7',crew:'Мельников Р.С.',distance:'7,4 км',eta:'16 мин',role:'Резервная',state:'Свободен',phone:'+78615550007'},
   {id:'ГБР-4',crew:'Захаров Д.В.',distance:'11,2 км',eta:'24 мин',role:'Резервная',state:'На задании',phone:'+78615550004'}
 ];
-const completedReports = [{
-  number:'9921',name:'Бизнес-центр Олимп',address:'Краснодар, ул. Северная, 324',event:'Техническое событие',operator:'Сидорова Е.С.',completedAt:'04.08.2026 10:49:40',result:'Связь восстановлена, оборудование работает штатно.',panel:'Краснодар',section:'Раздел 3',administrator:'А 01',manager:'Соколова Марина Викторовна',gbr:'Не направлялась',
-  chronology:[{time:'10:31:02',event:'Получено техническое событие',operator:'Система'},{time:'10:32:15',event:'Тревога принята в работу',operator:'Сидорова Е.С.'},{time:'10:38:04',event:'Звонок ответственному лицу',operator:'Сидорова Е.С.'},{time:'10:49:40',event:'Тревога завершена',operator:'Сидорова Е.С.'}]
-}];
+const completedReports = [];
 const operatorStats = [
   {date:'2026-09-23',name:'Смирнов А.С.',start:'08:00',end:'16:32',workSec:27480,breakSec:1380,lunchSec:1800,alarms:12},
   {date:'2026-09-23',name:'Иванов И.И.',start:'08:02',end:'16:41',workSec:28020,breakSec:960,lunchSec:1860,alarms:15},
@@ -37,6 +34,8 @@ let shiftTotalSec = 0;
 let shiftWorkSec = 0;
 let shiftModeSec = 0;
 let shiftPauseSec = 0;
+let shiftBreakSec = 0;
+let shiftLunchSec = 0;
 let shiftFinished = false;
 let lastMouseActivityAt = Date.now();
 let autoIdleBreak = false;
@@ -150,7 +149,7 @@ function hasDispatchedGbr(alarmNumber){return history.some(item=>item.alarmNumbe
 function setShiftMode(mode){
   const previous=shiftMode;
   shiftMode=mode; const active=mode!=='off';
-  if(mode==='work'&&!shiftStartedAt){shiftStartedAt=new Date();shiftTotalSec=0;shiftWorkSec=0;shiftPauseSec=0;shiftModeSec=0;shiftFinished=false;lastMouseActivityAt=Date.now();}
+  if(mode==='work'&&!shiftStartedAt){shiftStartedAt=new Date();shiftTotalSec=0;shiftWorkSec=0;shiftPauseSec=0;shiftBreakSec=0;shiftLunchSec=0;shiftModeSec=0;shiftFinished=false;lastMouseActivityAt=Date.now();}
   if(mode!==previous&&mode!=='off')shiftModeSec=0;
   $('startShiftBtn').hidden=active; $('endShiftBtn').hidden=!active; $('breakBtn').disabled=!active; $('lunchBtn').disabled=!active;
   $('breakBtn').classList.toggle('active',mode==='break'); $('lunchBtn').classList.toggle('active',mode==='lunch');
@@ -182,6 +181,7 @@ $('confirmFinishBtn').addEventListener('click',()=>{
   const completedHistory=history.filter(item=>item.alarmNumber===completedNumber).map(item=>({time:item.time,event:item.event,operator:item.operator,details:item.details}));
   const gbrEntry=completedHistory.find(item=>item.event==='ГБР направлена');
   completedReports.unshift({number:selected.number,name:selected.name,address:selected.address,event:selected.event,operator:currentOperator,completedAt:new Date().toLocaleString('ru-RU'),result:note,operatorComment:selected.operatorComment||'Комментарий не добавлен',panel:selected.panel,section:selected.section,category:selected.category||2,administrator:selected.administrator||'А 01',manager:selected.manager||'Соколова Марина Викторовна',gbr:gbrEntry?gbrEntry.details:'Не направлялась',chronology:sortHistory(completedHistory,'asc')});
+  const todayStat=operatorStats.find(item=>item.date===localIsoDate()&&item.name===currentOperator);if(todayStat)todayStat.alarms+=1;
   const index=alarms.findIndex(a=>a.number===completedNumber);
   if(index!==-1)alarms.splice(index,1);
   $('finishDialog').close();
@@ -221,18 +221,24 @@ $('allContactsBtn').addEventListener('click',()=>{$('contactsObjectLabel').textC
 $('applyEventsFilter').addEventListener('click',renderEventsDialog);
 $('resetEventsFilter').addEventListener('click',()=>{$('eventsDate').value='';$('eventsTimeFrom').value='';$('eventsTimeTo').value='';renderEventsDialog();});
 function renderReports(){
-  $('reportsBody').innerHTML=completedReports.length?completedReports.map(report=>`<article class="report-card"><div class="report-summary"><div><b>Объект ${report.number} • ${report.name}</b><span>${report.address}</span></div><div><span>Завершено</span><strong>${report.completedAt}</strong></div><div><span>Оператор</span><strong>${report.operator}</strong></div></div><details><summary>Подробнее об отработке</summary><div class="report-details"><dl><div><dt>Событие</dt><dd>${report.event}</dd></div><div><dt>Категория</dt><dd>${report.category||2}</dd></div><div><dt>Результат</dt><dd>${report.result}</dd></div><div><dt>ГБР</dt><dd>${report.gbr}</dd></div><div><dt>Комментарий оператора</dt><dd>${report.operatorComment||'Комментарий не добавлен'}</dd></div><div><dt>Администратор</dt><dd>${report.administrator}</dd></div><div><dt>Менеджер</dt><dd>${report.manager}</dd></div></dl><h3>Хронология отработки</h3><table><thead><tr><th>Время</th><th>Действие</th><th>Оператор</th><th>Детали</th></tr></thead><tbody>${sortHistory(report.chronology,'asc').map(item=>`<tr><td>${item.time}</td><td>${item.event}</td><td>${item.operator}</td><td>${item.details||'—'}</td></tr>`).join('')}</tbody></table></div></details></article>`).join(''):'<div class="events-empty">Завершённых тревог пока нет</div>';
+  $('reportsBody').innerHTML=completedReports.length?completedReports.map((report,index)=>`<article class="report-card"><div class="report-summary"><div><b>Объект ${report.number} • ${report.name}</b><span>${report.address}</span></div><div><span>Завершено</span><strong>${report.completedAt}</strong></div><div><span>Оператор</span><strong>${report.operator}</strong></div></div><details open><summary>Отработка тревоги</summary><div class="report-details"><dl><div><dt>Событие</dt><dd>${report.event}</dd></div><div><dt>Категория</dt><dd>${report.category||2}</dd></div><div><dt>Результат</dt><dd>${report.result}</dd></div><div><dt>ГБР</dt><dd>${report.gbr}</dd></div><div><dt>Комментарий оператора</dt><dd>${report.operatorComment||'Комментарий не добавлен'}</dd></div><div><dt>Администратор</dt><dd>${report.administrator}</dd></div><div><dt>Менеджер</dt><dd>${report.manager}</dd></div></dl><div class="report-history-head"><h3>Хронология отработки</h3><button class="copy-report-history" data-report-index="${index}">⧉ Копировать хронологию</button></div><table><thead><tr><th>Время</th><th>Действие</th><th>Оператор</th><th>Детали</th></tr></thead><tbody>${sortHistory(report.chronology,'asc').map(item=>`<tr><td>${item.time}</td><td>${item.event}</td><td>${item.operator}</td><td>${item.details||'—'}</td></tr>`).join('')}</tbody></table></div></details></article>`).join(''):'<div class="events-empty">Завершённых тревог пока нет</div>';
+  document.querySelectorAll('.copy-report-history').forEach(button=>button.addEventListener('click',()=>{const report=completedReports[Number(button.dataset.reportIndex)];const text=[`Объект ${report.number} • ${report.name}`,'Время\tДействие\tОператор\tДетали',...sortHistory(report.chronology,'asc').map(item=>`${item.time}\t${item.event}\t${item.operator}\t${item.details||'—'}`)].join('\n');copyText(text,'Хронология скопирована');}));
 }
 $('reportsMenuBtn').addEventListener('click',()=>{setDrawer(false);renderReports();$('reportsDialog').showModal();});
 function renderOperatorStats(){
   const date=$('operatorStatsDate').value;
-  const rows=operatorStats.filter(item=>item.date===date);
+  const rows=getLiveOperatorStats(date);
   const totalWork=rows.reduce((sum,item)=>sum+item.workSec,0), totalBreak=rows.reduce((sum,item)=>sum+item.breakSec,0), totalLunch=rows.reduce((sum,item)=>sum+item.lunchSec,0), totalAlarms=rows.reduce((sum,item)=>sum+item.alarms,0);
   $('operatorStatsBody').innerHTML=rows.length?`<div class="operator-stats-summary"><div><span>Операторов</span><b>${rows.length}</b></div><div><span>Рабочее время</span><b>${formatShift(totalWork)}</b></div><div><span>Перерывы</span><b>${formatShift(totalBreak)}</b></div><div><span>Обед</span><b>${formatShift(totalLunch)}</b></div><div><span>Тревог обработано</span><b>${totalAlarms}</b></div></div><div class="operator-stats-table-wrap"><table class="events-full-table operator-stats-table"><thead><tr><th>Оператор</th><th>Начало смены</th><th>Завершение</th><th>Рабочее время</th><th>Перерыв</th><th>Обед</th><th>Обработано тревог</th></tr></thead><tbody>${rows.map(item=>`<tr><td><b>${item.name}</b></td><td>${item.start}</td><td>${item.end}</td><td><strong>${formatShift(item.workSec)}</strong></td><td>${formatShift(item.breakSec)}</td><td>${formatShift(item.lunchSec)}</td><td><span class="alarm-count-badge">${item.alarms}</span></td></tr>`).join('')}</tbody></table></div>`:'<div class="events-empty">За выбранную дату статистики нет</div>';
 }
+function localIsoDate(date=new Date()){return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;}
+function getLiveOperatorStats(date){
+  const today=localIsoDate(),now=new Date(),nowSec=now.getHours()*3600+now.getMinutes()*60+now.getSeconds();
+  return operatorStats.filter(item=>item.date===date).map(item=>{if(date!==today)return {...item};const [h,m]=item.start.split(':').map(Number);const elapsed=Math.max(0,nowSec-h*3600-m*60);const live={...item,end:'Сейчас',workSec:Math.max(0,elapsed-item.breakSec-item.lunchSec)};if(item.name===currentOperator&&shiftStartedAt){live.start=shiftStartedAt.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});live.end=shiftFinished?new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):'Сейчас';live.workSec=shiftWorkSec;live.breakSec=shiftBreakSec;live.lunchSec=shiftLunchSec;}return live;});
+}
 $('operatorStatsMenuBtn').addEventListener('click',()=>{setDrawer(false);renderOperatorStats();$('operatorStatsDialog').showModal();});
 $('applyOperatorStats').addEventListener('click',renderOperatorStats);
-$('todayOperatorStats').addEventListener('click',()=>{$('operatorStatsDate').value='2026-09-23';renderOperatorStats();});
+$('todayOperatorStats').addEventListener('click',()=>{$('operatorStatsDate').value=localIsoDate();renderOperatorStats();});
 document.addEventListener('click',e=>{const phone=e.target.closest('a.phone');if(!phone)return;if(phone.dataset.callName)addHistory('Звонок ответственному лицу',phone.dataset.callName);if(phone.dataset.callGbr)addHistory('Звонок экипажу ГБР',phone.dataset.callGbr);toast('Открывается звонок');}); document.addEventListener('keydown',e=>{if(e.key==='Escape'){setDrawer(false);$('operatorsMenu').hidden=true;$('mapPanel').hidden=true;}});
 
 const paneResizer = $('paneResizer');
@@ -282,7 +288,8 @@ paneResizer.addEventListener('keydown', e => {
 setInterval(()=>{
   alarms.forEach(a=>{if(a.status!=='complete')a.elapsedSec+=1;});
   if(shiftMode==='work'&&Date.now()-lastMouseActivityAt>=idleBreakAfterMs){autoIdleBreak=true;setShiftMode('break');toast('Нет активности 3 минуты — включён режим «Перерыв»');}
-  if(shiftMode!=='off'){shiftTotalSec+=1;shiftModeSec+=1;if(shiftMode==='work')shiftWorkSec+=1;else shiftPauseSec+=1;renderShiftTimer();}
+  if(shiftMode!=='off'){shiftTotalSec+=1;shiftModeSec+=1;if(shiftMode==='work')shiftWorkSec+=1;else{shiftPauseSec+=1;if(shiftMode==='break')shiftBreakSec+=1;if(shiftMode==='lunch')shiftLunchSec+=1;}renderShiftTimer();}
+  if($('operatorStatsDialog').open)renderOperatorStats();
   renderRows();if(selected)$('elapsed').textContent=formatElapsed(selected.elapsedSec);$('clock').textContent=new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
 },1000);
 renderRows();renderDetail();renderContacts();renderHistory();

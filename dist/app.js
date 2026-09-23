@@ -38,6 +38,9 @@ let shiftWorkSec = 0;
 let shiftModeSec = 0;
 let shiftPauseSec = 0;
 let shiftFinished = false;
+let lastMouseActivityAt = Date.now();
+let autoIdleBreak = false;
+const idleBreakAfterMs = 3 * 60 * 1000;
 let historySortDirection = 'asc';
 let history = [
   {alarmNumber:'11307',tone:'red',date:'2026-08-04',time:'11:00:19',event:'Тревога принята оператором',operator:'Петров А.В.',details:'Принята в работу'},
@@ -147,7 +150,7 @@ function hasDispatchedGbr(alarmNumber){return history.some(item=>item.alarmNumbe
 function setShiftMode(mode){
   const previous=shiftMode;
   shiftMode=mode; const active=mode!=='off';
-  if(mode==='work'&&!shiftStartedAt){shiftStartedAt=new Date();shiftTotalSec=0;shiftWorkSec=0;shiftPauseSec=0;shiftModeSec=0;shiftFinished=false;}
+  if(mode==='work'&&!shiftStartedAt){shiftStartedAt=new Date();shiftTotalSec=0;shiftWorkSec=0;shiftPauseSec=0;shiftModeSec=0;shiftFinished=false;lastMouseActivityAt=Date.now();}
   if(mode!==previous&&mode!=='off')shiftModeSec=0;
   $('startShiftBtn').hidden=active; $('endShiftBtn').hidden=!active; $('breakBtn').disabled=!active; $('lunchBtn').disabled=!active;
   $('breakBtn').classList.toggle('active',mode==='break'); $('lunchBtn').classList.toggle('active',mode==='lunch');
@@ -187,7 +190,11 @@ $('confirmFinishBtn').addEventListener('click',()=>{
   if(selected)renderDetail();
   toast('Тревога завершена и удалена из активного списка');
 });
-$('startShiftBtn').addEventListener('click',()=>setShiftMode('work')); $('endShiftBtn').addEventListener('click',()=>{shiftFinished=true;shiftStartedAt=null;setShiftMode('off');}); $('breakBtn').addEventListener('click',()=>setShiftMode(shiftMode==='break'?'work':'break')); $('lunchBtn').addEventListener('click',()=>setShiftMode(shiftMode==='lunch'?'work':'lunch'));
+$('startShiftBtn').addEventListener('click',()=>{autoIdleBreak=false;setShiftMode('work');}); $('endShiftBtn').addEventListener('click',()=>{autoIdleBreak=false;shiftFinished=true;shiftStartedAt=null;setShiftMode('off');}); $('breakBtn').addEventListener('click',()=>{autoIdleBreak=false;lastMouseActivityAt=Date.now();setShiftMode(shiftMode==='break'?'work':'break');}); $('lunchBtn').addEventListener('click',()=>{autoIdleBreak=false;lastMouseActivityAt=Date.now();setShiftMode(shiftMode==='lunch'?'work':'lunch');});
+document.addEventListener('mousemove',()=>{
+  lastMouseActivityAt=Date.now();
+  if(autoIdleBreak&&shiftMode==='break'){autoIdleBreak=false;setShiftMode('work');toast('Активность возобновлена — режим «Работа»');}
+},{passive:true});
 $('openPhotosBtn').addEventListener('click',()=>$('photosDialog').showModal()); $('mapButton').addEventListener('click',()=>{$('mapPanel').hidden=false;}); $('mapClose').addEventListener('click',()=>{$('mapPanel').hidden=true;});
 $('copyObjectBtn').addEventListener('click',()=>copyText(selectedObjectText(),'Информация об объекте скопирована'));
 $('historyTimeSort').addEventListener('click',()=>{historySortDirection=historySortDirection==='asc'?'desc':'asc';renderHistory();});
@@ -274,6 +281,7 @@ paneResizer.addEventListener('keydown', e => {
 
 setInterval(()=>{
   alarms.forEach(a=>{if(a.status!=='complete')a.elapsedSec+=1;});
+  if(shiftMode==='work'&&Date.now()-lastMouseActivityAt>=idleBreakAfterMs){autoIdleBreak=true;setShiftMode('break');toast('Нет активности 3 минуты — включён режим «Перерыв»');}
   if(shiftMode!=='off'){shiftTotalSec+=1;shiftModeSec+=1;if(shiftMode==='work')shiftWorkSec+=1;else shiftPauseSec+=1;renderShiftTimer();}
   renderRows();if(selected)$('elapsed').textContent=formatElapsed(selected.elapsedSec);$('clock').textContent=new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
 },1000);

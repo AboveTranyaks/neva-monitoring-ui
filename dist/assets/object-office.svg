@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Офис охраняемого объекта</title>
+  <desc id="desc">Светлый современный офис с рабочими столами и знаком Нева.</desc>
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f7f9fa"/><stop offset="1" stop-color="#dfe8ed"/></linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d9e1e5"/><stop offset="1" stop-color="#aebcc4"/></linearGradient>
+  </defs>
+  <rect width="960" height="600" fill="url(#wall)"/>
+  <path d="M0 390h960v210H0z" fill="url(#floor)"/>
+  <path d="M0 390h960M115 390 15 600M305 390 245 600M495 390 480 600M685 390 715 600M875 390 945 600" stroke="#97a7b0" stroke-width="3" opacity=".65"/>
+  <g fill="#c9d7de" stroke="#9eb1bb" stroke-width="5">
+    <rect x="34" y="55" width="245" height="275" rx="5"/><rect x="681" y="55" width="245" height="275" rx="5"/>
+  </g>
+  <g fill="#9bc1d5" opacity=".8"><rect x="49" y="70" width="100" height="245"/><rect x="164" y="70" width="100" height="245"/><rect x="696" y="70" width="100" height="245"/><rect x="811" y="70" width="100" height="245"/></g>
+  <g fill="#40515b"><path d="M110 430h275l-24 95H92z"/><path d="M575 430h275l18 95H599z"/></g>
+  <g fill="#1c2c35"><rect x="194" y="350" width="100" height="68" rx="5"/><rect x="660" y="350" width="100" height="68" rx="5"/></g>
+  <g fill="#e6ecef"><rect x="205" y="361" width="78" height="46"/><rect x="671" y="361" width="78" height="46"/></g>
+  <g fill="#344750"><rect x="222" y="418" width="42" height="14"/><rect x="687" y="418" width="42" height="14"/></g>
+  <g fill="#73858f"><path d="M145 500h78v26h-17l-7 70h-12l-8-70h-34z"/><path d="M718 500h78v26h-17l-7 70h-12l-8-70h-34z"/></g>
+  <g transform="translate(480 225)"><circle r="103" fill="#fff" stroke="#0c4a91" stroke-width="12"/><circle r="83" fill="#0c4a91"/><text x="0" y="16" text-anchor="middle" font-family="Arial,sans-serif" font-size="47" font-weight="700" fill="#fff">НЕВА</text></g>
+  <g fill="#4b815b"><path d="M320 389c-32-57 4-105 42-109-5 31 3 55 22 75-4-48 29-83 70-86-5 59-27 100-74 120z"/><path d="M820 389c-22-50 8-91 43-98-4 29 4 51 22 70 0-35 20-63 50-71-1 48-19 81-61 99z"/></g>
+</svg>

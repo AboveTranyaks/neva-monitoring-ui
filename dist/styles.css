@@ -64,6 +64,7 @@ body.resizing-panes{cursor:col-resize;user-select:none}
 .main-data-heading{display:flex;align-items:center;justify-content:space-between}
 .main-data-heading h2{margin:0;font:inherit}
 .main-data-heading button{height:29px;padding:0 12px;border:1px solid #2772bc;border-radius:4px;background:#edf5fc;color:#0d5da7;font-weight:800;cursor:pointer}
+.heading-actions{display:flex;gap:7px}
 .main-data-grid{grid-template-columns:minmax(0,1fr) 360px;align-items:stretch}
 .embedded-gbr{border-left:1px solid var(--line);background:#f5f7f8}
 .embedded-gbr h3{font-size:.86rem}
@@ -72,3 +73,50 @@ body.resizing-panes{cursor:col-resize;user-select:none}
 
 @media(max-width:1450px){.workspace{--list-width:39%;grid-template-columns:var(--list-width) 8px minmax(0,1fr)}.main-data-grid{grid-template-columns:minmax(0,1fr) 320px}.middle-grid{grid-template-columns:1fr}.contacts-card{grid-column:auto}}
 @media(max-width:1100px){.workspace{display:block}.pane-resizer{display:none}.main-data-grid{grid-template-columns:1fr}.embedded-gbr{border-left:0;border-top:1px solid var(--line)}}
+
+/* Адрес в списке тревог и копирование */
+.alarm-table{table-layout:fixed;min-width:940px}
+.alarm-table th:nth-child(1){width:72px}.alarm-table th:nth-child(2){width:160px}.alarm-table th:nth-child(3){width:205px}.alarm-table th:nth-child(4){width:145px}.alarm-table th:nth-child(5){width:140px}.alarm-table th:nth-child(6){width:95px}.alarm-table th:nth-child(7){width:82px}
+.address-cell{position:relative;padding-right:34px!important}
+.address-cell>span{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:help}
+.copy-address{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:25px;height:25px;border:1px solid #9bb9d0;border-radius:4px;background:#eef6fc;color:#0b63ae;cursor:pointer;opacity:.35}
+.alarm-table tr:hover .copy-address,.copy-address:focus{opacity:1}
+
+/* Полный журнал событий */
+.section-heading-actions{display:flex;align-items:center;justify-content:space-between}
+.section-heading-actions h2{margin:0;font:inherit}
+.section-heading-actions button{border:0;background:transparent;color:#0b5ca9;font-weight:700;cursor:pointer}
+#eventsDialog{width:min(980px,94vw)}
+#eventsDialog header small{display:block;margin-top:3px;color:#667480}
+.event-filters{display:flex;align-items:end;gap:10px;padding:14px 18px;background:#f1f5f7;border-bottom:1px solid var(--line)}
+.event-filters label{display:grid;gap:4px;color:#52616b;font-size:.75rem}.event-filters input{height:36px;border:1px solid #b9c7d0;border-radius:4px;padding:0 9px;background:#fff;color:#111}
+.event-filters button{height:36px;padding:0 16px;border:1px solid #276fa8;border-radius:4px;background:#1f6598;color:#fff;font-weight:800;cursor:pointer}.event-filters button.secondary{background:#fff;color:#28404f;border-color:#9babb5}
+#eventsDialogBody{padding:14px 18px;max-height:58vh;overflow:auto}
+.events-full-table{width:100%;border-collapse:collapse;font-size:.82rem}.events-full-table th,.events-full-table td{padding:9px 10px;border-bottom:1px solid #dfe6ea;text-align:left}.events-full-table th{position:sticky;top:0;background:#e9f0f4}.events-empty{padding:34px;text-align:center;color:#677580}
+@media(max-width:700px){.event-filters{align-items:stretch;flex-direction:column}.event-filters button{width:100%}}
+
+/* Завершение тревоги с результатом */
+.finish-dialog{width:min(620px,92vw)}
+.finish-dialog header small{display:block;margin-top:3px;color:#667480}
+.finish-dialog-body{padding:18px}
+.finish-dialog-body label{display:grid;gap:8px;color:#26343d;font-weight:700}
+.finish-dialog textarea{width:100%;resize:vertical;border:1px solid #aebdc7;border-radius:5px;padding:10px;font:inherit;color:#111;outline:none}.finish-dialog textarea:focus{border-color:#2672b6;box-shadow:0 0 0 3px #2672b61c}
+.finish-dialog-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:15px}.finish-dialog-actions button{height:39px;padding:0 16px;border:1px solid #ad1522;border-radius:4px;background:#c81e2b;color:#fff;font-weight:800;cursor:pointer}.finish-dialog-actions button.secondary{border-color:#9eabb4;background:#fff;color:#253946}
+.history-card{overflow:auto}.history-card .data-table{min-width:720px}.history-card .data-table th:nth-child(3){min-width:220px}.history-card .data-table th:nth-child(5){min-width:230px}
+
+/* Цветовые состояния активных тревог */
+.alarm-table tbody tr{background:#fff;color:#111}
+.alarm-table tbody tr:hover{background:#f5f7f8}
+.alarm-table tbody tr.selected{background:#fff;outline:2px solid #2f75a5;outline-offset:-2px}
+.alarm-table tbody tr.new{background:#fff0f2;color:#a20f21}
+.alarm-table tbody tr.new:hover,.alarm-table tbody tr.new.selected{background:#ffe4e8}
+.alarm-table tbody tr:not(.new) .status{color:#111;background:#edf1f4}
+
+/* Отчёты по завершённым тревогам */
+.reports-dialog{width:min(1180px,95vw)}
+.reports-dialog header small{display:block;margin-top:3px;color:#667480}
+#reportsBody{max-height:72vh;overflow:auto;padding:15px;background:#eef2f5}
+.report-card{margin-bottom:10px;border:1px solid #cbd6dd;border-radius:5px;background:#fff;overflow:hidden}.report-card:last-child{margin-bottom:0}
+.report-summary{display:grid;grid-template-columns:1fr 210px 190px;gap:14px;align-items:center;padding:13px 15px}.report-summary b,.report-summary span,.report-summary strong{display:block}.report-summary span{margin-top:3px;color:#687681;font-size:.74rem}.report-summary strong{margin-top:3px}
+.report-card details{border-top:1px solid #dfe6ea}.report-card summary{padding:10px 15px;color:#0b5da7;font-weight:800;cursor:pointer;background:#f7f9fa}.report-details{padding:14px 15px}.report-details dl{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;margin:0}.report-details dl>div{display:grid;grid-template-columns:120px 1fr;padding:7px 0;border-bottom:1px solid #e2e7ea}.report-details dt{color:#687681}.report-details dd{margin:0}.report-details h3{margin:18px 0 8px}.report-details table{width:100%;border-collapse:collapse;font-size:.8rem}.report-details th,.report-details td{padding:8px;border:1px solid #dce4e8;text-align:left}.report-details th{background:#e8f0f5}
+@media(max-width:800px){.report-summary{grid-template-columns:1fr}.report-details dl{grid-template-columns:1fr}}

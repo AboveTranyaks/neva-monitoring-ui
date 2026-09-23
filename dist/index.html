@@ -63,11 +63,11 @@
 
         <div class="alarm-table-wrap">
           <table class="alarm-table">
-            <thead><tr><th>Время</th><th>Объект</th><th>Событие</th><th>Статус</th><th>Оператор</th><th>Таймер</th></tr></thead>
+            <thead><tr><th>Время</th><th>Объект</th><th>Адрес</th><th>Событие</th><th>Статус</th><th>Оператор</th><th>Таймер</th></tr></thead>
             <tbody id="alarmRows"></tbody>
           </table>
         </div>
-        <div class="alarm-summary">Всего активных: <b>10</b><span>•</span>Не взяты: <b id="unclaimedCount">3</b></div>
+        <div class="alarm-summary">Всего активных: <b id="totalCount">10</b><span>•</span>Не взяты: <b id="unclaimedCount">3</b></div>
       </section>
 
       <div class="pane-resizer" id="paneResizer" role="separator" aria-label="Изменить ширину списка тревог" aria-orientation="vertical" tabindex="0"><span></span></div>
@@ -86,7 +86,7 @@
         </div>
 
         <section class="card main-data">
-          <div class="section-heading blue main-data-heading"><h2>Основные данные</h2><button id="openPhotosBtn">▣ Фото объекта</button></div>
+          <div class="section-heading blue main-data-heading"><h2>Основные данные</h2><div class="heading-actions"><button id="copyObjectBtn">⧉ Копировать данные</button><button id="openPhotosBtn">▣ Фото объекта</button></div></div>
           <div class="main-data-grid">
             <dl>
               <div><dt>Название</dt><dd id="objectName">Кабинет разработчиков ПО ХБ Нева</dd></div>
@@ -95,6 +95,8 @@
               <div><dt>Пультовый номер</dt><dd id="objectNumber">14919</dd></div>
               <div><dt>Пульт</dt><dd id="objectPanel">Краснодар</dd></div>
               <div><dt>Раздел</dt><dd id="objectSection">Раздел 1</dd></div>
+              <div><dt>Администратор</dt><dd id="objectAdministrator">А 01</dd></div>
+              <div><dt>Менеджер</dt><dd id="objectManager">Соколова Марина Викторовна</dd></div>
               <div><dt>Услуги</dt><dd id="objectServices">Охрана ОС • Мониторинг ПС</dd></div>
             </dl>
             <section class="embedded-gbr" aria-label="Экипажи ГБР">
@@ -106,7 +108,7 @@
 
         <div class="detail-grid middle-grid">
           <section class="card loops-card">
-            <h2 class="section-heading red">Сработавшие шлейфы</h2>
+            <div class="section-heading red section-heading-actions"><h2>Сработавшие шлейфы</h2><button id="objectEventsBtn">Все события ›</button></div>
             <table class="data-table"><thead><tr><th>№</th><th>Шлейф</th><th>Наименование</th><th>Состояние</th><th>Время</th></tr></thead>
               <tbody id="loopsBody"></tbody>
             </table>
@@ -132,7 +134,7 @@
 
           <section class="card history-card">
             <div class="section-heading blue"><h2>Хронология событий</h2><button id="allEventsBtn">Все события ›</button></div>
-            <table class="data-table"><thead><tr><th></th><th>Время</th><th>Событие</th><th>Оператор</th></tr></thead><tbody id="historyBody"></tbody></table>
+            <table class="data-table"><thead><tr><th></th><th>Время</th><th>Действие</th><th>Оператор</th><th>Детали</th></tr></thead><tbody id="historyBody"></tbody></table>
           </section>
         </div>
       </section>
@@ -143,13 +145,15 @@
 
   <aside class="menu-drawer" id="mainMenu" hidden>
     <div class="drawer-head"><strong>Меню</strong><button id="menuClose" aria-label="Закрыть меню">×</button></div>
-    <nav><button class="active">● Тревоги</button><button>⌖ Объекты</button><button>▱ Карта</button><button>▰ ГБР</button><button>▣ Фото</button><button>▥ Отчёты</button><button>▤ Справочники</button><button>⚙ Настройки</button></nav>
+    <nav><button class="active">● Тревоги</button><button>⌖ Объекты</button><button>▱ Карта</button><button>▰ ГБР</button><button>▣ Фото</button><button id="reportsMenuBtn">▥ Отчёты</button><button>▤ Справочники</button><button>⚙ Настройки</button></nav>
     <button class="help">?&nbsp; Помощь</button>
   </aside>
   <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <dialog id="eventsDialog"><form method="dialog"><header><h2>Хронология событий</h2><button aria-label="Закрыть">×</button></header><div id="eventsDialogBody"></div></form></dialog>
+  <dialog id="eventsDialog"><form method="dialog"><header><div><h2>Все события объекта</h2><small id="eventsObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div class="event-filters"><label>Дата<input id="eventsDate" type="date"></label><label>Время с<input id="eventsTimeFrom" type="time"></label><label>Время по<input id="eventsTimeTo" type="time"></label><button type="button" id="applyEventsFilter">Показать</button><button type="button" class="secondary" id="resetEventsFilter">Сбросить</button></div><div id="eventsDialogBody"></div></form></dialog>
+  <dialog class="finish-dialog" id="finishDialog"><form method="dialog"><header><div><h2>Завершение тревоги</h2><small id="finishObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div class="finish-dialog-body"><label>Результат отработки и примечание<textarea id="finishNote" rows="5" placeholder="Например: ответственное лицо подтвердило ложное срабатывание…" required></textarea></label><div class="finish-dialog-actions"><button type="button" class="secondary" id="cancelFinishBtn">Отмена</button><button type="button" id="confirmFinishBtn">Завершить тревогу</button></div></div></form></dialog>
+  <dialog class="reports-dialog" id="reportsDialog"><form method="dialog"><header><div><h2>Отчёты по завершённым тревогам</h2><small>Полная информация и хронология отработки</small></div><button aria-label="Закрыть">×</button></header><div id="reportsBody"></div></form></dialog>
   <dialog class="photos-dialog" id="photosDialog"><form method="dialog"><header><div><h2>Фотографии объекта</h2><small id="photosObjectName">Кабинет разработчиков ПО ХБ Нева</small></div><button aria-label="Закрыть">×</button></header><div class="photo-gallery"><figure><img src="assets/office-main.png" alt="Общий вид офиса"><figcaption>Общий вид помещения</figcaption></figure><figure><img src="assets/office-entrance.png" alt="Вход в офис"><figcaption>Основной вход</figcaption></figure><figure><img src="assets/office-security.png" alt="Охранное оборудование"><figcaption>Прибор и датчики</figcaption></figure></div></form></dialog>
   <aside class="map-panel" id="mapPanel" hidden aria-label="Мини-карта объекта">
     <header><div><strong>Карта объекта</strong><small id="mapObjectName">Кабинет разработчиков ПО ХБ Нева</small></div><button id="mapClose" aria-label="Закрыть карту">×</button></header>

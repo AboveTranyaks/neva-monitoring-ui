@@ -54,13 +54,8 @@ function sortedAlarms(list) {
 function renderRows() {
   const q = $('alarmSearch').value.trim().toLowerCase();
   const rows = sortedAlarms(alarms.filter(a => filter === 'all' || (filter === 'new' && a.status === 'new') || (filter === 'mine' && a.operator === currentOperator)).filter(a => `${a.number} ${a.name} ${a.address} ${a.event}`.toLowerCase().includes(q)));
-  $('alarmRows').innerHTML = rows.map(a => `<tr class="${a.status} ${a.number===selected.number?'selected':''}" data-number="${a.number}" tabindex="0"><td><strong>${a.time}</strong><small>${a.number}</small></td><td>${a.name}</td><td class="address-cell"><span title="${a.address}">${a.address}</span><button class="copy-address" data-copy-number="${a.number}" aria-label="Копировать адрес объекта ${a.number}" title="Копировать адрес">⧉</button></td><td>${a.event}</td><td><span class="status ${statusClass(a)}">${a.statusLabel}</span></td><td>${a.operator}</td><td class="timer ${a.status==='new'&&a.elapsedSec>600?'critical':''}">${formatElapsed(a.elapsedSec)}</td></tr>`).join('');
+  $('alarmRows').innerHTML = rows.map(a => `<tr class="${a.status} ${a.number===selected.number?'selected':''}" data-number="${a.number}" tabindex="0"><td><strong>${a.time}</strong><small>${a.number}</small></td><td>${a.name}</td><td class="address-cell"><span title="${a.address}">${a.address}</span></td><td>${a.event}</td><td><span class="status ${statusClass(a)}">${a.statusLabel}</span></td><td>${a.operator}</td><td class="timer ${a.status==='new'&&a.elapsedSec>600?'critical':''}">${formatElapsed(a.elapsedSec)}</td></tr>`).join('');
   document.querySelectorAll('#alarmRows tr').forEach(row => { const choose = () => selectAlarm(row.dataset.number); row.addEventListener('click',choose); row.addEventListener('keydown',e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();} }); });
-  document.querySelectorAll('.copy-address').forEach(button => button.addEventListener('click', e => {
-    e.stopPropagation();
-    const alarm = alarms.find(item => item.number === button.dataset.copyNumber);
-    copyText(alarm.address, 'Адрес скопирован');
-  }));
   $('totalCount').textContent = alarms.length;
   $('unclaimedCount').textContent = alarms.filter(a => a.status === 'new').length;
   document.querySelector('.filters button[data-filter="all"] span').textContent=`(${alarms.length})`;

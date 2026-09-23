@@ -77,10 +77,8 @@ body.resizing-panes{cursor:col-resize;user-select:none}
 /* Адрес в списке тревог и копирование */
 .alarm-table{table-layout:fixed;min-width:940px}
 .alarm-table th:nth-child(1){width:72px}.alarm-table th:nth-child(2){width:160px}.alarm-table th:nth-child(3){width:205px}.alarm-table th:nth-child(4){width:145px}.alarm-table th:nth-child(5){width:140px}.alarm-table th:nth-child(6){width:95px}.alarm-table th:nth-child(7){width:82px}
-.address-cell{position:relative;padding-right:34px!important}
+.address-cell{position:relative}
 .address-cell>span{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:help}
-.copy-address{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:25px;height:25px;border:1px solid #9bb9d0;border-radius:4px;background:#eef6fc;color:#0b63ae;cursor:pointer;opacity:.35}
-.alarm-table tr:hover .copy-address,.copy-address:focus{opacity:1}
 
 /* Полный журнал событий */
 .section-heading-actions{display:flex;align-items:center;justify-content:space-between}

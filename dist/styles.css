@@ -103,6 +103,7 @@ body.resizing-panes{cursor:col-resize;user-select:none}
 .finish-dialog textarea{width:100%;resize:vertical;border:1px solid #aebdc7;border-radius:5px;padding:10px;font:inherit;color:#111;outline:none}.finish-dialog textarea:focus{border-color:#2672b6;box-shadow:0 0 0 3px #2672b61c}
 .finish-dialog-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:15px}.finish-dialog-actions button{height:39px;padding:0 16px;border:1px solid #ad1522;border-radius:4px;background:#c81e2b;color:#fff;font-weight:800;cursor:pointer}.finish-dialog-actions button.secondary{border-color:#9eabb4;background:#fff;color:#253946}
 .history-card{overflow:auto}.history-card .data-table{min-width:720px}.history-card .data-table th:nth-child(3){min-width:220px}.history-card .data-table th:nth-child(5){min-width:230px}
+.action.comment{background:#eef4f8;border:1px solid #547b98;color:#173b55}.sort-time{border:0;background:transparent;color:#111;font:inherit;font-weight:800;padding:0;cursor:pointer}.sort-time:hover{text-decoration:underline}.dialog-hint{margin:10px 0 0;color:#667480;font-size:.78rem}.finish-dialog-actions button.save-comment{border-color:#386f50;background:#e2f0e6;color:#173d26}#loopsDialogBody{padding:16px;max-height:65vh;overflow:auto}
 
 /* Цветовые состояния активных тревог */
 .alarm-table tbody tr{background:#fff;color:#111}

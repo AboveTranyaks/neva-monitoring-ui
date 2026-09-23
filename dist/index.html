@@ -82,6 +82,7 @@
         <div class="alarm-actions">
           <button class="action accept" id="acceptBtn">✓&nbsp; Принять в работу</button>
           <button class="action take" id="takeBtn">♟&nbsp; Забрать тревогу</button>
+          <button class="action comment" id="operatorCommentBtn" hidden>✎&nbsp; Комментарий оператора</button>
           <button class="action finish" id="finishBtn">✓&nbsp; ЗАВЕРШИТЬ</button>
         </div>
 
@@ -108,7 +109,7 @@
 
         <div class="detail-grid middle-grid">
           <section class="card loops-card">
-            <div class="section-heading red section-heading-actions"><h2>Сработавшие шлейфы</h2><button id="objectEventsBtn">Все события ›</button></div>
+            <div class="section-heading red section-heading-actions"><h2>Шлейфы в тревоге</h2><button id="objectEventsBtn">Все шлейфы ›</button></div>
             <table class="data-table"><thead><tr><th>№</th><th>Шлейф</th><th>Наименование</th><th>Состояние</th><th>Время</th></tr></thead>
               <tbody id="loopsBody"></tbody>
             </table>
@@ -134,7 +135,7 @@
 
           <section class="card history-card">
             <div class="section-heading blue"><h2>Хронология событий</h2><button id="allEventsBtn">Все события ›</button></div>
-            <table class="data-table"><thead><tr><th></th><th>Время</th><th>Действие</th><th>Оператор</th><th>Детали</th></tr></thead><tbody id="historyBody"></tbody></table>
+            <table class="data-table"><thead><tr><th></th><th><button class="sort-time" id="historyTimeSort" aria-label="Изменить направление сортировки по времени">Время ↑</button></th><th>Действие</th><th>Оператор</th><th>Детали</th></tr></thead><tbody id="historyBody"></tbody></table>
           </section>
         </div>
       </section>
@@ -153,6 +154,8 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <dialog id="eventsDialog"><form method="dialog"><header><div><h2>Все события объекта</h2><small id="eventsObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div class="event-filters"><label>Дата<input id="eventsDate" type="date"></label><label>Время с<input id="eventsTimeFrom" type="time"></label><label>Время по<input id="eventsTimeTo" type="time"></label><button type="button" id="applyEventsFilter">Показать</button><button type="button" class="secondary" id="resetEventsFilter">Сбросить</button></div><div id="eventsDialogBody"></div></form></dialog>
   <dialog class="finish-dialog" id="finishDialog"><form method="dialog"><header><div><h2>Завершение тревоги</h2><small id="finishObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div class="finish-dialog-body"><label>Результат отработки и примечание<textarea id="finishNote" rows="5" placeholder="Например: ответственное лицо подтвердило ложное срабатывание…" required></textarea></label><div class="finish-dialog-actions"><button type="button" class="secondary" id="cancelFinishBtn">Отмена</button><button type="button" id="confirmFinishBtn">Завершить тревогу</button></div></div></form></dialog>
+  <dialog class="finish-dialog" id="operatorCommentDialog"><form method="dialog"><header><div><h2>Комментарий оператора</h2><small id="commentObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div class="finish-dialog-body"><label>Информация по результатам осмотра объекта<textarea id="operatorCommentText" rows="6" placeholder="Например: экипаж осмотрел периметр, следов проникновения не обнаружено…"></textarea></label><p class="dialog-hint">Комментарий смогут дополнять и редактировать все операторы, работающие с тревогой.</p><div class="finish-dialog-actions"><button type="button" class="secondary" id="cancelCommentBtn">Отмена</button><button type="button" class="save-comment" id="saveCommentBtn">Сохранить комментарий</button></div></div></form></dialog>
+  <dialog id="loopsDialog"><form method="dialog"><header><div><h2>Все шлейфы объекта</h2><small id="loopsObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div id="loopsDialogBody"></div></form></dialog>
   <dialog class="reports-dialog" id="reportsDialog"><form method="dialog"><header><div><h2>Отчёты по завершённым тревогам</h2><small>Полная информация и хронология отработки</small></div><button aria-label="Закрыть">×</button></header><div id="reportsBody"></div></form></dialog>
   <dialog class="photos-dialog" id="photosDialog"><form method="dialog"><header><div><h2>Фотографии объекта</h2><small id="photosObjectName">Кабинет разработчиков ПО ХБ Нева</small></div><button aria-label="Закрыть">×</button></header><div class="photo-gallery"><figure><img src="assets/office-main.png" alt="Общий вид офиса"><figcaption>Общий вид помещения</figcaption></figure><figure><img src="assets/office-entrance.png" alt="Вход в офис"><figcaption>Основной вход</figcaption></figure><figure><img src="assets/office-security.png" alt="Охранное оборудование"><figcaption>Прибор и датчики</figcaption></figure></div></form></dialog>
   <aside class="map-panel" id="mapPanel" hidden aria-label="Мини-карта объекта">

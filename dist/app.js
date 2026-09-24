@@ -86,11 +86,20 @@ function addIncomingAlarm(){
     {name:'Банк Центральный',address:'Краснодар, ул. Красная, 45',event:'Тревожная кнопка',alarmType:'КТС',category:10,note:'Главный зал',services:'Охрана ОС'},
     {name:'Магазин Восток',address:'Краснодар, ул. Сормовская, 12',event:'Датчик движения',category:5,note:'Торговый зал',services:'Охрана ОС'},
     {name:'Офис Альфа',address:'Краснодар, ул. Коммунаров, 81',event:'Открытие двери',category:2,note:'Проверить вход',services:'Охрана ОС'},
-    {name:'Склад Северный',address:'Краснодар, ул. Ростовское шоссе, 18',event:'Пожарный шлейф',category:2,note:'Проверить пожарный датчик',services:'Мониторинг ПС'}
+    {name:'Склад Северный',address:'Краснодар, ул. Ростовское шоссе, 18',event:'Пожарный шлейф',category:2,note:'Проверить пожарный датчик',services:'Мониторинг ПС'},
+    {name:'Ломбард Гарант',address:'Краснодар, ул. Тургенева, 138',event:'Тревожная кнопка',alarmType:'КТС',category:7,note:'Кассовая зона',services:'Охрана ОС'},
+    {name:'Аптека Здоровье',address:'Краснодар, ул. Российская, 72',event:'Снятие под принуждением',category:5,note:'Связаться с заведующей',services:'Охрана ОС'},
+    {name:'Банкомат Кубань',address:'Краснодар, ул. Северная, 326',event:'Датчик удара',category:10,note:'Зона банкомата',services:'Охрана ОС'},
+    {name:'ТехноМаркет',address:'Краснодар, ул. Уральская, 79',event:'Разбитие стекла',category:7,note:'Витрина у входа',services:'Охрана ОС'},
+    {name:'Ювелирный салон Алмаз',address:'Краснодар, ул. Красных Партизан, 152',event:'Тревожная кнопка',alarmType:'КТС',category:10,note:'Торговый зал',services:'Охрана ОС'},
+    {name:'Клиника Медлайн',address:'Краснодар, ул. Зиповская, 31',event:'Датчик движения',category:2,note:'Первый этаж',services:'Охрана ОС'},
+    {name:'Автосалон Премьер',address:'Краснодар, ул. Дзержинского, 231',event:'Открытие ворот',category:5,note:'Сервисная зона',services:'Охрана ОС'},
+    {name:'Ресторан Южный',address:'Краснодар, ул. Кубанская Набережная, 39',event:'Пожарный шлейф',category:2,note:'Кухня',services:'Мониторинг ПС'}
   ];
-  const sample=samples[(nextIncomingAlarmNumber-16001)%samples.length],now=new Date(),number=String(nextIncomingAlarmNumber++);
-  alarms.push({...sample,time:now.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}),number,status:'new',statusLabel:sample.alarmType==='КТС'?'КТС • НЕ ВЗЯТА':'НОВАЯ / НЕ ВЗЯТА',operator:'—',elapsedSec:0,critical:true,panel:'Краснодар',section:'Раздел 1',coords:'45.0355,38.9753'});
-  renderRows();renderOperatorList();toast(`Новая тревога: ${sample.name}`);
+  const sequence=nextIncomingAlarmNumber-16001,sample=samples[sequence%samples.length],cycle=Math.floor(sequence/samples.length),now=new Date(),number=String(nextIncomingAlarmNumber++);
+  const object={...sample,name:cycle?`${sample.name} • корпус ${cycle+1}`:sample.name,address:cycle?`${sample.address}, корпус ${cycle+1}`:sample.address};
+  alarms.push({...object,time:now.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}),number,status:'new',statusLabel:object.alarmType==='КТС'?'КТС • НЕ ВЗЯТА':'НОВАЯ / НЕ ВЗЯТА',operator:'—',elapsedSec:0,critical:true,panel:'Краснодар',section:'Раздел 1',coords:'45.0355,38.9753'});
+  renderRows();renderOperatorList();toast(`Новая тревога: ${object.name}`);
 }
 function renderRows() {
   const q = $('alarmSearch').value.trim().toLowerCase();

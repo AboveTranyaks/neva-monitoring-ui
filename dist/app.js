@@ -384,5 +384,5 @@ setInterval(()=>{
   if(!$('operatorsMenu').hidden)renderOperatorList();
   renderRows();if(selected)$('elapsed').textContent=formatElapsed(selected.elapsedSec);$('clock').textContent=new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
 },1000);
-setInterval(addIncomingAlarm,60000);
+setInterval(addIncomingAlarm,20000);
 ensureTodayOperatorStats();$('operatorStatsDate').value=localIsoDate();renderOperatorList();renderRows();renderDetail();renderContacts();renderHistory();

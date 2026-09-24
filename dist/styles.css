@@ -137,7 +137,7 @@ body.resizing-panes{cursor:col-resize;user-select:none}
 
 /* Интерактивность меню */
 .menu-drawer nav button,.menu-drawer .help{transition:background-color .16s ease,color .16s ease,transform .16s ease}
-.menu-drawer nav button:hover,.menu-drawer .help:hover,.menu-drawer nav button:focus-visible,.menu-drawer .help:focus-visible{background:#1d5278;color:#fff;outline:none;transform:translateX(-2px)}
+.menu-drawer nav button:hover,.menu-drawer .help:hover,.menu-drawer nav button:focus-visible,.menu-drawer .help:focus-visible{background:#fff;color:#143a58;outline:none;transform:translateX(-2px)}
 .menu-drawer nav button.active:hover,.menu-drawer nav button.active:focus-visible{background:#fff;color:#143a58}
 
 /* Повторный клик по кнопке карты закрывает панель */
@@ -148,6 +148,9 @@ body.resizing-panes{cursor:col-resize;user-select:none}
 .alarm-table-wrap{flex:1;min-height:240px;max-height:none}
 .alarm-summary{flex:0 0 auto}
 @media(max-width:1100px){.alarm-pane{display:block}.alarm-table-wrap{max-height:480px}}
+.app-shell{height:100dvh}
+.workspace{overflow:hidden}
+@media(max-width:1100px){.app-shell{height:auto;min-height:100dvh}.workspace{overflow:visible}}
 
 /* Статус слева, действие справа в одной строке */
 .alarm-table{min-width:1020px}

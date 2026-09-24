@@ -116,10 +116,18 @@ function renderRows() {
   updateAlarmCounts();
 }
 function updateAlarmCounts(){
+  const newCount=alarms.filter(a=>a.status==='new').length;
+  const workCount=alarms.filter(a=>a.status==='mine'||a.status==='work').length;
+  const gbrCount=alarms.filter(a=>a.status==='gbr').length;
+  const overdueCount=alarms.filter(a=>a.status==='new'&&a.elapsedSec>=15*60).length;
   $('totalCount').textContent = alarms.length;
-  $('unclaimedCount').textContent = alarms.filter(a => a.status === 'new').length;
+  $('unclaimedCount').textContent = newCount;
+  $('newCount').textContent = newCount;
+  $('workCount').textContent = workCount;
+  $('gbrCount').textContent = gbrCount;
+  $('overdueCount').textContent = overdueCount;
   document.querySelector('.filters button[data-filter="all"] span').textContent=`(${alarms.length})`;
-  document.querySelector('.filters button[data-filter="new"] span').textContent=`(${alarms.filter(a=>a.status==='new').length})`;
+  document.querySelector('.filters button[data-filter="new"] span').textContent=`(${newCount})`;
   document.querySelector('.filters button[data-filter="mine"] span').textContent=`(${alarms.filter(a=>a.operator===currentOperator).length})`;
   document.querySelector('.filters button[data-filter="complete"] span').textContent=`(${completedReports.length})`;
 }

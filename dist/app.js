@@ -43,6 +43,8 @@ let shiftFinished = false;
 let lastMouseActivityAt = Date.now();
 let autoIdleBreak = false;
 const idleBreakAfterMs = 3 * 60 * 1000;
+const operatorPresenceStartedAt = Date.now();
+let nextIncomingAlarmNumber = 16001;
 let historySortDirection = 'asc';
 let history = [
   {alarmNumber:'11307',tone:'red',date:'2026-08-04',time:'11:00:19',event:'Тревога принята оператором',operator:'Петров А.В.',details:'Принята в работу'},
@@ -70,6 +72,26 @@ function sortedAlarms(list) {
   });
 }
 function isKts(alarm){return alarm.alarmType==='КТС'||/тревожная кнопка|ктс/i.test(alarm.event);}
+function renderOperatorList(){
+  const elapsed=Math.floor((Date.now()-operatorPresenceStartedAt)/1000);
+  const currentMode=shiftMode==='break'||shiftMode==='lunch'?shiftMode:null;
+  const currentState=currentMode?`<span class="operator-mode ${currentMode}">● ${currentMode==='break'?'Перерыв':'Обед'} <time>${formatShift(shiftModeSec)}</time></span>`:'<span class="online">● Онлайн</span>';
+  const assigned=alarms.filter(item=>item.operator===currentOperator&&item.status!=='complete').length;
+  $('operatorList').innerHTML=`<li data-name="смирнов"><span class="avatar">СА</span><b>Смирнов А.С.</b>${currentState}<em>${assigned?`${assigned} ${assigned===1?'тревога':'тревоги'}`:'Свободен'}</em></li><li data-name="иванов"><span class="avatar">ИИ</span><b>Иванов И.И.</b><span class="online">● Онлайн</span><em>2 тревоги</em></li><li data-name="петров"><span class="avatar">ПА</span><b>Петров А.В.</b><span class="operator-mode lunch">● Обед <time>${formatShift(1122+elapsed)}</time></span><em>Свободен</em></li><li data-name="сидорова"><span class="avatar">СЕ</span><b>Сидорова Е.С.</b><span class="operator-mode break">● Перерыв <time>${formatShift(435+elapsed)}</time></span><em>1 тревога</em></li>`;
+  const q=$('operatorSearch').value.trim().toLowerCase();
+  document.querySelectorAll('#operatorList li').forEach(li=>li.hidden=!li.dataset.name.includes(q));
+}
+function addIncomingAlarm(){
+  const samples=[
+    {name:'Банк Центральный',address:'Краснодар, ул. Красная, 45',event:'Тревожная кнопка',alarmType:'КТС',category:10,note:'Главный зал',services:'Охрана ОС'},
+    {name:'Магазин Восток',address:'Краснодар, ул. Сормовская, 12',event:'Датчик движения',category:5,note:'Торговый зал',services:'Охрана ОС'},
+    {name:'Офис Альфа',address:'Краснодар, ул. Коммунаров, 81',event:'Открытие двери',category:2,note:'Проверить вход',services:'Охрана ОС'},
+    {name:'Склад Северный',address:'Краснодар, ул. Ростовское шоссе, 18',event:'Пожарный шлейф',category:2,note:'Проверить пожарный датчик',services:'Мониторинг ПС'}
+  ];
+  const sample=samples[(nextIncomingAlarmNumber-16001)%samples.length],now=new Date(),number=String(nextIncomingAlarmNumber++);
+  alarms.push({...sample,time:now.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}),number,status:'new',statusLabel:sample.alarmType==='КТС'?'КТС • НЕ ВЗЯТА':'НОВАЯ / НЕ ВЗЯТА',operator:'—',elapsedSec:0,critical:true,panel:'Краснодар',section:'Раздел 1',coords:'45.0355,38.9753'});
+  renderRows();renderOperatorList();toast(`Новая тревога: ${sample.name}`);
+}
 function renderRows() {
   const q = $('alarmSearch').value.trim().toLowerCase();
   if(filter==='complete'){
@@ -112,18 +134,20 @@ function renderWorkflow(){
   const button=document.querySelector('#workflowList button');if(button)button.addEventListener('click',()=>{addHistory('Проверена информация',`${type}: выполнен следующий шаг алгоритма`);toast('Действие добавлено в хронологию');});
 }
 function renderGbr() {
+  const objectGbrUnits=getGbrUnits(selected);
   if(!selected.dispatchedGbr)selected.dispatchedGbr=selected.status==='gbr'?[selected.statusLabel.split(' ')[0]]:[];
-  $('gbrList').innerHTML=gbrUnits.map((unit,index)=>{const dispatched=selected.dispatchedGbr.includes(unit.id);return `<article class="gbr-unit ${index===0?'primary':''}"><div class="gbr-unit-head"><div><span class="gbr-role">${unit.role}</span><b>▰ ${unit.id}</b></div><span class="crew-state ${dispatched||unit.state!=='Свободен'?'busy':'free'}">${dispatched?'Направлена':unit.state}</span></div><div class="gbr-meta"><span>${unit.crew}</span><strong>${unit.distance}</strong><span>≈ ${unit.eta}</span></div><div class="gbr-actions"><button class="${dispatched?'cancel-gbr':'dispatch-gbr'}" data-unit="${unit.id}" ${!dispatched&&unit.state!=='Свободен'?'disabled':''}>${dispatched?'Отменить ГБР':'Отправить'}</button><a class="icon-button phone" data-call-gbr="${unit.id}" href="tel:${unit.phone}" aria-label="Позвонить ${unit.id}">☎</a></div></article>`;}).join('');
+  $('gbrList').innerHTML=objectGbrUnits.map((unit,index)=>{const dispatched=selected.dispatchedGbr.includes(unit.id);const blocked=selected.status==='new';return `<article class="gbr-unit ${index===0?'primary':''}"><div class="gbr-unit-head"><div><span class="gbr-role">${unit.role}</span><b>▰ ${unit.id}</b></div><span class="crew-state ${dispatched||unit.state!=='Свободен'?'busy':'free'}">${dispatched?'Направлена':unit.state}</span></div><div class="gbr-meta"><span>${unit.crew}</span><strong>${unit.distance}</strong><span>≈ ${unit.eta}</span></div><div class="gbr-actions"><button class="${dispatched?'cancel-gbr':'dispatch-gbr'}" data-unit="${unit.id}" ${!dispatched&&(blocked||unit.state!=='Свободен')?'disabled':''} title="${blocked?'Сначала примите тревогу в работу':''}">${dispatched?'Отменить ГБР':'Отправить'}</button><a class="icon-button phone" data-call-gbr="${unit.id}" href="tel:${unit.phone}" aria-label="Позвонить ${unit.id}">☎</a></div></article>`;}).join('');
   document.querySelectorAll('.dispatch-gbr').forEach(button=>button.addEventListener('click',()=>dispatchGbr(button.dataset.unit)));
   document.querySelectorAll('.cancel-gbr').forEach(button=>button.addEventListener('click',()=>cancelGbr(button.dataset.unit)));
 }
+function getGbrUnits(alarm){if(alarm.gbrUnits)return alarm.gbrUnits;const base=Number(alarm.number)%70+10;const initial=alarm.status==='gbr'?(alarm.statusLabel.match(/ГБР-\d+/)||[])[0]:null;alarm.gbrUnits=gbrUnits.map((unit,index)=>({...unit,id:index===0&&initial?initial:`ГБР-${base+index}`,state:index===2?'На задании':'Свободен'}));return alarm.gbrUnits;}
 function dispatchGbr(unitId) {
   if(!selected.dispatchedGbr)selected.dispatchedGbr=[];if(!selected.dispatchedGbr.includes(unitId))selected.dispatchedGbr.push(unitId);
   selected.status='gbr'; selected.statusLabel=selected.dispatchedGbr.length>1?`${selected.dispatchedGbr.join(', ')} НАПРАВЛЕНЫ`:`${unitId} НАПРАВЛЕНА`; selected.operator=currentOperator;
-  const unit=gbrUnits.find(item=>item.id===unitId); unit.state='Направлена'; addHistory('ГБР направлена',`${unitId} • экипаж ${unit.crew} • ${unit.distance} • прибытие ${unit.eta}`); renderRows(); renderDetail(); toast(`${unitId} направлена на объект`);
+  const unit=getGbrUnits(selected).find(item=>item.id===unitId); unit.state='Направлена'; addHistory('ГБР направлена',`${unitId} • экипаж ${unit.crew} • ${unit.distance} • прибытие ${unit.eta}`); renderRows(); renderDetail(); toast(`${unitId} направлена на объект`);
 }
 function cancelGbr(unitId){
-  selected.dispatchedGbr=(selected.dispatchedGbr||[]).filter(id=>id!==unitId);const unit=gbrUnits.find(item=>item.id===unitId);unit.state='Свободен';addHistory('Выезд ГБР отменён',`${unitId} • экипаж ${unit.crew}`);
+  selected.dispatchedGbr=(selected.dispatchedGbr||[]).filter(id=>id!==unitId);const unit=getGbrUnits(selected).find(item=>item.id===unitId);unit.state='Свободен';addHistory('Выезд ГБР отменён',`${unitId} • экипаж ${unit.crew}`);
   if(selected.dispatchedGbr.length){selected.status='gbr';selected.statusLabel=selected.dispatchedGbr.length>1?`${selected.dispatchedGbr.join(', ')} НАПРАВЛЕНЫ`:`${selected.dispatchedGbr[0]} НАПРАВЛЕНА`;}else{selected.status='mine';selected.statusLabel='В РАБОТЕ';}
   renderRows();renderDetail();toast(`${unitId}: выезд отменён`);
 }
@@ -168,7 +192,7 @@ function setShiftMode(mode){
   $('startShiftBtn').hidden=active; $('endShiftBtn').hidden=!active; $('breakBtn').disabled=!active; $('lunchBtn').disabled=!active;
   $('breakBtn').classList.toggle('active',mode==='break'); $('lunchBtn').classList.toggle('active',mode==='lunch');
   const labels={off:shiftFinished?'Смена завершена':'Смена не начата',work:'На смене',break:'Перерыв',lunch:'Обед'};
-  document.querySelector('.current-user small').textContent=active?labels[mode]:'Оператор'; renderShiftTimer(); toast(labels[mode]);
+  document.querySelector('.current-user small').textContent=active?labels[mode]:'Оператор'; renderShiftTimer(); renderOperatorList(); toast(labels[mode]);
 }
 function renderShiftTimer(){
   if(shiftFinished){$('shiftStatus').textContent=`Смена завершена • Работа ${formatShift(shiftWorkSec)} • Перерывы и обед ${formatShift(shiftPauseSec)} • Всего ${formatShift(shiftTotalSec)}`;return;}
@@ -180,6 +204,7 @@ function renderShiftTimer(){
 document.querySelectorAll('.filters button').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');filter=btn.dataset.filter;const completed=filter==='complete';document.querySelector('.detail-pane').classList.toggle('completed-view',completed);$('completedReportPane').hidden=!completed;if(completed)$('completedReportPane').innerHTML='<div class="completed-empty"><b>Выберите завершённую тревогу</b><span>Справа откроется информация и хронология отработки.</span></div>';renderRows();}));
 $('alarmSearch').addEventListener('input',renderRows);
 $('operatorsTrigger').addEventListener('click',()=>{const open=$('operatorsMenu').hidden;$('operatorsMenu').hidden=!open;$('operatorsTrigger').setAttribute('aria-expanded',String(open));});
+document.addEventListener('click',e=>{if($('operatorsMenu').hidden||$('operatorsMenu').contains(e.target)||$('operatorsTrigger').contains(e.target))return;$('operatorsMenu').hidden=true;$('operatorsTrigger').setAttribute('aria-expanded','false');});
 $('operatorSearch').addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('#operatorList li').forEach(li=>li.hidden=!li.dataset.name.includes(q));});
 function setDrawer(open){$('mainMenu').hidden=!open;$('drawerBackdrop').hidden=!open;$('menuTrigger').setAttribute('aria-expanded',String(open));}
 $('menuTrigger').addEventListener('click',()=>setDrawer($('mainMenu').hidden)); $('menuClose').addEventListener('click',()=>setDrawer(false)); $('drawerBackdrop').addEventListener('click',()=>setDrawer(false));
@@ -252,10 +277,10 @@ function renderOperatorStats(){
   $('operatorStatsBody').innerHTML=rows.length?`<div class="operator-stats-summary"><div><span>Операторов</span><b>${rows.length}</b></div><div title="Обновляется на одну секунду каждую секунду"><span>Суммарное рабочее время</span><b>${formatShift(totalWork)}</b></div><div><span>Перерывы</span><b>${formatShift(totalBreak)}</b></div><div><span>Обед</span><b>${formatShift(totalLunch)}</b></div><div><span>Тревог обработано</span><b>${totalAlarms}</b></div></div><div class="operator-stats-table-wrap"><table class="events-full-table operator-stats-table"><thead><tr><th>Оператор</th><th>Начало смены</th><th>Завершение</th><th>Рабочее время</th><th>Перерыв</th><th>Обед</th><th>Обработано тревог</th></tr></thead><tbody>${rows.map(item=>`<tr><td><b>${item.name}</b></td><td>${item.start}</td><td>${item.end}</td><td><strong>${formatShift(item.workSec)}</strong></td><td>${formatShift(item.breakSec)}</td><td>${formatShift(item.lunchSec)}</td><td><span class="alarm-count-badge">${item.alarms}</span></td></tr>`).join('')}</tbody></table></div>`:'<div class="events-empty">За выбранную дату статистики нет</div>';
 }
 function localIsoDate(date=new Date()){return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;}
-function ensureTodayOperatorStats(){const today=localIsoDate();if(operatorStats.some(item=>item.date===today))return;const latest=[...new Set(operatorStats.map(item=>item.date))].sort().at(-1);const startedAt=Date.now();operatorStats.filter(item=>item.date===latest).forEach(item=>operatorStats.push({...item,date:today,end:'Сейчас',liveBaseWorkSec:item.workSec,liveStartedAt:startedAt}));}
+function ensureTodayOperatorStats(){const today=localIsoDate();if(operatorStats.some(item=>item.date===today))return;const latest=[...new Set(operatorStats.map(item=>item.date))].sort().at(-1);const startedAt=Date.now();operatorStats.filter(item=>item.date===latest).forEach(item=>{const liveMode=item.name==='Петров А.В.'?'lunch':item.name==='Сидорова Е.С.'?'break':'work';operatorStats.push({...item,date:today,end:'Сейчас',workSec:0,breakSec:0,lunchSec:0,alarms:0,liveBaseWorkSec:0,liveStartedAt:startedAt,liveMode});});}
 function getLiveOperatorStats(date){
   const today=localIsoDate(),now=new Date(),nowSec=now.getHours()*3600+now.getMinutes()*60+now.getSeconds();
-  return operatorStats.filter(item=>item.date===date).map(item=>{if(date!==today)return {...item};const [h,m]=item.start.split(':').map(Number);const elapsed=Math.max(0,nowSec-h*3600-m*60);const live={...item,end:'Сейчас',workSec:item.liveStartedAt?item.liveBaseWorkSec+Math.floor((Date.now()-item.liveStartedAt)/1000):Math.max(0,elapsed-item.breakSec-item.lunchSec)};if(item.name===currentOperator&&shiftStartedAt){const actualShiftSec=Math.max(0,Math.floor((Date.now()-shiftStartedAt.getTime())/1000));live.start=shiftStartedAt.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});live.end=shiftFinished?new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):'Сейчас';live.workSec=Math.max(0,actualShiftSec-shiftBreakSec-shiftLunchSec);live.breakSec=shiftBreakSec;live.lunchSec=shiftLunchSec;}return live;});
+  return operatorStats.filter(item=>item.date===date).map(item=>{if(date!==today)return {...item};const [h,m]=item.start.split(':').map(Number);const elapsed=Math.max(0,nowSec-h*3600-m*60);const liveElapsed=item.liveStartedAt?Math.floor((Date.now()-item.liveStartedAt)/1000):0;const live={...item,end:'Сейчас',workSec:item.liveStartedAt?(item.liveMode==='work'?item.liveBaseWorkSec+liveElapsed:item.liveBaseWorkSec):Math.max(0,elapsed-item.breakSec-item.lunchSec),breakSec:item.liveMode==='break'?liveElapsed:item.breakSec,lunchSec:item.liveMode==='lunch'?liveElapsed:item.lunchSec};if(item.name===currentOperator&&shiftStartedAt){const actualShiftSec=Math.max(0,Math.floor((Date.now()-shiftStartedAt.getTime())/1000));live.start=shiftStartedAt.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});live.end=shiftFinished?new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):'Сейчас';live.workSec=Math.max(0,actualShiftSec-shiftBreakSec-shiftLunchSec);live.breakSec=shiftBreakSec;live.lunchSec=shiftLunchSec;}return live;});
 }
 $('operatorStatsMenuBtn').addEventListener('click',()=>{setDrawer(false);ensureTodayOperatorStats();$('operatorStatsDate').value=localIsoDate();renderOperatorStats();$('operatorStatsDialog').showModal();});
 $('applyOperatorStats').addEventListener('click',renderOperatorStats);
@@ -311,6 +336,8 @@ setInterval(()=>{
   if(shiftMode==='work'&&Date.now()-lastMouseActivityAt>=idleBreakAfterMs){autoIdleBreak=true;setShiftMode('break');toast('Нет активности 3 минуты — включён режим «Перерыв»');}
   if(shiftMode!=='off'){shiftTotalSec+=1;shiftModeSec+=1;if(shiftMode==='work')shiftWorkSec+=1;else{shiftPauseSec+=1;if(shiftMode==='break')shiftBreakSec+=1;if(shiftMode==='lunch')shiftLunchSec+=1;}renderShiftTimer();}
   if($('operatorStatsDialog').open)renderOperatorStats();
+  if(!$('operatorsMenu').hidden)renderOperatorList();
   renderRows();if(selected)$('elapsed').textContent=formatElapsed(selected.elapsedSec);$('clock').textContent=new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
 },1000);
-ensureTodayOperatorStats();$('operatorStatsDate').value=localIsoDate();renderRows();renderDetail();renderContacts();renderHistory();
+setInterval(addIncomingAlarm,60000);
+ensureTodayOperatorStats();$('operatorStatsDate').value=localIsoDate();renderOperatorList();renderRows();renderDetail();renderContacts();renderHistory();

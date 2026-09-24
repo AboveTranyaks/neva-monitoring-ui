@@ -130,8 +130,7 @@ function renderDetail() {
 function renderWorkflow(){
   const type=isKts(selected)?'КТС':/пожар|пс/i.test(`${selected.event} ${selected.services}`)?'ПС':'ОС';
   const steps=type==='КТС'?['Принять тревогу','Немедленно направить ГБР','Получить результат осмотра','Добавить комментарий','Завершить тревогу']:type==='ПС'?['Принять тревогу','Позвонить клиенту','При необходимости направить ГБР','Зафиксировать результат','Завершить тревогу']:['Принять тревогу','Проверить: датчик сработал однократно или многократно','При многократном срабатывании направить ГБР','Получить осмотр ГБР и добавить комментарий','Позвонить клиенту','Завершить тревогу'];
-  $('workflowList').innerHTML=steps.map((step,index)=>`<li class="${index===0?'done':index===1?'active':''}"><span>${index===0?'✓':index+1}</span><b>${index+1}</b>${step}${index===1?'<button aria-label="Перейти к шагу">›</button>':''}</li>`).join('');
-  const button=document.querySelector('#workflowList button');if(button)button.addEventListener('click',()=>{addHistory('Проверена информация',`${type}: выполнен следующий шаг алгоритма`);toast('Действие добавлено в хронологию');});
+  $('workflowList').innerHTML=steps.map(step=>`<li>${step}</li>`).join('');
 }
 function renderGbr() {
   const objectGbrUnits=getGbrUnits(selected);

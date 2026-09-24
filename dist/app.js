@@ -264,7 +264,12 @@ $('confirmFinishBtn').addEventListener('click',()=>{
   if(selected)renderDetail();
   toast('Тревога завершена и удалена из активного списка');
 });
-$('startShiftBtn').addEventListener('click',()=>{autoIdleBreak=false;setShiftMode('work');}); $('endShiftBtn').addEventListener('click',()=>{autoIdleBreak=false;shiftFinished=true;shiftStartedAt=null;setShiftMode('off');}); $('breakBtn').addEventListener('click',()=>{autoIdleBreak=false;lastMouseActivityAt=Date.now();setShiftMode(shiftMode==='break'?'work':'break');}); $('lunchBtn').addEventListener('click',()=>{autoIdleBreak=false;lastMouseActivityAt=Date.now();setShiftMode(shiftMode==='lunch'?'work':'lunch');});
+let pendingShiftAction=null;
+function requestShiftAction(title,text,action){$('shiftConfirmTitle').textContent=title;$('shiftConfirmText').textContent=text;pendingShiftAction=action;$('shiftConfirmDialog').showModal();}
+$('cancelShiftAction').addEventListener('click',()=>{pendingShiftAction=null;$('shiftConfirmDialog').close();});
+$('confirmShiftAction').addEventListener('click',()=>{const action=pendingShiftAction;pendingShiftAction=null;$('shiftConfirmDialog').close();if(action)action();});
+$('shiftConfirmDialog').addEventListener('close',()=>{pendingShiftAction=null;});
+$('startShiftBtn').addEventListener('click',()=>requestShiftAction('Начать смену','Вы готовы начать смену?',()=>{autoIdleBreak=false;setShiftMode('work');})); $('endShiftBtn').addEventListener('click',()=>{autoIdleBreak=false;shiftFinished=true;shiftStartedAt=null;setShiftMode('off');}); $('breakBtn').addEventListener('click',()=>{const returning=shiftMode==='break';requestShiftAction(returning?'Завершить перерыв':'Начать перерыв',returning?'Вы готовы завершить перерыв и вернуться к работе?':'Вы готовы перейти на перерыв?',()=>{autoIdleBreak=false;lastMouseActivityAt=Date.now();setShiftMode(returning?'work':'break');});}); $('lunchBtn').addEventListener('click',()=>{const returning=shiftMode==='lunch';requestShiftAction(returning?'Завершить обед':'Начать обед',returning?'Вы готовы завершить обед и вернуться к работе?':'Вы готовы перейти на обед?',()=>{autoIdleBreak=false;lastMouseActivityAt=Date.now();setShiftMode(returning?'work':'lunch');});});
 document.addEventListener('mousemove',()=>{
   lastMouseActivityAt=Date.now();
   if(autoIdleBreak&&shiftMode==='break'){autoIdleBreak=false;setShiftMode('work');toast('Активность возобновлена — режим «Работа»');}

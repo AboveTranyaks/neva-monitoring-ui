@@ -165,3 +165,11 @@ body.resizing-panes{cursor:col-resize;user-select:none}
 .status-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;white-space:nowrap;min-width:0}
 .status-actions .status{min-width:0;overflow:hidden;text-overflow:ellipsis}
 .take-alarm-row{display:inline-flex;align-items:center;margin:0}
+.shift-confirm-dialog{width:min(390px,90vw)}
+.shift-confirm-dialog header{padding:11px 14px}
+.shift-confirm-dialog h2{font-size:1.15rem}
+.shift-confirm-body{padding:17px}
+.shift-confirm-body p{margin:0 0 18px;font-size:.95rem;color:#26343d}
+.shift-confirm-actions{display:flex;justify-content:flex-end;gap:9px}
+.shift-confirm-actions button{min-width:82px;height:36px;border:1px solid #1769a5;border-radius:4px;background:#1769a5;color:#fff;font-weight:700;cursor:pointer}
+.shift-confirm-actions button.secondary{background:#fff;color:#26343d;border-color:#aebdc7}

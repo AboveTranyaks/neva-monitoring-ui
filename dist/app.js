@@ -234,6 +234,7 @@ document.addEventListener('click',e=>{if($('operatorsMenu').hidden||$('operators
 $('operatorSearch').addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('#operatorList li').forEach(li=>li.hidden=!li.dataset.name.includes(q));});
 function setDrawer(open){$('mainMenu').hidden=!open;$('drawerBackdrop').hidden=!open;$('menuTrigger').setAttribute('aria-expanded',String(open));}
 $('menuTrigger').addEventListener('click',()=>setDrawer($('mainMenu').hidden)); $('menuClose').addEventListener('click',()=>setDrawer(false)); $('drawerBackdrop').addEventListener('click',()=>setDrawer(false));
+document.querySelectorAll('.menu-drawer nav button').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.menu-drawer nav button').forEach(item=>item.classList.remove('active'));button.classList.add('active');}));
 function acceptAlarm(alarm){if(!alarm||alarm.status!=='new')return;selected=alarm;selected.status='mine';selected.statusLabel='В РАБОТЕ';selected.operator=currentOperator;addHistory('Тревога принята в работу','Оператор назначен ответственным');renderRows();renderDetail();toast('Тревога принята в работу');}
 $('acceptBtn').addEventListener('click',()=>acceptAlarm(selected));
 $('takeBtn').addEventListener('click',()=>{$('takeObjectLabel').textContent=`Объект ${selected.number} • ${selected.name}`;$('takeOperatorLabel').textContent=`Текущий оператор: ${selected.operator}`;$('takeComment').value='';$('takeAlarmDialog').showModal();});

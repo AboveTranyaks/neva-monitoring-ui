@@ -110,7 +110,7 @@ function renderRows() {
     updateAlarmCounts();return;
   }
   const rows = sortedAlarms(alarms.filter(a => filter === 'all' || (filter === 'new' && a.status === 'new') || (filter === 'mine' && a.operator === currentOperator)).filter(a => `${a.number} ${a.name} ${a.address} ${a.event}`.toLowerCase().includes(q)));
-  $('alarmRows').innerHTML = rows.map(a => {const newKts=isKts(a)&&a.status==='new';return `<tr class="${a.status} ${newKts?'kts':''} ${a.number===selected.number?'selected':''}" data-number="${a.number}" tabindex="0"><td><strong>${a.time}</strong><small>${a.number}</small></td><td>${a.name}</td><td class="address-cell"><span title="${a.address}">${a.address}</span></td><td>${a.event}</td><td><span class="status ${statusClass(a)} ${newKts?'kts':''}">${a.statusLabel}</span>${a.status==='new'?`<button class="take-alarm-row" data-number="${a.number}">Взять тревогу</button>`:''}</td><td>${a.operator}</td><td class="timer ${a.status==='new'&&a.elapsedSec>600?'critical':''}">${formatElapsed(a.elapsedSec)}</td></tr>`;}).join('');
+  $('alarmRows').innerHTML = rows.map(a => {const newKts=isKts(a)&&a.status==='new';return `<tr class="${a.status} ${newKts?'kts':''} ${a.number===selected.number?'selected':''}" data-number="${a.number}" tabindex="0"><td><strong>${a.time}</strong><small>${a.number}</small></td><td>${a.name}</td><td class="address-cell"><span title="${a.address}">${a.address}</span></td><td>${a.event}</td><td><div class="status-actions"><span class="status ${statusClass(a)} ${newKts?'kts':''}">${a.statusLabel}</span>${a.status==='new'?`<button class="take-alarm-row" data-number="${a.number}">Взять тревогу</button>`:''}</div></td><td>${a.operator}</td><td class="timer ${a.status==='new'&&a.elapsedSec>600?'critical':''}">${formatElapsed(a.elapsedSec)}</td></tr>`;}).join('');
   document.querySelectorAll('#alarmRows tr').forEach(row => { const choose = () => selectAlarm(row.dataset.number); row.addEventListener('click',choose); row.addEventListener('keydown',e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();} }); });
   document.querySelectorAll('.take-alarm-row').forEach(button=>button.addEventListener('click',e=>{e.stopPropagation();const alarm=alarms.find(item=>item.number===button.dataset.number);acceptAlarm(alarm);}));
   updateAlarmCounts();
@@ -268,7 +268,18 @@ document.addEventListener('mousemove',()=>{
   lastMouseActivityAt=Date.now();
   if(autoIdleBreak&&shiftMode==='break'){autoIdleBreak=false;setShiftMode('work');toast('Активность возобновлена — режим «Работа»');}
 },{passive:true});
-$('openPhotosBtn').addEventListener('click',()=>$('photosDialog').showModal()); $('mapButton').addEventListener('click',()=>{$('mapPanel').hidden=false;}); $('mapClose').addEventListener('click',()=>{$('mapPanel').hidden=true;});
+$('openPhotosBtn').addEventListener('click',()=>$('photosDialog').showModal());
+const mapButton=$('mapButton');
+const mapPanel=$('mapPanel');
+function setMapPanel(open){
+  mapPanel.hidden=!open;
+  mapButton.setAttribute('aria-expanded',String(open));
+  mapButton.setAttribute('aria-label',open?'Закрыть мини-карту объекта':'Показать объект на мини-карте');
+  mapButton.title=open?'Закрыть карту':'Показать карту';
+  mapButton.classList.toggle('active',open);
+}
+mapButton.addEventListener('click',()=>setMapPanel(mapPanel.hidden));
+$('mapClose').addEventListener('click',()=>setMapPanel(false));
 $('copyObjectBtn').addEventListener('click',()=>copyText(selectedObjectText(),'Информация об объекте скопирована'));
 $('historyTimeSort').addEventListener('click',()=>{historySortDirection=historySortDirection==='asc'?'desc':'asc';renderHistory();});
 $('operatorCommentBtn').addEventListener('click',()=>{$('commentObjectLabel').textContent=`Объект ${selected.number} • ${selected.name}`;$('savedCommentText').textContent=selected.operatorComment||'Комментарий ещё не добавлен';const hasComment=Boolean(selected.operatorComment);$('commentView').hidden=!hasComment;$('commentEditor').hidden=hasComment;$('saveCommentBtn').hidden=hasComment;$('cancelEditCommentBtn').hidden=true;$('operatorCommentText').value=selected.operatorComment||'';$('operatorCommentDialog').showModal();});
@@ -318,7 +329,7 @@ function getLiveOperatorStats(date){
 $('operatorStatsMenuBtn').addEventListener('click',()=>{setDrawer(false);ensureTodayOperatorStats();$('operatorStatsDate').value=localIsoDate();renderOperatorStats();$('operatorStatsDialog').showModal();});
 $('applyOperatorStats').addEventListener('click',renderOperatorStats);
 $('todayOperatorStats').addEventListener('click',()=>{$('operatorStatsDate').value=localIsoDate();renderOperatorStats();});
-document.addEventListener('click',e=>{const phone=e.target.closest('a.phone');if(!phone)return;if(phone.dataset.callName)addHistory('Звонок ответственному лицу',phone.dataset.callName);if(phone.dataset.callGbr)addHistory('Звонок экипажу ГБР',phone.dataset.callGbr);toast('Открывается звонок');}); document.addEventListener('keydown',e=>{if(e.key==='Escape'){setDrawer(false);$('operatorsMenu').hidden=true;$('mapPanel').hidden=true;}});
+document.addEventListener('click',e=>{const phone=e.target.closest('a.phone');if(!phone)return;if(phone.dataset.callName)addHistory('Звонок ответственному лицу',phone.dataset.callName);if(phone.dataset.callGbr)addHistory('Звонок экипажу ГБР',phone.dataset.callGbr);toast('Открывается звонок');}); document.addEventListener('keydown',e=>{if(e.key==='Escape'){setDrawer(false);$('operatorsMenu').hidden=true;setMapPanel(false);}});
 
 const paneResizer = $('paneResizer');
 const workspace = document.querySelector('.workspace');

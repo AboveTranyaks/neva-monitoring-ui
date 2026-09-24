@@ -49,7 +49,7 @@
 .map-label{position:absolute;left:218px;top:136px;padding:7px 9px;border-radius:4px;background:#fff;box-shadow:0 2px 8px #0002;font-size:.72rem;font-weight:800}
 .map-panel dl{margin:0}.map-panel dl>div{display:grid;grid-template-columns:105px 1fr;gap:8px;padding:9px 0;border-bottom:1px solid var(--line)}.map-panel dt{color:#667480}.map-panel dd{margin:0}.map-panel>a{display:block;margin-top:14px;padding:10px;text-align:center;text-decoration:none;border:1px solid #2874bc;border-radius:4px;background:#edf5fc;color:#0f5ba3;font-weight:800}
 
-@media(min-width:1451px){.brand{min-width:270px}.topbar{gap:11px}.operators-trigger{padding-left:7px;padding-right:7px}.current-user{min-width:125px}.top-stats{gap:9px}.stat{font-size:.69rem}}
+@media(min-width:1451px){.brand{min-width:270px}.topbar{gap:11px}.operators-trigger{padding-left:7px;padding-right:7px}.current-user{min-width:125px}.top-stats{gap:13px}.stat{font-size:.82rem}}
 @media(max-width:1450px){.topbar{height:auto;min-height:70px;flex-wrap:wrap;padding:8px 12px}.shift-controls{order:4;margin-left:auto}.top-stats{order:5;width:100%;padding-bottom:3px}.operators-popover{top:118px}.menu-drawer{top:119px}.drawer-backdrop{inset:119px 250px 0 0}.photo-gallery{grid-template-columns:1fr}.photo-gallery figure:first-child{grid-row:auto}.photo-gallery figure:first-child img{height:330px}}
 
 /* Регулируемая ширина списка и карточки */
@@ -175,3 +175,9 @@ body.resizing-panes{cursor:col-resize;user-select:none}
 .shift-confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
 .shift-confirm-actions button{width:100%;height:40px;border:1px solid #1769a5;border-radius:5px;background:#1769a5;color:#fff;font-weight:700;cursor:pointer}
 .shift-confirm-actions button.secondary{background:#fff;color:#26343d;border-color:#aebdc7}
+
+/* Сводка тревог в одну строку и по центру значка меню */
+.top-stats{flex-wrap:nowrap;align-self:center;white-space:nowrap;min-width:max-content}
+.top-stats .stat{display:inline-flex;align-items:center;line-height:1.2}
+.top-stats .stat b{font-size:.86rem;line-height:1.15}
+.clock,.menu-trigger{align-self:center}

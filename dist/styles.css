@@ -356,3 +356,13 @@ body.dark-theme .algorithm-card li,body.dark-theme .algorithm-card li.done,body.
 
 /* Активный переключатель темы — фирменный синий, без зелёного фона */
 .theme-setting button[aria-pressed="true"],body.dark-theme .theme-setting button[aria-pressed="true"]{background:#1d5878;border:1px solid #fff;box-shadow:inset 0 0 0 1px #ffffff40;color:#fff}
+
+/* Единая типографическая шкала интерфейса */
+:root{--ui-text-size:13px}
+html,body,button,input,select,textarea,table,dialog,*::before,*::after{font-family:Inter,"Segoe UI",Arial,sans-serif}
+body{font-size:var(--ui-text-size)}
+.top-control,.operators-trigger,.current-user,.shift-controls button,.stat,.clock,.menu-trigger,.filters button,.search-field input,.alarm-table,.data-table,.main-data dl,.gbr-card,.contact,.algorithm-card,.history-card,.statusbar,.menu-drawer nav button,.menu-drawer .help,.theme-setting button,.events-full-table,.report-card,.operator-stats-table,.photo-gallery figcaption{font-size:var(--ui-text-size)}
+.alarm-table th,.alarm-table td,.data-table th,.data-table td,.history-table th,.history-table td{font-size:var(--ui-text-size)}
+.main-data-heading button,#takeBtn,#copyObjectBtn,#openPhotosBtn,.section-heading button,.section-heading a,.history-card .section-heading button{font-size:var(--ui-text-size)!important}
+.brand span,.current-user small,.shift-status,.gbr-role,.crew-state,.gbr-meta,.alarm-table td:first-child small,.report-summary span,.operator-stats-summary span{font-size:11px}
+.section-heading{font-size:15px}.alarm-title{font-size:18px}.brand strong{font-size:18px}

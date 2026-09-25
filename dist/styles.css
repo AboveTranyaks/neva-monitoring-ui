@@ -262,3 +262,6 @@ body.dark-theme .gbr-unit{background:#fff;color:#111;border-color:#cfd9df}body.d
 .alarm-pane{padding-top:8px}
 .top-stats .stat{font-size:.78rem;line-height:22px;align-items:center}
 .top-stats .stat b{display:inline-flex;align-items:center;justify-content:center;height:22px;min-width:22px;padding:0 6px;font-size:.78rem;line-height:22px}
+.alarm-actions:not(:has(.action:not([hidden]))){display:none}
+.main-data-heading .heading-take{height:29px;min-width:150px;padding:0 12px;background:#fff;border-color:#1c6ddd;color:#14283a;font-size:.78rem}
+@media(max-width:1450px){.alarm-banner{padding:0 10px;grid-template-columns:minmax(0,1fr) auto auto}.alarm-title{font-size:1rem;white-space:nowrap}.alarm-meta{font-size:.62rem;padding-right:9px}.alarm-meta strong{font-size:.78rem}.priority{gap:5px;padding-left:9px}.priority b{font-size:.85rem}.main-data-heading #copyObjectBtn,.main-data-heading #openPhotosBtn{width:34px;padding:0;font-size:0}.main-data-heading #copyObjectBtn::before{content:'⧉';font-size:1rem}.main-data-heading #openPhotosBtn::before{content:'▣';font-size:1rem}}

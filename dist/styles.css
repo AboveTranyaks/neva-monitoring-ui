@@ -328,3 +328,16 @@ body,button,input,select,textarea,a{font-family:Inter,"Segoe UI",Arial,sans-seri
 .section-heading button,.section-heading a{font-size:.78rem;font-weight:700;color:inherit!important;-webkit-text-fill-color:currentColor}
 .section-heading button:hover,.section-heading a:hover{text-decoration:underline;text-underline-offset:2px}
 body.dark-theme .section-heading,body.dark-theme .section-heading button,body.dark-theme .section-heading a{color:#f5f7f8!important;-webkit-text-fill-color:#f5f7f8}
+
+/* Компактная хронология: все колонки помещаются в карточку */
+.history-card{min-width:0;overflow:hidden}
+.history-card .section-heading,.history-card .section-heading button,.history-table,.history-table button{font-family:Inter,"Segoe UI",Arial,sans-serif}
+.history-card .section-heading button{font-size:.76rem;white-space:nowrap}
+.history-card .data-table.history-table{width:100%;min-width:0;table-layout:fixed}
+.history-table th,.history-table td{padding:6px 6px;font-size:.7rem;line-height:1.25;white-space:normal;overflow-wrap:anywhere;word-break:normal}
+.history-table th:nth-child(1),.history-table td:nth-child(1){width:18px;padding-left:4px;padding-right:2px;text-align:center}
+.history-table th:nth-child(2),.history-table td:nth-child(2){width:68px}
+.history-table th:nth-child(3),.history-table td:nth-child(3){width:36%}
+.history-table th:nth-child(4),.history-table td:nth-child(4){width:86px}
+.history-table th:nth-child(5),.history-table td:nth-child(5){width:auto}
+.history-table .sort-time{font-family:inherit;font-size:inherit;white-space:normal}

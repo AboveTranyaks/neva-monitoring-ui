@@ -480,3 +480,8 @@ a.phone.shift-disabled{opacity:.42;filter:grayscale(1);pointer-events:none;curso
 .alarm-table tbody td:nth-child(6),.alarm-table tbody td:nth-child(7){text-align:center!important}
 .alarm-table tbody td:nth-child(6) .status{display:inline-flex!important;align-items:center;justify-content:center;margin:0 auto;font-family:Inter,"Segoe UI",Arial,sans-serif!important;font-size:10px!important;font-weight:500!important;line-height:18px!important;text-align:center!important}
 .alarm-table tbody .alarm-state-cell>.status,.alarm-table tbody .alarm-state-cell>.take-alarm-row{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:28px!important;min-height:28px!important;margin:0!important;padding:3px 5px!important;font-family:Inter,"Segoe UI",Arial,sans-serif!important;font-size:10px!important;font-weight:500!important;line-height:18px!important;text-align:center!important}
+
+/* Финальный контраст кнопки комментария и компактные состояния */
+body.dark-theme #operatorCommentDialog #saveCommentBtn{background:#111b22!important;background-color:#111b22!important;background-image:none!important;border:1px solid #718692!important;color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:none!important;opacity:1!important}
+body.dark-theme #operatorCommentDialog #saveCommentBtn:hover{background:#1a2932!important;background-color:#1a2932!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+.alarm-table tbody .alarm-state-cell>.status{font-size:9px!important;font-weight:500!important;letter-spacing:0!important}

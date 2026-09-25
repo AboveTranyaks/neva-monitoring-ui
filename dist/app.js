@@ -63,9 +63,20 @@ function applyTheme(theme){
   if(toggle){toggle.setAttribute('aria-pressed',String(dark));toggle.querySelector('i').textContent=dark?'Вкл.':'Выкл.';toggle.querySelector('span').textContent=dark?'☾':'◐';}
   document.documentElement.style.colorScheme=dark?'dark':'light';
 }
+function applyCustomBackground(dataUrl){
+  const hasBackground=Boolean(dataUrl);
+  document.body.classList.toggle('custom-background',hasBackground);
+  document.body.style.setProperty('--custom-background-image',hasBackground?`url("${dataUrl}")`:'none');
+  const preview=$('backgroundPreview');
+  if(preview){preview.classList.toggle('has-image',hasBackground);preview.style.backgroundImage=hasBackground?`url("${dataUrl}")`:'none';preview.querySelector('span').textContent=hasBackground?'Выбранный фон':'Фон не выбран';}
+  const remove=$('removeBackgroundBtn');if(remove)remove.disabled=!hasBackground;
+}
 let savedTheme='light';
 try{savedTheme=localStorage.getItem('neva-theme')||'light';}catch(error){}
 applyTheme(savedTheme);
+let savedBackground='';
+try{savedBackground=localStorage.getItem('neva-background')||'';}catch(error){}
+applyCustomBackground(savedBackground);
 const statusClass = a => a.status === 'new' ? 'new' : a.status === 'complete' ? 'complete' : '';
 const formatElapsed = seconds => {
   const h = Math.floor(seconds / 3600), m = Math.floor((seconds % 3600) / 60), s = seconds % 60;
@@ -245,6 +256,9 @@ $('operatorSearch').addEventListener('input',e=>{const q=e.target.value.toLowerC
 function setDrawer(open){$('mainMenu').hidden=!open;$('drawerBackdrop').hidden=!open;$('menuTrigger').setAttribute('aria-expanded',String(open));}
 $('menuTrigger').addEventListener('click',()=>setDrawer($('mainMenu').hidden)); $('menuClose').addEventListener('click',()=>setDrawer(false)); $('drawerBackdrop').addEventListener('click',()=>setDrawer(false));
 $('themeToggle').addEventListener('click',()=>{const theme=document.body.classList.contains('dark-theme')?'light':'dark';applyTheme(theme);try{localStorage.setItem('neva-theme',theme);}catch(error){}toast(theme==='dark'?'Тёмная тема включена':'Светлая тема включена');});
+$('settingsMenuBtn').addEventListener('click',()=>{setDrawer(false);applyCustomBackground(savedBackground);$('settingsDialog').showModal();});
+$('backgroundFile').addEventListener('change',event=>{const file=event.target.files[0];if(!file)return;if(!file.type.startsWith('image/')){toast('Выберите изображение');return;}if(file.size>12*1024*1024){toast('Файл должен быть меньше 12 МБ');event.target.value='';return;}const reader=new FileReader();reader.onload=()=>{const image=new Image();image.onload=()=>{const max=1920,scale=Math.min(1,max/Math.max(image.width,image.height)),canvas=document.createElement('canvas');canvas.width=Math.round(image.width*scale);canvas.height=Math.round(image.height*scale);canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);const dataUrl=canvas.toDataURL('image/jpeg',.82);try{localStorage.setItem('neva-background',dataUrl);savedBackground=dataUrl;applyCustomBackground(dataUrl);toast('Фон добавлен');}catch(error){toast('Изображение слишком большое для сохранения');}};image.src=reader.result;};reader.readAsDataURL(file);event.target.value='';});
+$('removeBackgroundBtn').addEventListener('click',()=>{savedBackground='';try{localStorage.removeItem('neva-background');}catch(error){}applyCustomBackground('');toast('Фон удалён');});
 document.querySelectorAll('.menu-drawer nav button').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.menu-drawer nav button').forEach(item=>item.classList.remove('active'));button.classList.add('active');}));
 function acceptAlarm(alarm){if(!alarm||alarm.status!=='new')return;selected=alarm;selected.status='mine';selected.statusLabel='В РАБОТЕ';selected.operator=currentOperator;addHistory('Тревога принята в работу','Оператор назначен ответственным');renderRows();renderDetail();toast('Тревога принята в работу');}
 $('acceptBtn').addEventListener('click',()=>acceptAlarm(selected));
@@ -296,6 +310,7 @@ function setMapPanel(open){
   mapButton.classList.toggle('active',open);
 }
 mapButton.addEventListener('click',()=>setMapPanel(mapPanel.hidden));
+$('copyCoordsBtn').addEventListener('click',()=>copyText(selected.coords.replace(',',', '),'Координаты скопированы'));
 $('mapClose').addEventListener('click',()=>setMapPanel(false));
 $('copyObjectBtn').addEventListener('click',()=>copyText(selectedObjectText(),'Информация об объекте скопирована'));
 $('historyTimeSort').addEventListener('click',()=>{historySortDirection=historySortDirection==='asc'?'desc':'asc';renderHistory();});

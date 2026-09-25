@@ -381,3 +381,33 @@ body{font-size:var(--ui-text-size)}
 .main-data-heading .heading-actions button{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;min-width:0!important;width:auto!important;height:32px!important;padding:0 10px!important;margin:0;font-family:Inter,"Segoe UI",Arial,sans-serif!important;font-size:12px!important;font-weight:700;line-height:1!important;white-space:nowrap}
 .main-data-heading .heading-actions button[hidden]{display:none!important}
 .main-data-heading #operatorCommentBtn{background:#fff;color:#111!important;-webkit-text-fill-color:#111!important}
+
+/* Пользовательский фон */
+body.custom-background{background-image:linear-gradient(#eaf0f4d9,#eaf0f4d9),var(--custom-background-image);background-size:cover;background-position:center;background-attachment:fixed}
+body.dark-theme.custom-background{background-image:linear-gradient(#081117dc,#081117dc),var(--custom-background-image)}
+body.custom-background .app-shell{background:transparent}
+body.custom-background .workspace{background:transparent}
+body.custom-background .alarm-pane,body.custom-background .detail-pane{background:#f8fafcee;backdrop-filter:blur(2px)}
+body.dark-theme.custom-background .alarm-pane,body.dark-theme.custom-background .detail-pane{background:#10181eee}
+.settings-dialog{width:min(620px,92vw)}
+.background-settings{display:grid;gap:14px;padding:18px}
+.background-preview{height:210px;display:grid;place-items:center;border:1px dashed var(--md-outline);border-radius:12px;background:#eef3f6;color:#60717c;background-size:cover;background-position:center;overflow:hidden}
+.background-preview.has-image span{padding:7px 11px;border-radius:6px;background:#10181ecc;color:#fff;font-weight:700}
+.background-settings p{margin:0;color:var(--md-on-surface-variant)}
+.background-actions{display:flex;justify-content:flex-end;gap:10px}
+.background-upload,.background-actions button{height:40px;display:inline-flex;align-items:center;justify-content:center;padding:0 16px;border:1px solid #2874bc;border-radius:8px;background:#1769aa;color:#fff;font-weight:700;cursor:pointer}
+.background-upload input{display:none}
+.background-actions button.secondary{background:#fff;color:#263946;border-color:#84939d}
+.background-actions button:disabled{opacity:.45;cursor:not-allowed}
+body.dark-theme .background-preview{background-color:#172229;color:#b7c5ce;border-color:#526673}
+
+/* Координаты и контраст элементов управления */
+.map-panel .coords-value{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#copyCoordsBtn{flex:0 0 34px;height:30px;border:1px solid #2874bc;border-radius:6px;background:#edf5ff;color:#075fd4;font-weight:800;cursor:pointer}
+body.dark-theme #copyCoordsBtn{background:#174c6b;color:#fff;border-color:#8fc9f2}
+#acceptBtn{color:#111!important;-webkit-text-fill-color:#111!important}
+body.dark-theme .call-center-body,body.dark-theme .call-center-body label,body.dark-theme .call-center-body legend,body.dark-theme .call-center-body .select-all-contact,body.dark-theme .call-center-body #callCenterContacts b{color:#e7edf1!important;-webkit-text-fill-color:#e7edf1}
+body.dark-theme .call-center-body #callCenterContacts small{color:#b7c5ce!important;-webkit-text-fill-color:#b7c5ce}
+body.dark-theme .call-center-body input,body.dark-theme .call-center-body select{background:#172229;color:#f5f7f8!important;-webkit-text-fill-color:#f5f7f8;border-color:#526673}
+body.dark-theme .call-center-body fieldset,body.dark-theme .call-center-body .select-all-contact,body.dark-theme .call-center-body #callCenterContacts label{border-color:#526673}
+body.dark-theme .call-center-actions #startCallCenter{color:#111!important;-webkit-text-fill-color:#111}

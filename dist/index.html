@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=aligned-actions-28">
+  <link rel="stylesheet" href="styles.css?v=custom-background-29">
 </head>
 <body>
   <div class="app-shell">
@@ -150,7 +150,7 @@
 
   <aside class="menu-drawer" id="mainMenu" hidden>
     <div class="drawer-head"><strong>Меню</strong><button id="menuClose" aria-label="Закрыть меню">×</button></div>
-    <nav><button class="active">● Тревоги</button><button>⌖ Объекты</button><button>▱ Карта</button><button>▰ ГБР</button><button>▣ Фото</button><button id="reportsMenuBtn">▥ Отчёты</button><button id="operatorStatsMenuBtn">▥ Статистика операторов</button><button>▤ Справочники</button><button>⚙ Настройки</button></nav>
+    <nav><button class="active">● Тревоги</button><button>⌖ Объекты</button><button>▱ Карта</button><button>▰ ГБР</button><button>▣ Фото</button><button id="reportsMenuBtn">▥ Отчёты</button><button id="operatorStatsMenuBtn">▥ Статистика операторов</button><button>▤ Справочники</button><button id="settingsMenuBtn">⚙ Настройки</button></nav>
     <div class="theme-setting"><span>Оформление</span><button type="button" id="themeToggle" aria-pressed="false"><span aria-hidden="true">◐</span><b>Тёмная тема</b><i>Выкл.</i></button></div>
     <button class="help">?&nbsp; Помощь</button>
   </aside>
@@ -165,15 +165,16 @@
   <dialog id="loopsDialog"><form method="dialog"><header><div><h2>Все шлейфы объекта</h2><small id="loopsObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div id="loopsDialogBody"></div></form></dialog>
   <dialog id="contactsDialog"><form method="dialog"><header><div><h2>Все ответственные лица</h2><small id="contactsObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div id="contactsDialogBody"></div></form></dialog>
   <dialog class="call-center-dialog" id="callCenterDialog"><form method="dialog"><header><div><h2>Колл-центр</h2><small id="callCenterObjectLabel">Объект 11307</small></div><button aria-label="Закрыть">×</button></header><div class="call-center-body"><div class="call-center-top"><label>Объект<input id="callCenterObject" readonly></label><label>Система<select id="callCenterSystem"><option>Краснодар Феникс</option><option>Краснодар Мираж</option><option>Сочи Феникс</option></select></label></div><fieldset><legend>Ответственные лица</legend><label class="select-all-contact"><input type="checkbox" id="callCenterSelectAll"> Выбрать всех</label><div id="callCenterContacts"></div></fieldset><label>Шаблон звонка<select id="callCenterTemplate"><option value="">Выберите шаблон</option><option>power_outage_ai</option><option>no_signal_ai</option><option>Пожарка</option><option>Яша_Не_АзАй</option><option>Дислокация</option><option>Тампер</option><option>7-11</option></select></label><div class="call-center-actions"><button type="button" class="secondary" id="cancelCallCenter">Отмена</button><button type="button" id="startCallCenter">Запустить звонок</button></div></div></form></dialog>
+  <dialog class="settings-dialog" id="settingsDialog"><form method="dialog"><header><div><h2>Настройки оформления</h2><small>Фоновое изображение применяется к светлой и тёмной теме</small></div><button aria-label="Закрыть">×</button></header><div class="background-settings"><div class="background-preview" id="backgroundPreview"><span>Фон не выбран</span></div><p>Изображение отображается приглушённо и не мешает работе с таблицами и карточками.</p><div class="background-actions"><label class="background-upload">Добавить фон<input id="backgroundFile" type="file" accept="image/png,image/jpeg,image/webp"></label><button type="button" class="secondary" id="removeBackgroundBtn">Удалить фон</button></div></div></form></dialog>
   <dialog class="reports-dialog" id="reportsDialog"><form method="dialog"><header><div><h2>Отчёты по завершённым тревогам</h2><small>Полная информация и хронология отработки</small></div><button aria-label="Закрыть">×</button></header><div class="event-filters report-filters"><label>Дата с<input id="reportsDateFrom" type="date"></label><label>Дата по<input id="reportsDateTo" type="date"></label><label class="report-number-search">Пультовый номер<input id="reportsNumberSearch" type="search" inputmode="numeric" placeholder="Например, 13540"></label><button type="button" id="applyReportsFilter">Показать</button><button type="button" class="secondary" id="resetReportsFilter">Сбросить</button><button type="button" class="export-excel" id="exportReportsExcel">⇩ Скачать Excel</button></div><div id="reportsBody"></div></form></dialog>
   <dialog class="reports-dialog" id="operatorStatsDialog"><form method="dialog"><header><div><h2>Статистика операторов</h2><small>Рабочее время, перерывы, обед и нагрузка за выбранную дату</small></div><button aria-label="Закрыть">×</button></header><div class="event-filters"><label>Дата<input id="operatorStatsDate" type="date"></label><button type="button" id="applyOperatorStats">Показать</button><button type="button" class="secondary" id="todayOperatorStats">Сегодня</button></div><div id="operatorStatsBody"></div></form></dialog>
   <dialog class="photos-dialog" id="photosDialog"><form method="dialog"><header><div><h2>Фотографии объекта</h2><small id="photosObjectName">Кабинет разработчиков ПО ХБ Нева</small></div><button aria-label="Закрыть">×</button></header><div class="photo-gallery"><figure><img src="assets/office-main.png" alt="Общий вид офиса"><figcaption>Общий вид помещения</figcaption></figure><figure><img src="assets/office-entrance.png" alt="Вход в офис"><figcaption>Основной вход</figcaption></figure><figure><img src="assets/office-security.png" alt="Охранное оборудование"><figcaption>Прибор и датчики</figcaption></figure></div></form></dialog>
   <aside class="map-panel" id="mapPanel" hidden aria-label="Мини-карта объекта">
     <header><div><strong>Карта объекта</strong><small id="mapObjectName">Кабинет разработчиков ПО ХБ Нева</small></div><button id="mapClose" aria-label="Закрыть карту">×</button></header>
     <div class="mini-map" aria-hidden="true"><div class="map-grid"></div><div class="map-road road-a"></div><div class="map-road road-b"></div><div class="map-pin">●</div><span class="map-label" id="mapLabel">Объект 14919</span></div>
-    <dl><div><dt>Координаты</dt><dd id="mapCoords">45.032954, 38.971944</dd></div><div><dt>Адрес</dt><dd id="mapAddress">Краснодар, ул. Пашковская, 74, кабинет 306</dd></div></dl>
+    <dl><div><dt>Координаты</dt><dd class="coords-value"><span id="mapCoords">45.032954, 38.971944</span><button type="button" id="copyCoordsBtn" title="Копировать координаты" aria-label="Копировать координаты">⧉</button></dd></div><div><dt>Адрес</dt><dd id="mapAddress">Краснодар, ул. Пашковская, 74, кабинет 306</dd></div></dl>
     <a id="externalMapLink" target="_blank" rel="noopener">Открыть большую карту</a>
   </aside>
-  <script src="app.js?v=gbr-black-8"></script>
+  <script src="app.js?v=background-settings-9"></script>
 </body>
 </html>

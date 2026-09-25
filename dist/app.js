@@ -71,12 +71,24 @@ function applyCustomBackground(dataUrl){
   if(preview){preview.classList.toggle('has-image',hasBackground);preview.style.backgroundImage=hasBackground?`url("${dataUrl}")`:'none';preview.querySelector('span').textContent=hasBackground?'Выбранный фон':'Фон не выбран';}
   const remove=$('removeBackgroundBtn');if(remove)remove.disabled=!hasBackground;
 }
+function applyWindowTransparency(value){
+  const transparency=Math.max(0,Math.min(75,Number(value)||0));
+  const opacity=(100-transparency)/100;
+  document.documentElement.style.setProperty('--window-opacity',opacity.toFixed(2));
+  document.documentElement.style.setProperty('--window-content-opacity',Math.min(.96,opacity+.18).toFixed(2));
+  const slider=$('windowTransparency'),output=$('windowTransparencyValue');
+  if(slider)slider.value=String(transparency);
+  if(output)output.textContent=`${transparency}%`;
+}
 let savedTheme='light';
 try{savedTheme=localStorage.getItem('neva-theme')||'light';}catch(error){}
 applyTheme(savedTheme);
 let savedBackground='';
 try{savedBackground=localStorage.getItem('neva-background')||'';}catch(error){}
 applyCustomBackground(savedBackground);
+let savedWindowTransparency=45;
+try{savedWindowTransparency=Number(localStorage.getItem('neva-window-transparency')??45);}catch(error){}
+applyWindowTransparency(savedWindowTransparency);
 const statusClass = a => a.status === 'new' ? 'new' : a.status === 'complete' ? 'complete' : '';
 const formatElapsed = seconds => {
   const h = Math.floor(seconds / 3600), m = Math.floor((seconds % 3600) / 60), s = seconds % 60;
@@ -259,6 +271,7 @@ $('themeToggle').addEventListener('click',()=>{const theme=document.body.classLi
 $('settingsMenuBtn').addEventListener('click',()=>{setDrawer(false);applyCustomBackground(savedBackground);$('settingsDialog').showModal();});
 $('backgroundFile').addEventListener('change',event=>{const file=event.target.files[0];if(!file)return;if(!file.type.startsWith('image/')){toast('Выберите изображение');return;}if(file.size>12*1024*1024){toast('Файл должен быть меньше 12 МБ');event.target.value='';return;}const reader=new FileReader();reader.onload=()=>{const image=new Image();image.onload=()=>{const max=1920,scale=Math.min(1,max/Math.max(image.width,image.height)),canvas=document.createElement('canvas');canvas.width=Math.round(image.width*scale);canvas.height=Math.round(image.height*scale);canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);const dataUrl=canvas.toDataURL('image/jpeg',.82);try{localStorage.setItem('neva-background',dataUrl);savedBackground=dataUrl;applyCustomBackground(dataUrl);toast('Фон добавлен');}catch(error){toast('Изображение слишком большое для сохранения');}};image.src=reader.result;};reader.readAsDataURL(file);event.target.value='';});
 $('removeBackgroundBtn').addEventListener('click',()=>{savedBackground='';try{localStorage.removeItem('neva-background');}catch(error){}applyCustomBackground('');toast('Фон удалён');});
+$('windowTransparency').addEventListener('input',event=>{savedWindowTransparency=Number(event.target.value);applyWindowTransparency(savedWindowTransparency);try{localStorage.setItem('neva-window-transparency',String(savedWindowTransparency));}catch(error){}});
 document.querySelectorAll('.menu-drawer nav button').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.menu-drawer nav button').forEach(item=>item.classList.remove('active'));button.classList.add('active');}));
 function acceptAlarm(alarm){if(!alarm||alarm.status!=='new')return;selected=alarm;selected.status='mine';selected.statusLabel='В РАБОТЕ';selected.operator=currentOperator;addHistory('Тревога принята в работу','Оператор назначен ответственным');renderRows();renderDetail();toast('Тревога принята в работу');}
 $('acceptBtn').addEventListener('click',()=>acceptAlarm(selected));

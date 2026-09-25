@@ -423,10 +423,14 @@ body.dark-theme #finishDialog .finish-dialog-actions .secondary{color:#f5f7f8!im
 /* Фон занимает всю рабочую область, панели сохраняют читаемость */
 body.custom-background .workspace{background-image:linear-gradient(#eef3f64f,#eef3f64f),var(--custom-background-image);background-size:cover;background-position:center;background-attachment:fixed}
 body.dark-theme.custom-background .workspace{background-image:linear-gradient(#0711174a,#0711174a),var(--custom-background-image)}
-body.custom-background .alarm-pane,body.custom-background .detail-pane{background:#f8fafc8f;backdrop-filter:blur(1px)}
-body.dark-theme.custom-background .alarm-pane,body.dark-theme.custom-background .detail-pane{background:#10181e80}
-body.custom-background .alarm-table-wrap,body.custom-background .card{background:#f8fafcd6}
-body.dark-theme.custom-background .alarm-table-wrap,body.dark-theme.custom-background .card{background:#10181ecc}
-body.dark-theme.custom-background .alarm-table tbody tr,body.dark-theme.custom-background .alarm-table tbody tr:not(.new),body.dark-theme.custom-background .alarm-table tbody tr.new{background:#151f26c7}
-body.custom-background .statusbar{background:#f8fafcd6;backdrop-filter:blur(1px)}
-body.dark-theme.custom-background .statusbar{background:#10181ed6}
+body.custom-background .alarm-pane,body.custom-background .detail-pane{background:rgb(248 250 252 / var(--window-opacity,.55));backdrop-filter:blur(1px)}
+body.dark-theme.custom-background .alarm-pane,body.dark-theme.custom-background .detail-pane{background:rgb(16 24 30 / var(--window-opacity,.55))}
+body.custom-background .alarm-table-wrap,body.custom-background .card{background:rgb(248 250 252 / var(--window-content-opacity,.73))}
+body.dark-theme.custom-background .alarm-table-wrap,body.dark-theme.custom-background .card{background:rgb(16 24 30 / var(--window-content-opacity,.73))}
+body.dark-theme.custom-background .alarm-table tbody tr,body.dark-theme.custom-background .alarm-table tbody tr:not(.new),body.dark-theme.custom-background .alarm-table tbody tr.new{background:rgb(21 31 38 / var(--window-content-opacity,.73))}
+body.custom-background .statusbar{background:rgb(248 250 252 / var(--window-content-opacity,.73));backdrop-filter:blur(1px)}
+body.dark-theme.custom-background .statusbar{background:rgb(16 24 30 / var(--window-content-opacity,.73))}
+.window-transparency{display:grid;gap:10px;padding:14px;border:1px solid var(--md-outline-variant);border-radius:10px;background:var(--md-surface-container)}
+.window-transparency>div{display:flex;align-items:center;justify-content:space-between;gap:12px}.window-transparency label{font-weight:700}.window-transparency output{min-width:46px;text-align:right;color:var(--md-primary);font-weight:800}
+.window-transparency input[type="range"]{width:100%;height:6px;padding:0;accent-color:#1769aa;cursor:pointer}
+body.dark-theme .window-transparency{background:#172229;border-color:#526673}body.dark-theme .window-transparency label{color:#f5f7f8}body.dark-theme .window-transparency output{color:#8fc9f2}

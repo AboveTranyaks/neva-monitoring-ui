@@ -277,3 +277,7 @@ body.dark-theme .operator-stats-table{background:#11191f;border-color:#465761}
 body.dark-theme .operator-stats-table tbody tr{background:#172128}
 body.dark-theme .operator-stats-table td{color:#e7edf1;border-color:#465761}
 body.dark-theme .alarm-count-badge{background:#28485d;color:#f2f7fa}
+.clock,.menu-trigger{height:38px;display:inline-flex;align-items:center;justify-content:center;line-height:1;margin:0}
+.menu-trigger{gap:8px;padding:0 14px;border:1px solid #5f89a7;background:#0d3a5a;box-shadow:0 1px 3px #071d2c66;font-weight:700}
+.menu-trigger span{margin:0;font-size:1.15rem;line-height:1}
+.menu-trigger:hover{background:#20597f;border-color:#8db7d3}

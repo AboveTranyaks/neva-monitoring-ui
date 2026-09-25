@@ -56,6 +56,16 @@ let history = [
   {alarmNumber:'11307',tone:'gray',date:'2026-08-03',time:'09:12:08',event:'Проверка канала связи',operator:'Система',details:'Успешно'}
 ];
 const $ = id => document.getElementById(id);
+function applyTheme(theme){
+  const dark=theme==='dark';
+  document.body.classList.toggle('dark-theme',dark);
+  const toggle=$('themeToggle');
+  if(toggle){toggle.setAttribute('aria-pressed',String(dark));toggle.querySelector('i').textContent=dark?'Вкл.':'Выкл.';toggle.querySelector('span').textContent=dark?'☾':'◐';}
+  document.documentElement.style.colorScheme=dark?'dark':'light';
+}
+let savedTheme='light';
+try{savedTheme=localStorage.getItem('neva-theme')||'light';}catch(error){}
+applyTheme(savedTheme);
 const statusClass = a => a.status === 'new' ? 'new' : a.status === 'complete' ? 'complete' : '';
 const formatElapsed = seconds => {
   const h = Math.floor(seconds / 3600), m = Math.floor((seconds % 3600) / 60), s = seconds % 60;
@@ -234,6 +244,7 @@ document.addEventListener('click',e=>{if($('operatorsMenu').hidden||$('operators
 $('operatorSearch').addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('#operatorList li').forEach(li=>li.hidden=!li.dataset.name.includes(q));});
 function setDrawer(open){$('mainMenu').hidden=!open;$('drawerBackdrop').hidden=!open;$('menuTrigger').setAttribute('aria-expanded',String(open));}
 $('menuTrigger').addEventListener('click',()=>setDrawer($('mainMenu').hidden)); $('menuClose').addEventListener('click',()=>setDrawer(false)); $('drawerBackdrop').addEventListener('click',()=>setDrawer(false));
+$('themeToggle').addEventListener('click',()=>{const theme=document.body.classList.contains('dark-theme')?'light':'dark';applyTheme(theme);try{localStorage.setItem('neva-theme',theme);}catch(error){}toast(theme==='dark'?'Тёмная тема включена':'Светлая тема включена');});
 document.querySelectorAll('.menu-drawer nav button').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.menu-drawer nav button').forEach(item=>item.classList.remove('active'));button.classList.add('active');}));
 function acceptAlarm(alarm){if(!alarm||alarm.status!=='new')return;selected=alarm;selected.status='mine';selected.statusLabel='В РАБОТЕ';selected.operator=currentOperator;addHistory('Тревога принята в работу','Оператор назначен ответственным');renderRows();renderDetail();toast('Тревога принята в работу');}
 $('acceptBtn').addEventListener('click',()=>acceptAlarm(selected));

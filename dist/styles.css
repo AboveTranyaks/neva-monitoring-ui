@@ -373,3 +373,11 @@ body{font-size:var(--ui-text-size)}
 .main-data .map-button{flex:0 0 34px;width:34px;height:30px;margin-left:auto;background:#172b38;border-color:#55778d;color:#fff}
 .main-data .map-button:hover,.main-data .map-button.active{background:#21475d;border-color:#8fb7cf}
 .main-data .map-button .location-pin-icon{width:22px;height:22px}
+
+/* Ровная панель действий в заголовке карточки */
+.main-data-heading{display:grid;grid-template-columns:130px minmax(0,1fr);gap:10px;align-items:center;min-height:46px}
+.main-data-heading h2{white-space:nowrap;line-height:1.2}
+.main-data-heading .heading-actions{display:flex;justify-content:flex-end;gap:8px;min-width:0;width:100%;align-items:center}
+.main-data-heading .heading-actions button{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;min-width:0!important;width:auto!important;height:32px!important;padding:0 10px!important;margin:0;font-family:Inter,"Segoe UI",Arial,sans-serif!important;font-size:12px!important;font-weight:700;line-height:1!important;white-space:nowrap}
+.main-data-heading .heading-actions button[hidden]{display:none!important}
+.main-data-heading #operatorCommentBtn{background:#fff;color:#111!important;-webkit-text-fill-color:#111!important}

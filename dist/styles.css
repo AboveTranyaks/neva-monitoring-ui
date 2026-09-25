@@ -468,3 +468,8 @@ body.dark-theme #operatorCommentDialog .comment-view{background:#172229;border-c
 body.dark-theme .shift-lock-message{background:#322a18;color:#ffe4a3;border-color:#8f6b25}
 .alarm-actions-locked .take-alarm-row:disabled,.alarm-actions-locked #acceptBtn:disabled,.alarm-actions-locked #takeBtn:disabled,.alarm-actions-locked #finishBtn:disabled,.alarm-actions-locked #operatorCommentBtn:disabled,.alarm-actions-locked .dispatch-gbr:disabled,.alarm-actions-locked .cancel-gbr:disabled,.alarm-actions-locked #openCallCenter:disabled,.alarm-actions-locked #startCallCenter:disabled{opacity:.42;filter:grayscale(.5);cursor:not-allowed;box-shadow:none}
 a.phone.shift-disabled{opacity:.42;filter:grayscale(1);pointer-events:none;cursor:not-allowed}
+
+/* Компактный текст по центру в колонках статуса и состояния */
+.alarm-table tbody td:nth-child(6),.alarm-table tbody td:nth-child(7){text-align:center!important}
+.alarm-table tbody td:nth-child(6) .status{display:inline-flex!important;align-items:center;justify-content:center;margin:0 auto;font-family:Inter,"Segoe UI",Arial,sans-serif!important;font-size:10px!important;font-weight:500!important;line-height:18px!important;text-align:center!important}
+.alarm-table tbody .alarm-state-cell>.status,.alarm-table tbody .alarm-state-cell>.take-alarm-row{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:28px!important;min-height:28px!important;margin:0!important;padding:3px 5px!important;font-family:Inter,"Segoe UI",Arial,sans-serif!important;font-size:10px!important;font-weight:500!important;line-height:18px!important;text-align:center!important}

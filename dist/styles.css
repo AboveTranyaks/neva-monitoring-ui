@@ -183,7 +183,10 @@ body.resizing-panes{cursor:col-resize;user-select:none}
 
 /* Единая строка шапки и цветовые статусы */
 .avatars i{position:relative}
-.avatars i::after{content:"";position:absolute;right:-2px;bottom:-2px;width:7px;height:7px;border:2px solid #123f60;border-radius:50%;background:#35c76f}
+.avatars i::after{display:none}
+.avatars .online-avatar{display:grid;place-items:center;width:24px;height:24px;margin-left:3px;border:2px solid #48d278;background:#348bd5;color:#fff;font-size:.68rem;font-style:normal;font-weight:800;line-height:1;box-shadow:0 0 0 1px #0b3857}
+.avatars .avatar-cyan{background:#19aeb4}.avatars .avatar-violet{background:#8c72d8}.avatars .avatar-lime{background:#6fb725}
+.avatars b{margin-left:3px}
 .top-stats{order:initial;margin-left:auto;padding-bottom:0}
 .stat-new{color:#d3dbe1}.stat-new b{background:#7b8995;color:#fff}
 .stat-work{color:#dff7e6}.stat-work b{background:#2e9a55;color:#fff}

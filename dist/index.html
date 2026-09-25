@@ -7,7 +7,7 @@
   <meta name="description" content="Рабочее место оператора пульта охраны «Нева Мониторинг»">
   <title>Нева Мониторинг — Пульт оператора</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='%230d4778' stroke='white' stroke-width='3'/%3E%3Cpath d='M17 40V23h5l10 10V23h5v17h-5L22 30v10zm24 0V23h12v4h-7v3h6v4h-6v6z' fill='white'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=header-status-colors-2">
+  <link rel="stylesheet" href="styles.css?v=online-avatars-3">
 </head>
 <body>
   <div class="app-shell">
@@ -19,7 +19,13 @@
 
       <button class="top-control operators-trigger" id="operatorsTrigger" aria-expanded="false" aria-controls="operatorsMenu">
         <span>Операторы онлайн: 12</span>
-        <span class="avatars" aria-label="Операторы онлайн"><i></i><i></i><i></i><i></i><b>+7</b></span>
+        <span class="avatars" aria-label="Операторы онлайн">
+          <i class="online-avatar avatar-blue" title="Иванов И.И.">И</i>
+          <i class="online-avatar avatar-cyan" title="Сидорова Е.С.">С</i>
+          <i class="online-avatar avatar-violet" title="Петров А.В.">П</i>
+          <i class="online-avatar avatar-lime" title="Кузнецов Д.М.">К</i>
+          <b title="Ещё 7 операторов онлайн">+7</b>
+        </span>
       </button>
 
       <div class="current-user"><span class="avatar">СА</span><div><strong>Смирнов А.С.</strong><small>Оператор</small></div></div>

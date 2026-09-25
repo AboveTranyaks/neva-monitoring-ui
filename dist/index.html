@@ -7,7 +7,7 @@
   <meta name="description" content="Рабочее место оператора пульта охраны «Нева Мониторинг»">
   <title>Нева Мониторинг — Пульт оператора</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='%230d4778' stroke='white' stroke-width='3'/%3E%3Cpath d='M17 40V23h5l10 10V23h5v17h-5L22 30v10zm24 0V23h12v4h-7v3h6v4h-6v6z' fill='white'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=header-stats-alignment-1">
+  <link rel="stylesheet" href="styles.css?v=header-status-colors-2">
 </head>
 <body>
   <div class="app-shell">
@@ -19,7 +19,7 @@
 
       <button class="top-control operators-trigger" id="operatorsTrigger" aria-expanded="false" aria-controls="operatorsMenu">
         <span>Операторы онлайн: 12</span>
-        <span class="avatars" aria-hidden="true"><i></i><i></i><i></i><i></i><b>+7</b></span>
+        <span class="avatars" aria-label="Операторы онлайн"><i></i><i></i><i></i><i></i><b>+7</b></span>
       </button>
 
       <div class="current-user"><span class="avatar">СА</span><div><strong>Смирнов А.С.</strong><small>Оператор</small></div></div>
@@ -31,9 +31,9 @@
         <span class="shift-status" id="shiftStatus">Смена не начата</span>
       </div>
       <div class="top-stats" aria-label="Сводка тревог">
-        <span class="stat alarm">● Новые <b id="newCount">3</b></span>
-        <span class="stat">▣ В работе <b id="workCount">5</b></span>
-        <span class="stat">▰ ГБР направлена <b id="gbrCount">2</b></span>
+        <span class="stat stat-new">● Новые <b id="newCount">3</b></span>
+        <span class="stat stat-work">▣ В работе <b id="workCount">5</b></span>
+        <span class="stat stat-gbr">▰ ГБР направлена <b id="gbrCount">2</b></span>
         <span class="stat overdue">◷ Просрочены <b id="overdueCount">1</b></span>
       </div>
       <time class="clock" id="clock">04.08.2026&nbsp;&nbsp;11:05:01</time>

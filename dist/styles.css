@@ -180,4 +180,23 @@ body.resizing-panes{cursor:col-resize;user-select:none}
 .top-stats{flex-wrap:nowrap;align-self:center;white-space:nowrap;min-width:max-content}
 .top-stats .stat{display:inline-flex;align-items:center;line-height:1.2}
 .top-stats .stat b{font-size:.86rem;line-height:1.15}
+
+/* Единая строка шапки и цветовые статусы */
+.avatars i{position:relative}
+.avatars i::after{content:"";position:absolute;right:-2px;bottom:-2px;width:7px;height:7px;border:2px solid #123f60;border-radius:50%;background:#35c76f}
+.top-stats{order:initial;margin-left:auto;padding-bottom:0}
+.stat-new{color:#d3dbe1}.stat-new b{background:#7b8995;color:#fff}
+.stat-work{color:#dff7e6}.stat-work b{background:#2e9a55;color:#fff}
+.stat-gbr{color:#ffd8dc}.stat-gbr b{background:#d93a49;color:#fff}
+.stat.overdue{color:#fff}.stat.overdue b{background:#ff1237;color:#fff;box-shadow:0 0 0 1px #ff4964}
+@media (min-width:1180px) and (max-width:1450px){
+  .topbar{height:70px;min-height:70px;flex-wrap:nowrap;gap:7px;padding:0 10px}
+  .brand{min-width:181px;gap:8px}.brand-mark{width:42px;height:42px}.brand strong{font-size:1rem}.brand span{display:none}
+  .operators-trigger{padding:5px 6px}.operators-trigger>span:first-child{font-size:.72rem}
+  .current-user{min-width:112px;gap:6px}.current-user strong{font-size:.78rem}.current-user small{font-size:.67rem}
+  .shift-controls{order:initial;margin-left:0;padding:4px;gap:3px}.shift-controls button{padding:0 5px;font-size:.61rem}
+  .top-stats{order:initial;width:auto;gap:6px}.stat{font-size:.64rem;gap:3px}.stat b{padding:3px 5px;font-size:.7rem}
+  .clock{display:block;font-size:.64rem}.menu-trigger{padding:10px 8px;font-size:.7rem}
+  .operators-popover{top:69px}.menu-drawer{top:70px}.drawer-backdrop{inset:70px 250px 0 0}
+}
 .clock,.menu-trigger{align-self:center}

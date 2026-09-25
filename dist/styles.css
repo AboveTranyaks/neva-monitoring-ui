@@ -367,3 +367,9 @@ body{font-size:var(--ui-text-size)}
 .brand span,.current-user small,.shift-status,.gbr-role,.crew-state,.gbr-meta,.alarm-table td:first-child small,.report-summary span,.operator-stats-summary span{font-size:11px}
 .section-heading{font-size:15px}.alarm-title{font-size:18px}.brand strong{font-size:18px}
 .map-button .location-pin-icon{width:25px;height:25px;overflow:visible}
+.main-data dl>div:nth-child(2){min-height:38px}
+.main-data dl>div:nth-child(2) dd{display:flex;align-items:center;gap:8px;min-width:0}
+#objectAddress{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.main-data .map-button{flex:0 0 34px;width:34px;height:30px;margin-left:auto;background:#172b38;border-color:#55778d;color:#fff}
+.main-data .map-button:hover,.main-data .map-button.active{background:#21475d;border-color:#8fb7cf}
+.main-data .map-button .location-pin-icon{width:22px;height:22px}

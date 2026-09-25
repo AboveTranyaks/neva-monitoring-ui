@@ -466,6 +466,8 @@ body.dark-theme #operatorCommentDialog form{margin:0;overflow:hidden;border-radi
 body.dark-theme #operatorCommentDialog .save-comment{background:#237a4b!important;border-color:#4caf78!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
 body.dark-theme #operatorCommentDialog .save-comment:hover{background:#2b8b58!important}
 body.dark-theme #operatorCommentDialog .save-comment:disabled{background:#2b3b34!important;border-color:#53665d!important;color:#aebbb4!important;-webkit-text-fill-color:#aebbb4!important}
+body.dark-theme #operatorCommentDialog #saveCommentBtn{background:#dff2e5!important;background-image:none!important;border-color:#4b9a68!important;color:#102d1c!important;-webkit-text-fill-color:#102d1c!important;text-shadow:none!important;opacity:1!important}
+body.dark-theme #operatorCommentDialog #saveCommentBtn:hover{background:#c9ead4!important;color:#0b2516!important;-webkit-text-fill-color:#0b2516!important}
 
 /* Обработка тревог доступна только в рабочем режиме смены */
 .shift-lock-message{margin:-4px 0 10px;padding:8px 11px;border:1px solid #d49a2c;border-radius:7px;background:#fff6dd;color:#5e4308;font-size:12px;font-weight:600;line-height:1.25}

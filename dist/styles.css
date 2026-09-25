@@ -310,3 +310,13 @@ body.dark-theme .completed-info>div{border-color:#3b4b55}body.dark-theme .comple
 body.dark-theme .completed-report-pane .events-full-table{background:#172229;color:#e7edf1}
 body.dark-theme .completed-report-pane .events-full-table td{background:#172229;color:#e7edf1;border-color:#3b4b55}
 @media(max-width:900px){.report-filters{grid-template-columns:1fr 1fr}.report-number-search{grid-column:1/-1}}
+body.dark-theme .map-panel{background:#10181e;color:#e7edf1;border-color:#3b4b55;box-shadow:-14px 0 36px #0008}
+body.dark-theme .map-panel header{border-color:#3b4b55}
+body.dark-theme .map-panel header strong{color:#f5f7f8}
+body.dark-theme .map-panel header small,body.dark-theme .map-panel dt{color:#b7c5ce}
+body.dark-theme .map-panel header button{color:#f5f7f8}
+body.dark-theme .map-panel dl>div{border-color:#3b4b55}
+body.dark-theme .map-panel dd{color:#e7edf1}
+body.dark-theme .map-panel>a{background:#174c6b;color:#d7efff;border-color:#8fc9f2}
+body.dark-theme .map-panel>a:hover{background:#205f82;color:#fff}
+body.dark-theme .map-label{background:#fff;color:#172128}

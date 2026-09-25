@@ -7,7 +7,7 @@
   <meta name="description" content="Рабочее место оператора пульта охраны «Нева Мониторинг»">
   <title>Нева Мониторинг — Пульт оператора</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='%230d4778' stroke='white' stroke-width='3'/%3E%3Cpath d='M17 40V23h5l10 10V23h5v17h-5L22 30v10zm24 0V23h12v4h-7v3h6v4h-6v6z' fill='white'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=compact-detail-11">
+  <link rel="stylesheet" href="styles.css?v=compact-detail-12">
 </head>
 <body>
   <div class="app-shell">
@@ -86,14 +86,8 @@
           <div class="priority">◔ <span>Приоритет<br><b>ВЫСОКИЙ</b></span></div>
         </div>
 
-        <div class="alarm-actions">
-          <button class="action accept" id="acceptBtn">✓&nbsp; Принять в работу</button>
-          <button class="action comment" id="operatorCommentBtn" hidden>✎&nbsp; Комментарий оператора</button>
-          <button class="action finish" id="finishBtn">✓&nbsp; ЗАВЕРШИТЬ</button>
-        </div>
-
         <section class="card main-data">
-          <div class="section-heading blue main-data-heading"><h2>Основные данные</h2><div class="heading-actions"><button class="action take heading-take" id="takeBtn">♟&nbsp; Забрать тревогу</button><button id="copyObjectBtn">⧉ Копировать данные</button><button id="openPhotosBtn">▣ Фото объекта</button></div></div>
+          <div class="section-heading blue main-data-heading"><h2>Основные данные</h2><div class="heading-actions"><button class="action accept heading-action" id="acceptBtn">✓&nbsp; Принять в работу</button><button class="action take heading-action" id="takeBtn">♟&nbsp; Забрать тревогу</button><button class="action comment heading-action" id="operatorCommentBtn" hidden>✎&nbsp; Комментарий оператора</button><button class="action finish heading-action" id="finishBtn">✓&nbsp; ЗАВЕРШИТЬ</button><button id="copyObjectBtn">⧉ Копировать данные</button><button id="openPhotosBtn">▣ Фото объекта</button></div></div>
           <div class="main-data-grid">
             <dl>
               <div><dt>Название</dt><dd id="objectName">Кабинет разработчиков ПО ХБ Нева</dd></div>

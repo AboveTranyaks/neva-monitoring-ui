@@ -1,4 +1,5 @@
 const currentOperator = 'Смирнов А.С.';
+const dispatchReasons=['Предоплаченная дислокация','Неисправность оборудования','Не смонтирован','По просьбе х/о','По просьбе менеджера','Объект не ставится под охрану или охрана невозможна'];
 const alarms = [
   {time:'11:04',number:'14933',name:'Магазин Север',address:'Краснодар, ул. Северная, 102',event:'Тревожная кнопка',alarmType:'КТС',category:7,status:'new',statusLabel:'КТС',operator:'—',elapsedSec:38,critical:true,note:'Позвонить ответственному лицу',panel:'Краснодар',section:'Раздел 1',services:'Охрана ОС',coords:'45.0402,38.9760'},
   {time:'11:00',number:'14919',name:'Кабинет разработчиков ПО ХБ Нева',address:'Краснодар, ул. Пашковская, 74, кабинет 306',event:'Датчик движения',status:'mine',statusLabel:'В РАБОТЕ',operator:'Смирнов А.С.',elapsedSec:282,critical:false,note:'При тревоге отвечаем и всё',panel:'Краснодар',section:'Раздел 1',services:'Охрана ОС • Мониторинг ПС',coords:'45.032954,38.971944'},
@@ -503,4 +504,4 @@ setInterval(()=>{
   renderRows();if(selected)$('elapsed').textContent=formatElapsed(selected.elapsedSec);$('clock').textContent=new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
 },1000);
 setInterval(addIncomingAlarm,20000);
-ensureTodayOperatorStats();$('operatorStatsDate').value=localIsoDate();renderOperatorList();renderRows();renderDetail();renderContacts();renderHistory();applyAlarmActionAvailability();
+$('finishDispatchReason').innerHTML='<option value="">Выберите причину</option>'+dispatchReasons.map(reason=>`<option>${reason}</option>`).join('');ensureTodayOperatorStats();$('operatorStatsDate').value=localIsoDate();renderOperatorList();renderRows();renderDetail();renderContacts();renderHistory();applyAlarmActionAvailability();

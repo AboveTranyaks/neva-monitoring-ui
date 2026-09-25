@@ -281,3 +281,32 @@ body.dark-theme .alarm-count-badge{background:#28485d;color:#f2f7fa}
 .menu-trigger{gap:8px;padding:0 14px;border:1px solid #5f89a7;background:#0d3a5a;box-shadow:0 1px 3px #071d2c66;font-weight:700}
 .menu-trigger span{margin:0;font-size:1.15rem;line-height:1}
 .menu-trigger:hover{background:#20597f;border-color:#8db7d3}
+.map-button svg{width:20px;height:20px;display:block;fill:currentColor}
+.menu-drawer,.menu-drawer button,.menu-drawer .help{font-family:Inter,"Segoe UI",Arial,sans-serif}
+.menu-drawer nav button:hover,.menu-drawer nav button:focus-visible,.menu-drawer .help:hover,.menu-drawer .help:focus-visible{background:#fff!important;color:#143a58!important;box-shadow:0 2px 8px #05192755;transform:translateX(-2px)}
+.theme-setting button[aria-pressed="true"]{border-color:#fff;background:#174f3b;box-shadow:inset 0 0 0 1px #ffffff55}
+.report-filters{display:grid;grid-template-columns:150px 150px minmax(190px,1fr) auto auto auto;align-items:end}
+.report-number-search{min-width:190px}.report-filters .export-excel{background:#287446;border-color:#3d9561;color:#fff;white-space:nowrap}
+.report-card details:not([open]) summary::before{content:'▸ ';}.report-card details[open] summary::before{content:'▾ '}
+body.dark-theme .gbr-card,body.dark-theme .embedded-gbr{background:#11191f;border-color:#3b4b55}
+body.dark-theme .gbr-list{background:#10181e}
+body.dark-theme .gbr-title{background:#223039;color:#f1f5f7}
+body.dark-theme .gbr-unit,body.dark-theme .gbr-unit.primary{background:#172229;color:#e7edf1;border-color:#3b4b55}
+body.dark-theme .gbr-unit-head b,body.dark-theme .gbr-name{color:#f5f7f8!important;-webkit-text-fill-color:#f5f7f8!important}
+body.dark-theme .gbr-unit .gbr-role,body.dark-theme .gbr-unit .gbr-meta span{color:#b7c5ce}
+body.dark-theme .gbr-unit .gbr-meta strong{color:#f5f7f8}
+body.dark-theme #reportsBody{background:#10181e}
+body.dark-theme .reports-dialog header small{color:#b7c5ce}
+body.dark-theme .report-card{background:#172229;color:#e3e9ed;border-color:#3b4b55}
+body.dark-theme .report-summary span,body.dark-theme .report-details dt{color:#b7c5ce}
+body.dark-theme .report-card details{border-color:#3b4b55}
+body.dark-theme .report-card summary{background:#223039;color:#9ed2f5}
+body.dark-theme .report-card summary:hover{background:#2b3b45;color:#fff}
+body.dark-theme .report-details dl>div{border-color:#3b4b55}
+body.dark-theme .report-details th{background:#223039;color:#e7edf1}
+body.dark-theme .report-details td{background:#172229;color:#e7edf1;border-color:#3b4b55}
+body.dark-theme .completed-report-head,body.dark-theme .completed-info{background:#172229;color:#e7edf1;border-color:#3b4b55}
+body.dark-theme .completed-info>div{border-color:#3b4b55}body.dark-theme .completed-info dt{color:#b7c5ce}
+body.dark-theme .completed-report-pane .events-full-table{background:#172229;color:#e7edf1}
+body.dark-theme .completed-report-pane .events-full-table td{background:#172229;color:#e7edf1;border-color:#3b4b55}
+@media(max-width:900px){.report-filters{grid-template-columns:1fr 1fr}.report-number-search{grid-column:1/-1}}

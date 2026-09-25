@@ -419,3 +419,14 @@ body.dark-theme #finishDialog input::placeholder,body.dark-theme #finishDialog t
 body.dark-theme #finishDialog .request-fields{background:#142027;border-color:#526673}
 body.dark-theme #finishDialog input[type="radio"],body.dark-theme #finishDialog input[type="checkbox"]{accent-color:#4ea7e0}
 body.dark-theme #finishDialog .finish-dialog-actions .secondary{color:#f5f7f8!important;-webkit-text-fill-color:#f5f7f8}
+
+/* Фон занимает всю рабочую область, панели сохраняют читаемость */
+body.custom-background .workspace{background-image:linear-gradient(#eef3f67a,#eef3f67a),var(--custom-background-image);background-size:cover;background-position:center;background-attachment:fixed}
+body.dark-theme.custom-background .workspace{background-image:linear-gradient(#07111780,#07111780),var(--custom-background-image)}
+body.custom-background .alarm-pane,body.custom-background .detail-pane{background:#f8fafcbf;backdrop-filter:blur(1.5px)}
+body.dark-theme.custom-background .alarm-pane,body.dark-theme.custom-background .detail-pane{background:#10181eb8}
+body.custom-background .alarm-table-wrap,body.custom-background .card{background:#f8fafce8}
+body.dark-theme.custom-background .alarm-table-wrap,body.dark-theme.custom-background .card{background:#10181ee8}
+body.dark-theme.custom-background .alarm-table tbody tr,body.dark-theme.custom-background .alarm-table tbody tr:not(.new),body.dark-theme.custom-background .alarm-table tbody tr.new{background:#151f26dc}
+body.custom-background .statusbar{background:#f8fafce8;backdrop-filter:blur(2px)}
+body.dark-theme.custom-background .statusbar{background:#10181ee8}

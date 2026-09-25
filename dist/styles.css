@@ -493,7 +493,3 @@ body.dark-theme .gbr-progress{background:#26343d;color:#c2cdd3}body.dark-theme .
 /* Источник тревоги рядом с пультовым номером */
 .alarm-table .pult-number{display:flex!important;align-items:center;gap:4px;margin-top:3px;color:#667480}.monitoring-system{display:inline-grid;place-items:center;width:15px;height:15px;border-radius:4px;color:#fff;font-size:9px;font-weight:800;line-height:1;cursor:help}.monitoring-system.fenix{background:#1670b8}.monitoring-system.andromeda{background:#7b4bb3}.monitoring-system.mirazh{background:#b56b18}
 body.dark-theme .alarm-table .pult-number{color:#a9c5d7}body.dark-theme .monitoring-system.fenix{background:#278acb}body.dark-theme .monitoring-system.andromeda{background:#9866ce}body.dark-theme .monitoring-system.mirazh{background:#d0852b}
-
-/* Для ложной КТС/ОС дислокация не требуется */
-.finish-form .dispatch-not-required{opacity:.48;pointer-events:none}.finish-form fieldset.dispatch-not-required::after{content:'Для ложной тревоги КТС/ОС дислокация не требуется';display:block;width:100%;margin-top:5px;color:#356a48;font-size:11px;font-weight:600}.finish-form label.dispatch-not-required select{background:#edf1f3;color:#6f7c84}
-body.dark-theme .finish-form fieldset.dispatch-not-required::after{color:#9fd2af}body.dark-theme .finish-form label.dispatch-not-required select{background:#202d34;color:#91a0a8}

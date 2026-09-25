@@ -341,3 +341,6 @@ body.dark-theme .section-heading,body.dark-theme .section-heading button,body.da
 .history-table th:nth-child(4),.history-table td:nth-child(4){width:86px}
 .history-table th:nth-child(5),.history-table td:nth-child(5){width:auto}
 .history-table .sort-time{font-family:inherit;font-size:inherit;white-space:normal}
+
+/* Заголовок списка тревог совпадает с синими заголовками карточек */
+body.dark-theme .alarm-table thead th{background:var(--md-primary-container);color:#f5f7f8;border-color:#497087}

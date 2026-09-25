@@ -264,3 +264,16 @@ body.dark-theme .gbr-unit{background:#fff;color:#111;border-color:#cfd9df}body.d
 .top-stats .stat b{display:inline-flex;align-items:center;justify-content:center;height:22px;min-width:22px;padding:0 6px;font-size:.78rem;line-height:22px}
 .main-data-heading .heading-action{height:29px;min-width:150px;padding:0 12px;font-size:.78rem}
 @media(max-width:1450px){.alarm-banner{padding:0 10px;grid-template-columns:minmax(0,1fr) auto auto}.alarm-title{font-size:1rem;white-space:nowrap}.alarm-meta{font-size:.62rem;padding-right:9px}.alarm-meta strong{font-size:.78rem}.priority{gap:5px;padding-left:9px}.priority b{font-size:.85rem}.main-data-heading .heading-action{min-width:auto;padding:0 8px;font-size:.68rem}.main-data-heading #copyObjectBtn,.main-data-heading #openPhotosBtn{width:34px;padding:0;font-size:0}.main-data-heading #copyObjectBtn::before{content:'⧉';font-size:1rem}.main-data-heading #openPhotosBtn::before{content:'▣';font-size:1rem}}
+body.dark-theme .shift-confirm-dialog header{background:#202b33;border-color:#465761}
+body.dark-theme .shift-confirm-dialog h2,body.dark-theme .shift-confirm-dialog header>button{color:#f5f7f8}
+body.dark-theme .shift-confirm-body p{color:#e4ebef}
+body.dark-theme .event-filters,body.dark-theme .operator-stats-summary,body.dark-theme .operator-stats-table-wrap{background:#172128;border-color:#344653}
+body.dark-theme .event-filters label{color:#d5dfe5}
+body.dark-theme .event-filters input{background:#11191f;color:#f2f5f7;border-color:#52636e;color-scheme:dark}
+body.dark-theme .operator-stats-summary>div{background:#202b33;color:#f2f5f7;border-color:#465761}
+body.dark-theme .operator-stats-summary span{color:#b8c6ce}
+body.dark-theme .operator-stats-summary b{color:#72bff3}
+body.dark-theme .operator-stats-table{background:#11191f;border-color:#465761}
+body.dark-theme .operator-stats-table tbody tr{background:#172128}
+body.dark-theme .operator-stats-table td{color:#e7edf1;border-color:#465761}
+body.dark-theme .alarm-count-badge{background:#28485d;color:#f2f7fa}

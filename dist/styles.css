@@ -353,3 +353,6 @@ body.dark-theme .alarm-table td:first-child strong{color:#f5f7f8}
 body.dark-theme .alarm-table td:first-child small{color:#a9c5d7}
 .photo-gallery figcaption,body.dark-theme .photo-gallery figcaption{color:#111!important;-webkit-text-fill-color:#111;background:#fff}
 body.dark-theme .algorithm-card li,body.dark-theme .algorithm-card li.done,body.dark-theme .algorithm-card li.active{color:#dce8ef}
+
+/* Активный переключатель темы — фирменный синий, без зелёного фона */
+.theme-setting button[aria-pressed="true"],body.dark-theme .theme-setting button[aria-pressed="true"]{background:#1d5878;border:1px solid #fff;box-shadow:inset 0 0 0 1px #ffffff40;color:#fff}

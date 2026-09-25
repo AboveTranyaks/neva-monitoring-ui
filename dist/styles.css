@@ -411,3 +411,11 @@ body.dark-theme .call-center-body #callCenterContacts small{color:#b7c5ce!import
 body.dark-theme .call-center-body input,body.dark-theme .call-center-body select{background:#172229;color:#f5f7f8!important;-webkit-text-fill-color:#f5f7f8;border-color:#526673}
 body.dark-theme .call-center-body fieldset,body.dark-theme .call-center-body .select-all-contact,body.dark-theme .call-center-body #callCenterContacts label{border-color:#526673}
 body.dark-theme .call-center-actions #startCallCenter{color:#111!important;-webkit-text-fill-color:#111}
+
+/* Читаемый диалог завершения тревоги в тёмной теме */
+body.dark-theme #finishDialog,body.dark-theme #finishDialog label,body.dark-theme #finishDialog legend,body.dark-theme #finishDialog .check-row,body.dark-theme #finishDialog .radio-row label{color:#f5f7f8!important;-webkit-text-fill-color:#f5f7f8}
+body.dark-theme #finishDialog input,body.dark-theme #finishDialog select,body.dark-theme #finishDialog textarea{color:#f5f7f8!important;-webkit-text-fill-color:#f5f7f8;background:#172229;border-color:#526673}
+body.dark-theme #finishDialog input::placeholder,body.dark-theme #finishDialog textarea::placeholder{color:#b7c5ce!important;-webkit-text-fill-color:#b7c5ce;opacity:1}
+body.dark-theme #finishDialog .request-fields{background:#142027;border-color:#526673}
+body.dark-theme #finishDialog input[type="radio"],body.dark-theme #finishDialog input[type="checkbox"]{accent-color:#4ea7e0}
+body.dark-theme #finishDialog .finish-dialog-actions .secondary{color:#f5f7f8!important;-webkit-text-fill-color:#f5f7f8}

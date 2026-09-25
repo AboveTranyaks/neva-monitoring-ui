@@ -110,6 +110,14 @@ function sortedAlarms(list) {
   });
 }
 function isKts(alarm){return alarm.alarmType==='КТС'||/тревожная кнопка|ктс/i.test(alarm.event);}
+function alarmPriority(alarm){
+  if(isKts(alarm))return{level:'high',label:'ВЫСОКИЙ'};
+  const category=Number(alarm.category||2);
+  const context=`${alarm.event||''} ${alarm.name||''} ${alarm.note||''} ${alarm.services||''}`;
+  const requiresAttention=/пожар|дым|газ|принужден|нападен|разбити|удар|вскрыт/i.test(context);
+  const importantObject=[1,7,10].includes(category)||/банк|ломбард|ювелир|банкомат|аптек|клиник/i.test(alarm.name||'');
+  return requiresAttention||importantObject?{level:'medium',label:'СРЕДНИЙ'}:{level:'low',label:'НИЗКИЙ'};
+}
 function monitoringSystem(alarm){const systems=[{code:'F',name:'Феникс',className:'fenix'},{code:'A',name:'Андромеда',className:'andromeda'},{code:'M',name:'Мираж',className:'mirazh'}];return systems[Math.abs(Number(alarm.number)||0)%systems.length];}
 function pultNumberMarkup(alarm){const system=monitoringSystem(alarm);return '<small class="pult-number"><span>'+alarm.number+'</span><b class="monitoring-system '+system.className+'" title="Система '+system.name+'" aria-label="Система '+system.name+'">'+system.code+'</b></small>';}
 function savePinnedAlarms(){try{localStorage.setItem('neva-pinned-alarms',JSON.stringify([...pinnedAlarmNumbers]));}catch(error){}}
@@ -187,7 +195,11 @@ function updateAlarmCounts(){
 function selectAlarm(number) { selected = alarms.find(a => a.number === number); renderRows(); renderDetail(); }
 function mapUrl(a) { const [lat,lon] = a.coords.split(','); return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=17/${lat}/${lon}`; }
 function renderDetail() {
-  $('alarmBanner').classList.toggle('alert',selected.status==='new'||isKts(selected));
+  const priority=alarmPriority(selected);
+  $('alarmBanner').classList.remove('priority-high','priority-medium','priority-low');
+  $('alarmBanner').classList.add(`priority-${priority.level}`);
+  $('alarmBanner').classList.toggle('alert',priority.level==='high');
+  $('alarmPriority').textContent=priority.label;
   $('bannerNumber').textContent=selected.number; $('objectNumber').textContent=selected.number; $('footerNumber').textContent=selected.number;
   $('objectName').textContent=selected.name; $('objectAddress').textContent=selected.address; $('footerAddress').textContent=selected.address; $('objectNote').textContent=selected.note; $('objectPanel').textContent=selected.panel; $('objectSection').textContent=selected.section; const category=selected.category||([14933,12844,9775].includes(Number(selected.number))?7:2); $('objectCategory').textContent=category; $('objectCategory').classList.toggle('important',[1,7,10].includes(category)); $('objectCategoryHint').textContent=[1,7,10].includes(category)?'Важный объект':'Стандартный объект'; $('objectAdministrator').textContent=selected.administrator||'А 01'; $('objectManager').textContent=selected.manager||'Соколова Марина Викторовна'; $('objectServices').textContent=selected.services; $('elapsed').textContent=formatElapsed(selected.elapsedSec);
   $('acceptBtn').hidden=selected.status!=='new'; $('takeBtn').hidden=selected.status==='new'||selected.operator===currentOperator||selected.status==='complete'; $('finishBtn').hidden=selected.operator!==currentOperator; $('operatorCommentBtn').hidden=!hasDispatchedGbr(selected.number);

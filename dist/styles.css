@@ -366,3 +366,4 @@ body{font-size:var(--ui-text-size)}
 .main-data-heading button,#takeBtn,#copyObjectBtn,#openPhotosBtn,.section-heading button,.section-heading a,.history-card .section-heading button{font-size:var(--ui-text-size)!important}
 .brand span,.current-user small,.shift-status,.gbr-role,.crew-state,.gbr-meta,.alarm-table td:first-child small,.report-summary span,.operator-stats-summary span{font-size:11px}
 .section-heading{font-size:15px}.alarm-title{font-size:18px}.brand strong{font-size:18px}
+.map-button .location-pin-icon{width:25px;height:25px;overflow:visible}

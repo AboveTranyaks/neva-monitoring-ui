@@ -1,6 +1,6 @@
 const currentOperator = 'Смирнов А.С.';
 const alarms = [
-  {time:'11:04',number:'14933',name:'Магазин Север',address:'Краснодар, ул. Северная, 102',event:'Тревожная кнопка',alarmType:'КТС',category:7,status:'new',statusLabel:'КТС • НЕ ВЗЯТА',operator:'—',elapsedSec:38,critical:true,note:'Позвонить ответственному лицу',panel:'Краснодар',section:'Раздел 1',services:'Охрана ОС',coords:'45.0402,38.9760'},
+  {time:'11:04',number:'14933',name:'Магазин Север',address:'Краснодар, ул. Северная, 102',event:'Тревожная кнопка',alarmType:'КТС',category:7,status:'new',statusLabel:'КТС',operator:'—',elapsedSec:38,critical:true,note:'Позвонить ответственному лицу',panel:'Краснодар',section:'Раздел 1',services:'Охрана ОС',coords:'45.0402,38.9760'},
   {time:'11:00',number:'14919',name:'Кабинет разработчиков ПО ХБ Нева',address:'Краснодар, ул. Пашковская, 74, кабинет 306',event:'Датчик движения',status:'mine',statusLabel:'В РАБОТЕ',operator:'Смирнов А.С.',elapsedSec:282,critical:false,note:'При тревоге отвечаем и всё',panel:'Краснодар',section:'Раздел 1',services:'Охрана ОС • Мониторинг ПС',coords:'45.032954,38.971944'},
   {time:'10:58',number:'12844',name:'Ритейл Плюс',address:'Краснодар, ул. Красная, 176',event:'Открытие двери',status:'gbr',statusLabel:'ГБР-7 НАПРАВЛЕНА',operator:'Иванов И.И.',elapsedSec:375,critical:true,note:'Главный вход',panel:'Краснодар',section:'Раздел 2',services:'Охрана ОС',coords:'45.0448,38.9764'},
   {time:'10:52',number:'11307',name:'Склад Юг',address:'Краснодар, ул. Уральская, 97',event:'Пожарный шлейф',status:'work',statusLabel:'ЗВОНОК КЛИЕНТУ',operator:'Петров А.В.',elapsedSec:561,critical:true,note:'Проверить пожарный датчик',panel:'Краснодар',section:'Раздел 1',services:'Мониторинг ПС',coords:'45.0196,39.0432'},
@@ -98,7 +98,7 @@ function addIncomingAlarm(){
   ];
   const sequence=nextIncomingAlarmNumber-16001,sample=samples[sequence%samples.length],cycle=Math.floor(sequence/samples.length),now=new Date(),number=String(nextIncomingAlarmNumber++);
   const object={...sample,name:cycle?`${sample.name} • корпус ${cycle+1}`:sample.name,address:cycle?`${sample.address}, корпус ${cycle+1}`:sample.address};
-  alarms.push({...object,time:now.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}),number,status:'new',statusLabel:object.alarmType==='КТС'?'КТС • НЕ ВЗЯТА':'НОВАЯ / НЕ ВЗЯТА',operator:'—',elapsedSec:0,critical:true,panel:'Краснодар',section:'Раздел 1',coords:'45.0355,38.9753'});
+  alarms.push({...object,time:now.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}),number,status:'new',statusLabel:object.alarmType==='КТС'?'КТС':'НОВАЯ / НЕ ВЗЯТА',operator:'—',elapsedSec:0,critical:true,panel:'Краснодар',section:'Раздел 1',coords:'45.0355,38.9753'});
   renderRows();renderOperatorList();toast(`Новая тревога: ${object.name}`);
 }
 function renderRows() {

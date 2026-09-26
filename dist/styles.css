@@ -499,6 +499,8 @@ body.dark-theme .gbr-progress{background:#26343d;color:#c2cdd3}body.dark-theme .
 .contacts-card .contact>.responsible-avatar{display:flex!important;align-items:center!important;justify-content:center!important;width:36px;height:36px;min-width:36px;padding:0!important;border:0!important;border-radius:50%;color:#fff!important;font-size:12px!important;font-weight:700;line-height:1!important;letter-spacing:0;text-align:center;overflow:hidden;box-shadow:none!important}
 .responsible-avatar.avatar-color-0{background:#8873d1}.responsible-avatar.avatar-color-1{background:#397fc4}.responsible-avatar.avatar-color-2{background:#25a18e}.responsible-avatar.avatar-color-3{background:#d17845}.responsible-avatar.avatar-color-4{background:#c4547d}.responsible-avatar.avatar-color-5{background:#6678c8}.responsible-avatar.avatar-color-6{background:#4d9b59}.responsible-avatar.avatar-color-7{background:#a65cad}
 body.dark-theme .contacts-card .contact>.responsible-avatar{color:#fff!important;box-shadow:none!important}
+.history-table th:nth-child(2),.history-table td:nth-child(2){width:82px!important;min-width:82px;white-space:nowrap!important;overflow-wrap:normal!important;word-break:keep-all!important}
+.history-table .sort-time{white-space:nowrap!important}
 
 /* Источник тревоги рядом с пультовым номером */
 .alarm-table .pult-number{display:flex!important;align-items:center;gap:4px;margin-top:3px;color:#667480}.monitoring-system{display:inline-grid;place-items:center;width:15px;height:15px;border-radius:4px;color:#fff;font-size:9px;font-weight:800;line-height:1;cursor:help}.monitoring-system.fenix{background:#1670b8}.monitoring-system.andromeda{background:#7b4bb3}.monitoring-system.mirazh{background:#b56b18}

@@ -11,3 +11,4 @@ body.dark-theme{--admin-bg:#0b151c;--admin-panel:#111f28;--admin-text:#e7eef2;--
 .loops-table th:first-child,.loops-table td:first-child{width:74px!important;min-width:74px;max-width:74px}.loops-table th:nth-child(2),.loops-table td:nth-child(2){width:82px;min-width:82px;max-width:82px}.loops-table td:nth-child(2) select{min-width:64px;padding-left:8px;padding-right:22px}
 .admin-head-actions .icon-action{width:32px;height:32px;font-size:16px}
 .admin-topbar{position:relative}.admin-version{position:absolute;top:5px;left:9px;color:#b9cbd8;font:500 10px/1.2 Consolas,"SFMono-Regular",monospace;white-space:nowrap}.admin-brand{padding-top:10px}
+.admin-form input::placeholder,.admin-form textarea::placeholder,.gbr-editor input::placeholder{color:transparent!important;-webkit-text-fill-color:transparent!important}

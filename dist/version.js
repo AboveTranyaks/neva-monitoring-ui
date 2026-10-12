@@ -1,8 +1,9 @@
 (function () {
   var versions = window.__APP_VERSIONS__ || {};
-  var firmware = versions.firmware || {};
-  var build = versions.build || {};
-  var target = document.getElementById("appVersion");
-  if (!target) return;
-  target.textContent = "FV: " + (firmware.version || "—") + " (" + (firmware.commit || "—") + ")  BV: " + (build.version || "—") + " (" + (build.commit || "—") + ")";
+  document.querySelectorAll("[data-version-scope]").forEach(function (target) {
+    var scope = target.dataset.versionScope;
+    var current = versions[scope] || {};
+    var label = scope === "admin" ? "Admin" : "Operator";
+    target.textContent = label + " " + (current.version || "v.---") + " (" + (current.commit || "—") + ")";
+  });
 })();

@@ -22,10 +22,11 @@ jobs:
         shell: bash
         run: |
           SHORT_SHA="${GITHUB_SHA:0:8}"
+          RELEASE_VERSION=$(printf "v.%03d" "${GITHUB_RUN_NUMBER}")
           cat > dist/version-data.js <<EOF
           window.__APP_VERSIONS__ = {
-            firmware: { version: "1.23123", commit: "${SHORT_SHA}" },
-            build: { version: "1.21231", commit: "${SHORT_SHA}" }
+            operator: { version: "${RELEASE_VERSION}", commit: "${SHORT_SHA}" },
+            admin: { version: "${RELEASE_VERSION}", commit: "${SHORT_SHA}" }
           };
           EOF
       - uses: actions/configure-pages@v5

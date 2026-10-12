@@ -11,13 +11,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=user-menu-48">
+  <link rel="stylesheet" href="styles.css?v=version-display-49">
 </head>
 <body>
   <div class="app-shell">
     <header class="topbar">
+      <div class="version-info" id="appVersion" aria-label="Application versions"></div>
       <div class="brand">
-        <div><small class="build-version">FV: 1.23123 (awedef24) BV: 1.21231 (asdf23s)</small><strong>Нева Мониторинг</strong><span>Ваша безопасность — наша ответственность</span></div>
+        <div><strong>Нева Мониторинг</strong><span>Ваша безопасность — наша ответственность</span></div>
       </div>
 
       <button class="top-control operators-trigger" id="operatorsTrigger" aria-expanded="false" aria-controls="operatorsMenu">
@@ -197,6 +198,8 @@
     <dl><div><dt>Координаты</dt><dd class="coords-value"><span id="mapCoords">45.032954, 38.971944</span><button type="button" id="copyCoordsBtn" title="Копировать координаты" aria-label="Копировать координаты">⧉</button></dd></div><div><dt>Адрес</dt><dd id="mapAddress">Краснодар, ул. Пашковская, 74, кабинет 306</dd></div></dl>
     <a id="externalMapLink" target="_blank" rel="noopener">Открыть большую карту</a>
   </aside>
+  <script src="version-data.js"></script>
+  <script src="version.js?v=1"></script>
   <script src="app.js?v=admin-db-30"></script>
 </body>
 </html>

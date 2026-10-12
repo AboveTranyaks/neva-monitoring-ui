@@ -527,3 +527,13 @@ body.dark-theme .faq-dialog{color:#dce6ec;background:#101b22;border-color:#49617
 .drawer-backdrop{inset:109px 250px 0 0}
 body.dark-theme .alarm-stats-bar{background:#123b57;border-color:#294f66}
 .brand .build-version{display:block;margin:0 0 2px;color:#b9d7e9;font-size:9px;font-weight:600;line-height:1;letter-spacing:.02em;white-space:nowrap}
+
+/* Сводка слева; оператор и меню объединены в один блок */
+.alarm-stats-bar{justify-content:flex-start}
+.alarm-stats-bar .top-stats{justify-content:flex-start}
+.topbar .shift-controls{order:3}
+.topbar .user-menu-control{order:4;display:flex;align-items:stretch;flex:0 0 auto;min-height:48px;border:1px solid #7da3bd;border-radius:6px;overflow:hidden;background:#0d3a5a}
+.topbar .user-menu-control .current-user{order:initial;display:flex;align-items:center;justify-content:center;flex:0 0 104px;min-height:46px;margin:0;padding:5px 10px;border:0;border-right:1px solid #527997;border-radius:0;text-align:center}
+.topbar .user-menu-control .current-user strong{font-size:15px;line-height:1.05}
+.topbar .user-menu-control .menu-trigger{order:initial;align-self:stretch;height:auto;margin:0;padding:0 14px;border:0;border-radius:0;box-shadow:none;background:transparent}
+.topbar .user-menu-control .menu-trigger:hover{background:#20597f}

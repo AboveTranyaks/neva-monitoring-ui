@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=version-label-47">
+  <link rel="stylesheet" href="styles.css?v=user-menu-48">
 </head>
 <body>
   <div class="app-shell">
@@ -32,7 +32,6 @@
       </button>
 
       <time class="clock" id="clock">04.08.2026&nbsp;&nbsp;11:05:01</time>
-      <div class="current-user"><div><strong>Смирнов А.С.</strong><small>Оператор</small></div></div>
       <div class="shift-controls" aria-label="Режим работы оператора">
         <button class="shift-primary" id="startShiftBtn">Начать смену</button>
         <button class="shift-mode" id="breakBtn" disabled>Перерыв</button>
@@ -40,7 +39,10 @@
         <button class="shift-end" id="endShiftBtn" hidden>Завершить смену</button>
         <span class="shift-status" id="shiftStatus">Смена не начата</span>
       </div>
-      <button class="menu-trigger" id="menuTrigger" aria-expanded="false" aria-controls="mainMenu"><span aria-hidden="true">☰</span> Меню</button>
+      <div class="user-menu-control">
+        <div class="current-user"><strong>Смирнов<br>А.С.</strong></div>
+        <button class="menu-trigger" id="menuTrigger" aria-expanded="false" aria-controls="mainMenu"><span aria-hidden="true">☰</span> Меню</button>
+      </div>
     </header>
 
     <div class="alarm-stats-bar">

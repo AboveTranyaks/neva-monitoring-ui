@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Нева Мониторинг — Администрирование БД</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=admin-db-46"><link rel="stylesheet" href="admin.css?v=admin-db-1">
+</head>
+<body class="admin-page">
+  <header class="admin-topbar"><div class="admin-brand"><span>НЕВА</span><div><b>Нева Мониторинг</b><small>Администрирование базы объектов</small></div></div><div class="admin-user"><span class="avatar">АД</span><div><b>Администратор БД</b><small>Полный доступ к карточкам</small></div></div><button id="adminThemeBtn">◐ Тёмная тема</button><a href="index.html">← Вернуться в пульт</a></header>
+  <main class="admin-shell">
+    <aside class="admin-catalog">
+      <div class="admin-catalog-head"><div><h1>Объекты</h1><span id="objectCount"></span></div><button id="newObjectBtn">＋ Добавить</button></div>
+      <label class="admin-search"><span>⌕</span><input id="adminSearch" type="search" autocomplete="off" placeholder="Пультовый, адрес или название"></label>
+      <div class="admin-filter-row"><select id="systemFilter"><option value="">Все системы</option><option>Феникс</option><option>Андромеда</option><option>Мираж</option></select><select id="categoryFilter"><option value="">Все категории</option><option>2</option><option>3</option><option>5</option><option>7</option><option>10</option></select></div>
+      <div class="admin-suggestions" id="adminSuggestions" hidden></div>
+      <div class="admin-object-list" id="adminObjectList"></div>
+    </aside>
+    <section class="admin-editor">
+      <div class="admin-editor-head"><div><span class="admin-system-badge" id="editorSystemBadge">F</span><div><h2 id="editorTitle">Карточка объекта</h2><small id="editorSubtitle">Выберите объект из списка</small></div></div><div class="admin-head-actions"><button class="secondary" id="duplicateObjectBtn">⧉ Дублировать</button><button class="danger" id="deleteObjectBtn">Удалить</button><button id="saveObjectBtn">Сохранить изменения</button></div></div>
+      <nav class="admin-tabs"><button class="active" data-tab="main">Основные данные</button><button data-tab="loops">Шлейфы <i id="loopsCount">0</i></button><button data-tab="contacts">Ответственные <i id="contactsCount">0</i></button><button data-tab="photos">Фото объекта</button><button data-tab="mobile">Мобильное приложение</button></nav>
+      <div class="admin-tab active" id="tab-main">
+        <form class="admin-form" id="objectForm">
+          <label>Пультовый номер<input name="number" inputmode="numeric" required></label><label>Система<select name="system"><option>Феникс</option><option>Андромеда</option><option>Мираж</option></select></label>
+          <label class="wide">Название объекта<input name="name" required></label><label class="wide">Адрес<input name="address" required></label>
+          <label>Город<input name="city"></label><label>Раздел<input name="section"></label><label>Категория<select name="category"><option>2</option><option>3</option><option>5</option><option>7</option><option>10</option></select></label><label>ГБР<input name="gbr" placeholder="Например, ГБР-33"></label>
+          <label>Широта<input name="latitude" inputmode="decimal"></label><label>Долгота<input name="longitude" inputmode="decimal"></label><label>Администратор<input name="administrator"></label><label>Менеджер<input name="manager"></label>
+          <label>Тип услуги<select name="service"><option>Охрана ОС</option><option>Мониторинг ПС</option><option>Охрана ОС • Мониторинг ПС</option><option>КТС</option></select></label><label>Статус объекта<select name="status"><option>Действующий</option><option>Приостановлен</option><option>Архивный</option></select></label>
+          <label class="wide">Примечание<textarea name="note" rows="4"></textarea></label>
+        </form>
+      </div>
+      <div class="admin-tab" id="tab-loops"><div class="admin-section-title"><div><h3>Шлейфы объекта</h3><p>Редактируйте номер, название, описание и тип зоны.</p></div><button id="addLoopBtn">＋ Добавить шлейф</button></div><div class="editable-table-wrap"><table class="editable-table"><thead><tr><th>№</th><th>Шлейф</th><th>Описание</th><th>Тип зоны</th><th></th></tr></thead><tbody id="adminLoopsBody"></tbody></table></div></div>
+      <div class="admin-tab" id="tab-contacts"><div class="admin-section-title"><div><h3>Ответственные лица</h3><p>Контакты относятся только к выбранному объекту.</p></div><button id="addContactBtn">＋ Добавить ответственного</button></div><div class="editable-table-wrap"><table class="editable-table"><thead><tr><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Приоритет</th><th></th></tr></thead><tbody id="adminContactsBody"></tbody></table></div></div>
+      <div class="admin-tab" id="tab-photos"><div class="admin-section-title"><div><h3>Фотографии объекта</h3><p>Общий вид, вход, приборы и другие важные точки.</p></div><label class="admin-upload">＋ Загрузить фото<input id="objectPhotoInput" type="file" accept="image/*" multiple></label></div><div class="admin-photo-grid" id="adminPhotoGrid"></div></div>
+      <div class="admin-tab" id="tab-mobile"><div class="mobile-settings"><div class="mobile-intro"><div><h3>Мобильное приложение клиента</h3><p>Настройки привязки объекта и уведомлений на основе личного кабинета «Нева».</p></div><a href="https://lk-admins.ohrana-neva.ru/dashboard/settings-notification-types" target="_blank" rel="noopener">Открыть личный кабинет ↗</a></div><div class="mobile-status" id="mobileStatus"><span>●</span><div><b>Интеграция не подключена</b><small>Для боевого подключения потребуется авторизация и серверный API.</small></div></div><div class="admin-form mobile-form"><label>ID клиента / договора<input id="mobileAccountId" placeholder="Введите идентификатор"></label><label>Телефон клиента<input id="mobilePhone" placeholder="+7 (___) ___-__-__"></label><fieldset><legend>Уведомления</legend><label><input type="checkbox" data-mobile-setting="alarm"> Тревоги и КТС</label><label><input type="checkbox" data-mobile-setting="arm"> Постановка и снятие</label><label><input type="checkbox" data-mobile-setting="power"> Питание и связь</label><label><input type="checkbox" data-mobile-setting="gbr"> Статусы ГБР</label></fieldset><button type="button" id="testMobileBtn">Проверить настройки</button></div></div></div>
+    </section>
+  </main>
+  <div class="admin-toast" id="adminToast"></div>
+  <script src="admin.js?v=admin-db-1"></script>
+</body></html>

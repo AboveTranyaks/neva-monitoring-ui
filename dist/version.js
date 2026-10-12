@@ -4,6 +4,6 @@
     var scope = target.dataset.versionScope;
     var current = versions[scope] || {};
     var label = scope === "admin" ? "Admin" : "Operator";
-    target.textContent = label + " " + (current.version || "v.---") + " (" + (current.commit || "—") + ")";
+    target.textContent = label + " " + (current.version || "v.---");
   });
 })();

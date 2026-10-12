@@ -29,6 +29,7 @@ jobs:
             admin: { version: "${RELEASE_VERSION}", commit: "${SHORT_SHA}" }
           };
           EOF
+          sed -i "s/admin.js?v=admin-db-[0-9]*/admin.js?v=${SHORT_SHA}/" dist/admin.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

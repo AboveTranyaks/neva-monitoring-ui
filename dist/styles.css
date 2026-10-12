@@ -526,3 +526,4 @@ body.dark-theme .faq-dialog{color:#dce6ec;background:#101b22;border-color:#49617
 .menu-drawer{top:109px}
 .drawer-backdrop{inset:109px 250px 0 0}
 body.dark-theme .alarm-stats-bar{background:#123b57;border-color:#294f66}
+.brand .build-version{display:block;margin:0 0 2px;color:#b9d7e9;font-size:9px;font-weight:600;line-height:1;letter-spacing:.02em;white-space:nowrap}

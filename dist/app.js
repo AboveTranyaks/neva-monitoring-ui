@@ -83,6 +83,17 @@ function applyWindowTransparency(value){
   if(slider)slider.value=String(transparency);
   if(output)output.textContent=`${transparency}%`;
 }
+const fontSizeSetting=document.createElement('div');
+fontSizeSetting.className='window-transparency interface-font-size';
+fontSizeSetting.innerHTML='<div><label for="interfaceFontSize">Размер текста</label><output id="interfaceFontSizeValue" for="interfaceFontSize">100%</output></div><input id="interfaceFontSize" type="range" min="100" max="150" step="5" value="100" aria-label="Размер текста в программе">';
+document.querySelector('.background-actions').before(fontSizeSetting);
+function applyInterfaceFontSize(value){
+  const size=Math.max(100,Math.min(150,Number(value)||100));
+  document.documentElement.style.zoom=String(size/100);
+  const slider=$('interfaceFontSize'),output=$('interfaceFontSizeValue');
+  if(slider)slider.value=String(size);
+  if(output)output.textContent=`${size}%`;
+}
 let savedTheme='light';
 try{savedTheme=localStorage.getItem('neva-theme')||'light';}catch(error){}
 applyTheme(savedTheme);
@@ -92,6 +103,9 @@ applyCustomBackground(savedBackground);
 let savedWindowTransparency=45;
 try{savedWindowTransparency=Number(localStorage.getItem('neva-window-transparency')??45);}catch(error){}
 applyWindowTransparency(savedWindowTransparency);
+let savedInterfaceFontSize=100;
+try{savedInterfaceFontSize=Number(localStorage.getItem('neva-interface-font-size')??100);}catch(error){}
+applyInterfaceFontSize(savedInterfaceFontSize);
 const statusClass = a => a.status === 'new' ? 'new' : a.status === 'complete' ? 'complete' : '';
 const formatElapsed = seconds => {
   const h = Math.floor(seconds / 3600), m = Math.floor((seconds % 3600) / 60), s = seconds % 60;
@@ -330,6 +344,7 @@ $('faqSearch').addEventListener('input',()=>{const query=$('faqSearch').value.tr
 $('backgroundFile').addEventListener('change',event=>{const file=event.target.files[0];if(!file)return;if(!file.type.startsWith('image/')){toast('Выберите изображение');return;}if(file.size>12*1024*1024){toast('Файл должен быть меньше 12 МБ');event.target.value='';return;}const reader=new FileReader();reader.onload=()=>{const image=new Image();image.onload=()=>{const max=1920,scale=Math.min(1,max/Math.max(image.width,image.height)),canvas=document.createElement('canvas');canvas.width=Math.round(image.width*scale);canvas.height=Math.round(image.height*scale);canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);const dataUrl=canvas.toDataURL('image/jpeg',.82);try{localStorage.setItem('neva-background',dataUrl);savedBackground=dataUrl;applyCustomBackground(dataUrl);toast('Фон добавлен');}catch(error){toast('Изображение слишком большое для сохранения');}};image.src=reader.result;};reader.readAsDataURL(file);event.target.value='';});
 $('removeBackgroundBtn').addEventListener('click',()=>{savedBackground='';try{localStorage.removeItem('neva-background');}catch(error){}applyCustomBackground('');toast('Фон удалён');});
 $('windowTransparency').addEventListener('input',event=>{savedWindowTransparency=Number(event.target.value);applyWindowTransparency(savedWindowTransparency);try{localStorage.setItem('neva-window-transparency',String(savedWindowTransparency));}catch(error){}});
+$('interfaceFontSize').addEventListener('input',event=>{savedInterfaceFontSize=Number(event.target.value);applyInterfaceFontSize(savedInterfaceFontSize);try{localStorage.setItem('neva-interface-font-size',String(savedInterfaceFontSize));}catch(error){}});
 document.querySelectorAll('.menu-drawer nav button').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.menu-drawer nav button').forEach(item=>item.classList.remove('active'));button.classList.add('active');}));
 function acceptAlarm(alarm){if(!requireWorkingShift()||!alarm||alarm.status!=='new')return;selected=alarm;selected.status='mine';selected.statusLabel='В РАБОТЕ';selected.operator=currentOperator;addHistory('Тревога принята в работу','Оператор назначен ответственным');renderRows();renderDetail();toast('Тревога принята в работу');}
 $('acceptBtn').addEventListener('click',()=>acceptAlarm(selected));
